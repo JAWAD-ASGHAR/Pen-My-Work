@@ -15,7 +15,7 @@ import {
   Image,
   Icon,
 } from "@chakra-ui/react"
-
+import { useRouter } from "next/navigation"
 
 import {
   FiPenTool,
@@ -35,6 +35,7 @@ export default function HandwritingAILanding() {
   const textColor = "#1A1A1A"
   const accentColor = "#FF6A00"
   const accentHoverColor = "#FF8A33"
+  const router = useRouter()
 
   return (
     <Box minH="100vh" bg={bgColor}>
@@ -82,6 +83,7 @@ export default function HandwritingAILanding() {
                 color="white"
                 borderRadius="full"
                 px={6}
+                onClick={() => router.push("/home")}
               >
                 Sign Up
               </Button>
