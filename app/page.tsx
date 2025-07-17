@@ -83,7 +83,7 @@ export default function HandwritingAILanding() {
                 color="white"
                 borderRadius="full"
                 px={6}
-                onClick={() => router.push("/home")}
+                onClick={() => router.push("/sign-in")}
               >
                 Sign Up
               </Button>
