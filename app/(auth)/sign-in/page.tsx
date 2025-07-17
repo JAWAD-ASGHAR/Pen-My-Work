@@ -11,16 +11,12 @@ import {
   Icon,
   Text,
   VStack,
-  HStack,
-  useToast,
 } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
-import { FiPenTool, FiArrowLeft, FiMail, FiCheckCircle, FiStar } from "react-icons/fi"
+import { FiPenTool, FiArrowLeft, FiMail, FiStar } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
-
 
 // Animation keyframes
 const float = keyframes`
@@ -33,18 +29,10 @@ const pulse = keyframes`
   50% { opacity: 0.7; }
 `
 
-const shimmer = keyframes`
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-`
-
 export default function SignInPage() {
   const bgColor = "#FDF7EE"
   const textColor = "#1A1A1A"
   const accentColor = "#FF6A00"
-  const accentHoverColor = "#FF8A33"
-  const router = useRouter()
-  const toast = useToast()
 
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
