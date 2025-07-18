@@ -165,21 +165,6 @@ export default function Step4() {
           </CardBody>
         </Card>
 
-        {content && (
-          <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-            <CardBody p={6}>
-              <Heading size="md" color="#1A1A1A" mb={4}>
-                Content Preview
-              </Heading>
-              <Box bg="gray.50" p={4} borderRadius="lg" maxH="40" overflowY="auto">
-                <Text fontSize="sm" color="gray.700" whiteSpace="pre-wrap">
-                  {content}
-                </Text>
-              </Box>
-            </CardBody>
-          </Card>
-        )}
-
         <Flex justify="space-between">
           <Link href="/create/step-2">
             <Button variant="outline" borderColor="gray.200" color="#666" bg="transparent">
@@ -187,7 +172,7 @@ export default function Step4() {
               Previous
             </Button>
           </Link>
-          <Link href="/create/step-5">
+          <Link href="/create/step-4">
             <Button 
               bg="#FF6A00" 
               _hover={{ bg: "#FF8A33" }}

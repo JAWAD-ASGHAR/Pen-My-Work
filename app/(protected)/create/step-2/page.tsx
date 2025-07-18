@@ -21,7 +21,7 @@ import Header from "../../../components/Header"
 import ProgressIndicator from "../../../components/ProgressIndicator"
 
 const inkColors = [
-  { id: "blue", name: "Blue", color: "#0066CC", hex: "#0066CC" },
+  { id: "blue", name: "Blue", color: "#0052A3", hex: "#0052A3" },
   { id: "black", name: "Black", color: "#0A0A0A", hex: "#0A0A0A" },
   { id: "dark-gray", name: "Dark Gray", color: "#4A4A4A", hex: "#4A4A4A" },
 ]
@@ -109,7 +109,7 @@ export default function Step2() {
               Previous
             </Button>
           </Link>
-          <Link href="/create/step-4">
+          <Link href="/create/step-3">
             <Button bg="#FF6A00" _hover={{ bg: "#FF8A33" }} color="white" px={8} rightIcon={<Icon as={FiArrowRight} />}>
               Next Step
             </Button>

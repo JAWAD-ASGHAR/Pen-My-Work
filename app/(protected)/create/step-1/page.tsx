@@ -28,21 +28,21 @@ const paperTypes = [
     name: "Ruled",
     description: "Traditional lined paper",
     icon: RxHamburgerMenu,
-    preview: "/ruled-page.png",
+    preview: "/lines-page.png",
   },
   {
     id: "blank",
     name: "Blank",
     description: "Clean white paper",
     icon: FiFileText,
-    preview: "/placeholder.svg?height=200&width=150",
+    preview: "/blank-page.png",
   },
   {
     id: "grid",
     name: "Grid",
     description: "Graph paper with grid lines",
     icon: FiGrid,
-    preview: "/placeholder.svg?height=200&width=150",
+    preview: "/grid-page.png",
   },
 ]
 
