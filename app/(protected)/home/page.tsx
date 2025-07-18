@@ -14,13 +14,13 @@ import {
   Image,
   Text,
   VStack,
-  Spinner,
   Center,
 } from "@chakra-ui/react"
 import { FiFileText, FiPlusCircle, FiCalendar, FiDroplet } from "react-icons/fi"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { getAssignments, type Assignment } from "@/server/actions/assignments"
+import LoadingSpinner from "../../components/LoadingSpinner"
 
 export default function Dashboard() {
   const [assignments, setAssignments] = useState<Assignment[]>([])
@@ -101,12 +101,7 @@ export default function Dashboard() {
 
       <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
         {loading ? (
-          <Center py={16}>
-            <VStack spacing={4}>
-              <Spinner size="xl" color="#FF6A00" />
-              <Text color="#666">Loading your assignments...</Text>
-            </VStack>
-          </Center>
+         <LoadingSpinner message="Loading your assignments..." />
         ) : error ? (
           <Center py={16}>
             <VStack spacing={4}>
