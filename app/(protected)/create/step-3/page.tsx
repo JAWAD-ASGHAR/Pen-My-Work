@@ -15,7 +15,7 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { ArrowBackIcon } from "@chakra-ui/icons"
-import { FiFileText, FiArrowRight, FiUpload } from "react-icons/fi"
+import { FiFileText, FiArrowRight } from "react-icons/fi"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -113,6 +113,20 @@ export default function Step4() {
             >
               4
             </Box>
+            <Box w="16" h="1" bg="gray.200" mx={2}></Box>
+            <Box
+              w="8"
+              h="8"
+              bg="gray.200"
+              color="gray.500"
+              borderRadius="full"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              fontSize="sm"
+            >
+              5
+            </Box>
           </Flex>
         </Box>
 
@@ -151,17 +165,7 @@ export default function Step4() {
               </Flex>
             </Box>
 
-            <Box borderTop="1px" borderColor="gray.200" pt={4}>
-              <Flex align="center" justify="center">
-                <Button variant="outline" borderColor="gray.200" color="#666" bg="transparent">
-                  <Icon as={FiUpload} w={4} h={4} mr={2} />
-                  Upload Text File
-                </Button>
-              </Flex>
-              <Text fontSize="xs" color="#666" textAlign="center" mt={2}>
-                Or upload a .txt file to import your content
-              </Text>
-            </Box>
+
           </CardBody>
         </Card>
 

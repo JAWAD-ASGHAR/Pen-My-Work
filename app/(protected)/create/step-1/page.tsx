@@ -54,7 +54,7 @@ export default function Step1() {
       <Header />
       
       <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
-        <ProgressIndicator currentStep={1} totalSteps={4} />
+        <ProgressIndicator currentStep={1} totalSteps={5} />
 
         <VStack spacing={8} align="center" mb={8}>
           <Heading size="2xl" color="#1A1A1A" textAlign="center">
