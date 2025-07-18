@@ -67,7 +67,7 @@ export default function Dashboard() {
                 Scribbly
               </Heading>
             </HStack>
-            <Link href="/create/step-1">
+            <Link href="/create">
               <Button bg="#FF6A00" _hover={{ bg: "#FF8A33" }} color="white" leftIcon={<Icon as={FiPlusCircle} />}>
                 Create New
               </Button>
@@ -146,7 +146,7 @@ export default function Dashboard() {
               <Text color="#666" mb={8}>
                 Click &apos;Create New&apos; to get started with your first handwritten assignment.
               </Text>
-              <Link href="/create/step-1">
+              <Link href="/create">
                 <Button bg="#FF6A00" _hover={{ bg: "#FF8A33" }} color="white" leftIcon={<Icon as={FiPlusCircle} />}>
                   Create Your First Assignment
                 </Button>
