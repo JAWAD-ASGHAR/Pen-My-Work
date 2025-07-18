@@ -7,25 +7,21 @@ import {
   CardBody,
   Container,
   Flex,
-  Grid,
   Heading,
   HStack,
   Icon,
-  Radio,
-  RadioGroup,
-  Stack,
   Text,
+  Textarea,
   VStack,
 } from "@chakra-ui/react"
 import { ArrowBackIcon } from "@chakra-ui/icons"
-import { FiFileText, FiArrowRight } from "react-icons/fi"
+import { FiFileText, FiArrowRight, FiUpload } from "react-icons/fi"
 import Link from "next/link"
 import { useState } from "react"
 
-export default function Step3() {
-  const [headingStyle, setHeadingStyle] = useState("normal")
-  const [textSpacing, setTextSpacing] = useState("normal")
-  const [textSize, setTextSize] = useState("medium")
+export default function Step4() {
+  const [content, setContent] = useState("")
+  const maxLength = 2000
 
   return (
     <Box minH="100vh" bg="#FDF7EE">
@@ -117,116 +113,72 @@ export default function Step3() {
             >
               4
             </Box>
-            <Box w="16" h="1" bg="gray.200" mx={2}></Box>
-            <Box
-              w="8"
-              h="8"
-              bg="gray.200"
-              color="gray.500"
-              borderRadius="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              fontSize="sm"
-            >
-              5
-            </Box>
           </Flex>
         </Box>
 
         <VStack spacing={8} align="center" mb={8}>
           <Heading size="2xl" color="#1A1A1A" textAlign="center">
-            Heading & Text Styles
+            Enter Content
           </Heading>
           <Text color="#666" textAlign="center">
-            Customize the appearance of your handwriting
+            Paste or type your assignment text
           </Text>
         </VStack>
 
-        <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={8} mb={8}>
-          {/* Heading Style */}
-          <Card bg="white" border="1px" borderColor="gray.200">
-            <CardBody p={6}>
-              <Heading size="md" color="#1A1A1A" mb={4}>
-                Heading Style
-              </Heading>
-              <RadioGroup value={headingStyle} onChange={setHeadingStyle}>
-                <Stack spacing={3}>
-                  <Radio value="normal">Normal</Radio>
-                  <Radio value="underlined">Underlined</Radio>
-                  <Radio value="caps">All Caps</Radio>
-                </Stack>
-              </RadioGroup>
-            </CardBody>
-          </Card>
-
-          {/* Text Spacing */}
-          <Card bg="white" border="1px" borderColor="gray.200">
-            <CardBody p={6}>
-              <Heading size="md" color="#1A1A1A" mb={4}>
-                Text Spacing
-              </Heading>
-              <RadioGroup value={textSpacing} onChange={setTextSpacing}>
-                <Stack spacing={3}>
-                  <Radio value="normal">Normal</Radio>
-                  <Radio value="wide">Wide</Radio>
-                </Stack>
-              </RadioGroup>
-            </CardBody>
-          </Card>
-
-          {/* Text Size */}
-          <Card bg="white" border="1px" borderColor="gray.200" gridColumn={{ lg: "span 2" }}>
-            <CardBody p={6}>
-              <Heading size="md" color="#1A1A1A" mb={4}>
-                Text Size
-              </Heading>
-              <RadioGroup value={textSize} onChange={setTextSize}>
-                <HStack spacing={8}>
-                  <Radio value="small">Small</Radio>
-                  <Radio value="medium">Medium</Radio>
-                  <Radio value="large">Large</Radio>
-                </HStack>
-              </RadioGroup>
-            </CardBody>
-          </Card>
-        </Grid>
-
-        {/* Live Preview */}
         <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-          <CardBody p={8}>
-            <Heading size="md" color="#1A1A1A" mb={4} textAlign="center">
-              Live Preview
-            </Heading>
-            <Box bg="gray.50" p={6} borderRadius="lg">
-              <Box mb={4}>
-                <Text
-                  color="#FF6A00"
-                  textAlign="center"
-                  fontSize={
-                    textSize === "small" ? "lg" : textSize === "large" ? "2xl" : "xl"
-                  }
-                  textTransform={headingStyle === "caps" ? "uppercase" : "none"}
-                  textDecoration={headingStyle === "underlined" ? "underline" : "none"}
-                  fontFamily="Patrick Hand, cursive"
-                >
-                  Assignment Title
+          <CardBody p={6}>
+            <Box mb={4}>
+              <Text as="label" display="block" fontSize="sm" fontWeight="medium" color="#1A1A1A" mb={2}>
+                Assignment Text
+              </Text>
+              <Textarea
+                placeholder="Paste your assignment text here..."
+                value={content}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
+                minH="300px"
+                resize="none"
+                borderColor="gray.300"
+                _focus={{ borderColor: "#FF6A00", boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)" }}
+                maxLength={maxLength}
+              />
+              <Flex justify="space-between" align="center" mt={2}>
+                <Text fontSize="sm" color="#666">
+                  Supports basic formatting with **bold** and *italic* text
                 </Text>
-              </Box>
-              <Text
-                color="#FF6A00"
-                fontSize={
-                  textSize === "small" ? "sm" : textSize === "large" ? "lg" : "md"
-                }
-                lineHeight={textSpacing === "wide" ? "loose" : "normal"}
-                fontFamily="Patrick Hand, cursive"
-              >
-                This is a sample paragraph showing how your handwritten text will appear with the selected styles. The
-                spacing and size will be applied consistently throughout your assignment.
+                <Text fontSize="sm" color="#666">
+                  {content.length}/{maxLength} characters
+                </Text>
+              </Flex>
+            </Box>
+
+            <Box borderTop="1px" borderColor="gray.200" pt={4}>
+              <Flex align="center" justify="center">
+                <Button variant="outline" borderColor="gray.200" color="#666" bg="transparent">
+                  <Icon as={FiUpload} w={4} h={4} mr={2} />
+                  Upload Text File
+                </Button>
+              </Flex>
+              <Text fontSize="xs" color="#666" textAlign="center" mt={2}>
+                Or upload a .txt file to import your content
               </Text>
             </Box>
           </CardBody>
         </Card>
+
+        {content && (
+          <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
+            <CardBody p={6}>
+              <Heading size="md" color="#1A1A1A" mb={4}>
+                Content Preview
+              </Heading>
+              <Box bg="gray.50" p={4} borderRadius="lg" maxH="40" overflowY="auto">
+                <Text fontSize="sm" color="gray.700" whiteSpace="pre-wrap">
+                  {content}
+                </Text>
+              </Box>
+            </CardBody>
+          </Card>
+        )}
 
         <Flex justify="space-between">
           <Link href="/create/step-2">
@@ -235,8 +187,15 @@ export default function Step3() {
               Previous
             </Button>
           </Link>
-          <Link href="/create/step-4">
-            <Button bg="#FF6A00" _hover={{ bg: "#FF8A33" }} color="white" px={8} rightIcon={<Icon as={FiArrowRight} />}>
+          <Link href="/create/step-5">
+            <Button 
+              bg="#FF6A00" 
+              _hover={{ bg: "#FF8A33" }}
+              color="white"
+              px={8} 
+              rightIcon={<Icon as={FiArrowRight} />}
+              isDisabled={!content.trim()}
+            >
               Next Step
             </Button>
           </Link>
