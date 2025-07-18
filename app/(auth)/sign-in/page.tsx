@@ -17,6 +17,8 @@ import { FiPenTool, FiArrowLeft, FiMail, FiStar } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 // Animation keyframes
 const float = keyframes`
@@ -33,6 +35,16 @@ export default function SignInPage() {
   const bgColor = "#FDF7EE"
   const textColor = "#1A1A1A"
   const accentColor = "#FF6A00"
+
+  const router = useRouter();
+
+  useEffect(() => {
+    authClient.getSession().then((session) => {
+      if (session) {
+        router.push("/home");
+      }
+    });
+  }, []);
 
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
