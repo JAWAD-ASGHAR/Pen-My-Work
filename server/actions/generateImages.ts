@@ -15,15 +15,16 @@ export const generateSystemMessage = async (
     : "";
 
   return [
-    `Create a realistic photo of a handwritten assignment on ${paper} notebook paper.`,
-    `The handwriting should look like neat student handwriting in ${ink} ink.`,
+    `You are given an image of ${paper} notebook paper.`,
+    `Write the following text on this paper using ${ink} ink, making it look like neat student handwriting.`,
     ``,
     `Use the exact following text content. Preserve all line breaks exactly as given, including mid-word or awkward breaks.`,
     `Do not add or remove any words or lines.`,
     `Write the text naturally on the ${paper} lines, as a student would write in a notebook.`,
+    `Make sure the handwriting looks realistic and matches the style of the paper provided.`,
     additional,
     ``, 
-    `Text:`,
+    `Text to write:`,
     pageText
   ].join("\n");
 };
