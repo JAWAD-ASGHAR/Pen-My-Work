@@ -49,4 +49,43 @@ export async function getAssignments(): Promise<Assignment[]> {
     console.error("Error fetching assignments:", error)
     return []
   }
+}
+
+export async function getAssignmentById(id: string): Promise<Assignment | null> {
+  try {
+    const headersList = await headers()
+    const session = await auth.api.getSession({ headers: headersList })
+    
+    if (!session?.user?.id) {
+      throw new Error("Unauthorized")
+    }
+
+    const assignments = await db
+      .select()
+      .from(assignment)
+      .where(eq(assignment.id, id))
+      .limit(1)
+
+    if (assignments.length === 0) {
+      return null
+    }
+
+    const assignmentData = assignments[0]
+    
+    // Transform the database result to match our Assignment type
+    return {
+      id: assignmentData.id,
+      paper: assignmentData.paper,
+      ink: assignmentData.ink,
+      text: assignmentData.text,
+      specialQuery: assignmentData.specialQuery || undefined,
+      imageURLs: assignmentData.imageURLs || undefined,
+      resultImageURL: assignmentData.resultImageURL || undefined,
+      createdAt: assignmentData.createdAt,
+      updatedAt: assignmentData.updatedAt,
+    }
+  } catch (error) {
+    console.error("Error fetching assignment:", error)
+    return null
+  }
 } 

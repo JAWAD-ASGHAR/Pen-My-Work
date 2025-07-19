@@ -19,6 +19,8 @@
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.44.3",
     "framer-motion": "^10.18.0",
+    "jspdf": "^3.0.1",
+    "jszip": "^3.10.1",
     "next": "15.3.5",
     "openai": "^5.10.1",
     "postgres": "^3.4.7",
