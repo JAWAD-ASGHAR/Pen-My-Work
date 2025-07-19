@@ -39,7 +39,7 @@ import {
   getAssignmentById,
   type Assignment,
 } from "@/server/actions/assignments";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function AssignmentDetails() {
   const params = useParams();

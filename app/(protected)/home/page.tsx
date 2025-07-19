@@ -29,8 +29,8 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getAssignments, type Assignment } from "@/server/actions/assignments";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import { RxHamburgerMenu } from "react-icons/rx";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function Dashboard() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);

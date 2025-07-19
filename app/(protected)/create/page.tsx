@@ -26,7 +26,7 @@ import {
 } from "react-icons/fi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import ProgressIndicator from "../../components/ProgressIndicator";
+import ProgressIndicator from "@/components/ProgressIndicator";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { charCount } from "@/utils/char-count";
 import { generateImages } from "@/server/actions/generateImages";

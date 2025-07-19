@@ -1,4 +1,9 @@
 "use client"
+import { Banner } from "@/components/banner"
+import { HeroSection } from "@/components/hero"
+import { Navbar } from "@/components/nav"
+import { gsap } from "gsap"
+import { PreviewPanels } from "@/components/panels"
 import {
   Box,
   Button,
@@ -16,6 +21,7 @@ import {
   Icon,
 } from "@chakra-ui/react"
 import { useRouter } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
 
 import {
   FiPenTool,
@@ -24,7 +30,6 @@ import {
   FiBriefcase,
   FiPlay,
   FiStar,
-  FiArrowRight,
   FiCheckCircle,
   FiBookOpen,
   FiImage,
@@ -34,194 +39,96 @@ export default function HandwritingAILanding() {
   const bgColor = "#FDF7EE"
   const textColor = "#1A1A1A"
   const accentColor = "#FF6A00"
-  const accentHoverColor = "#FF8A33"
-  const router = useRouter()
+  const router = useRouter();
+  const heroRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLDivElement>(null)
+  const headerTimeline = useRef<gsap.core.Timeline | null>(null)
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const previewRef = useRef<HTMLDivElement>(null)
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Banner animation
+      gsap.fromTo(bannerRef.current, { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" })
+
+      // Header animation (initial)
+      gsap.fromTo(
+        headerRef.current?.children || [],
+        { y: -30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: "power2.out" },
+      )
+
+      // Hero content animation
+      gsap.fromTo(
+        heroRef.current?.children || [],
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.4, ease: "power2.out" },
+      )
+
+      // Preview panels animation
+      gsap.fromTo(
+        previewRef.current?.children || [],
+        { y: 100, opacity: 0, scale: 0.9 },
+        { y: 0, opacity: 1, scale: 1, duration: 1, stagger: 0.2, delay: 0.8, ease: "power2.out" },
+      )
+
+      // Header shrink on scroll
+      if (headerRef.current) {
+        headerTimeline.current = gsap.timeline({ paused: true })
+          .to(headerRef.current, {
+            scale: 0.95,
+            paddingTop: 8,
+            paddingBottom: 8,
+            boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
+            duration: 0.3,
+            ease: "power2.out",
+          })
+      }
+
+      const handleScroll = () => {
+        if (!headerTimeline.current) return
+        if (window.scrollY > 30) {
+          headerTimeline.current.play()
+          setScrolled(true)
+        } else {
+          headerTimeline.current.reverse()
+          setScrolled(false)
+        }
+      }
+      window.addEventListener("scroll", handleScroll)
+      return () => {
+        window.removeEventListener("scroll", handleScroll)
+      }
+    })
+    return () => ctx.revert()
+  }, [])
 
   return (
-    <Box minH="100vh" bg={bgColor}>
-      {/* Header */}
-      <Box as="header" px={6} py={4}>
-        <Container maxW="7xl">
-          <Flex align="center" justify="space-between">
-            <Flex align="center" gap={2}>
-              <Icon as={FiPenTool} h={8} w={8} color={accentColor} />
-              <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-                ScriptAI
-              </Text>
-            </Flex>
-            <HStack spacing={8} display={{ base: "none", md: "flex" }}>
-              <Text
-                as="a"
-                href="#features"
-                color={textColor}
-                _hover={{ color: accentColor }}
-                transition="colors"
-              >
-                Features
-              </Text>
-              <Text
-                as="a"
-                href="#how-it-works"
-                color={textColor}
-                _hover={{ color: accentColor }}
-                transition="colors"
-              >
-                How It Works
-              </Text>
-              <Text
-                as="a"
-                href="#pricing"
-                color={textColor}
-                _hover={{ color: accentColor }}
-                transition="colors"
-              >
-                Pricing
-              </Text>
-              <Button
-                bg={accentColor}
-                _hover={{ bg: accentHoverColor }}
-                color="white"
-                borderRadius="full"
-                px={6}
-                onClick={() => router.push("/sign-in")}
-              >
-                Sign Up
-              </Button>
-            </HStack>
-          </Flex>
-        </Container>
-      </Box>
 
-      {/* Hero Section */}
-      <Box as="section" px={6} py={20}>
-        <Container maxW="7xl">
-          <Grid templateColumns={{ lg: "1fr 1fr" }} gap={12} alignItems="center">
-            <VStack align="start" spacing={8}>
-              <VStack align="start" spacing={6}>
-                <Heading
-                  fontSize={{ base: "5xl", lg: "6xl" }}
-                  fontWeight="bold"
-                  color={textColor}
-                  lineHeight="tight"
-                >
-                  Make It Look{" "}
-                  <Box position="relative" display="inline">
-                    Handwritten
-                    <Box
-                      position="absolute"
-                      bottom="-8px"
-                      left={0}
-                      w="full"
-                      h={3}
-                      bg={accentColor}
-                      opacity={0.3}
-                      borderRadius="full"
-                    />
-                  </Box>{" "}
-                  — Instantly.
-                </Heading>
-                <Text fontSize="xl" color="#666" lineHeight="relaxed">
-                  Convert any typed text into stunning, lifelike handwritten paper images with AI. Perfect for students,
-                  professionals, and creatives.
-                </Text>
-              </VStack>
 
-              <Flex
-                direction={{ base: "column", sm: "row" }}
-                gap={4}
-                maxW="md"
-                w="full"
-              >
-                <Input
-                  placeholder="Enter your email"
-                  flex={1}
-                  h={12}
-                  borderRadius="full"
-                  borderWidth={2}
-                  borderColor={textColor}
-                  bg="white"
-                />
-                <Button
-                  bg={accentColor}
-                  _hover={{ bg: accentHoverColor }}
-                  color="white"
-                  h={12}
-                  px={8}
-                  borderRadius="full"
-                  fontWeight="semibold"
-                >
-                  Get Started
-                </Button>
-              </Flex>
+<Box minH="100vh" bg="white">
+      <Banner ref={bannerRef} />
+      <Box h="16px" /> {/* Spacer to push header below banner */}
+      <Navbar ref={headerRef} scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} router={router} />
+      <Container as="main" centerContent maxW="6xl" px={2} py={[0, null, 8]}>
+        <VStack 
+          w="full"
+          bg="#FDF7EE" 
+          borderRadius="3xl"
+          shadow="sm"
+          px={[6, null, 16]}
+          pt={8}
+          pb={0}
+          mt={4}
+        >
+          <HeroSection ref={heroRef} />
+          <PreviewPanels ref={previewRef} />
+        </VStack>
+      </Container>
 
-              <Text fontSize="sm" color="#666">
-                Trusted by 130,000+ users in 180+ countries
-              </Text>
-            </VStack>
-
-            <Box position="relative">
-              <Card bg="white" shadow="2xl" borderRadius="3xl" overflow="hidden">
-                <CardBody p={8}>
-                  <VStack spacing={6}>
-                    <Box bg="#F5F5F5" borderRadius="2xl" p={6}>
-                      <HStack gap={2} mb={4}>
-                        <Box w={3} h={3} bg="red.500" borderRadius="full" />
-                        <Box w={3} h={3} bg="yellow.500" borderRadius="full" />
-                        <Box w={3} h={3} bg="green.500" borderRadius="full" />
-                        <Text fontSize="xs" color="gray.500" ml={2}>
-                          Text Editor
-                        </Text>
-                      </HStack>
-                      <Text
-                        color={textColor}
-                        fontFamily="mono"
-                        fontSize="sm"
-                        lineHeight="relaxed"
-                      >
-                        Dear Professor Johnson,
-                        <br />
-                        <br />I hope this email finds you well. I wanted to discuss the upcoming project deadline and
-                        request a brief extension if possible.
-                        <br />
-                        <br />
-                        Best regards,
-                        <br />
-                        Sarah
-                      </Text>
-                    </Box>
-                    <Flex justify="center">
-                      <Icon as={FiArrowRight} h={6} w={6} color={accentColor} />
-                    </Flex>
-                    <Box position="relative">
-                      <Image
-                        src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=300&fit=crop&crop=center"
-                        alt="Handwritten letter on paper"
-                        w="full"
-                        h={64}
-                        objectFit="cover"
-                        borderRadius="2xl"
-                        shadow="lg"
-                      />
-                      <Box
-                        position="absolute"
-                        inset={0}
-                        bgGradient="linear(to-t, blackAlpha.200, transparent)"
-                        borderRadius="2xl"
-                      />
-                      <Box position="absolute" bottom={4} left={4} right={4}>
-                        <Text color="white" fontSize="sm" fontWeight="semibold">
-                          ✨ AI-Generated Handwriting
-                        </Text>
-                      </Box>
-                    </Box>
-                  </VStack>
-                </CardBody>
-              </Card>
-            </Box>
-          </Grid>
-        </Container>
-      </Box>
-
+  
       {/* How It Works */}
       <Box as="section" id="how-it-works" px={6} py={20} bg="white">
         <Container maxW="7xl">
