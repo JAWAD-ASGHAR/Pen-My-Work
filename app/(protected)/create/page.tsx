@@ -23,6 +23,8 @@ import { useState } from "react"
 import Header from "../../components/Header"
 import ProgressIndicator from "../../components/ProgressIndicator"
 import { RxHamburgerMenu } from "react-icons/rx"
+import { charCount } from "@/utils/char-count"
+import { generateImages } from "@/server/actions/generateImages"
 
 const paperTypes = [
   {
@@ -67,9 +69,12 @@ export default function CreatePage() {
   const maxLength = 2000
   const selectedColor = inkColors.find((ink) => ink.id === selectedInk)
 
-  const handleGenerate = () => {
+  const handleGenerate = async (pages: string[],ink: string,paper: string,additionalQueries: string) => {
     setIsGenerating(true)
+    console.log("pages++++++", pages);
     // Simulate generation process
+    const result = await generateImages(pages,ink,paper,additionalQueries) 
+    console.log(result);
     setTimeout(() => {
       setIsGenerating(false)
       setIsGenerated(true)
@@ -372,7 +377,10 @@ export default function CreatePage() {
     </>
   )
 
-  const renderStep5 = () => (
+  const renderStep5 = () => {
+    const { pages, pageCount } = charCount(content);
+    console.log(pages, pageCount);
+    return (
     <>
       <VStack spacing={8} align="center" mb={8}>
         <Heading size="2xl" color="#1A1A1A" textAlign="center">
@@ -398,7 +406,7 @@ export default function CreatePage() {
                   </HStack>
                   <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
                     <Text fontWeight="medium">Pages to Generate:</Text>
-                    <Badge colorScheme="blue" variant="subtle">2-3 pages</Badge>
+                    <Badge colorScheme="blue" variant="subtle">{pageCount} pages</Badge>
                   </HStack>
                   <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
                     <Text fontWeight="medium">Content Length:</Text>
@@ -412,7 +420,7 @@ export default function CreatePage() {
               </Box>
 
               <Button
-                onClick={handleGenerate}
+                onClick={() => handleGenerate(pages,selectedInk,selectedPaper,additionalQueries)}
                 bg="#FF6A00"
                 _hover={{ bg: "#FF8A33" }}
                 color="white"
@@ -521,7 +529,7 @@ export default function CreatePage() {
         </Flex>
       )}
     </>
-  )
+  )}
 
   return (
     <Box minH="100vh" bg="#FDF7EE">
