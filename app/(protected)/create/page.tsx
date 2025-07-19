@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -16,15 +16,21 @@ import {
   VStack,
   Textarea,
   Badge,
-} from "@chakra-ui/react"
-import { ArrowBackIcon } from "@chakra-ui/icons"
-import { FiGrid, FiArrowRight, FiFileText, FiDownload, FiHome, FiPlay } from "react-icons/fi"
-import { useState } from "react"
-import Header from "../../components/Header"
-import ProgressIndicator from "../../components/ProgressIndicator"
-import { RxHamburgerMenu } from "react-icons/rx"
-import { charCount } from "@/utils/char-count"
-import { generateImages } from "@/server/actions/generateImages"
+} from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import {
+  FiGrid,
+  FiArrowRight,
+  FiFileText,
+  FiDownload,
+  FiHome,
+  FiPlay,
+} from "react-icons/fi";
+import { useState } from "react";
+import ProgressIndicator from "../../components/ProgressIndicator";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { charCount } from "@/utils/char-count";
+import { generateImages } from "@/server/actions/generateImages";
 
 const paperTypes = [
   {
@@ -48,64 +54,69 @@ const paperTypes = [
     icon: FiGrid,
     preview: "/grid-page.png",
   },
-]
+];
 
 const inkColors = [
   { id: "blue", name: "Blue", color: "#0052A3", hex: "#0052A3" },
   { id: "black", name: "Black", color: "#0A0A0A", hex: "#0A0A0A" },
   { id: "dark-gray", name: "Dark Gray", color: "#4A4A4A", hex: "#4A4A4A" },
-]
+];
 
 export default function CreatePage() {
   // State for all steps
-  const [currentStep, setCurrentStep] = useState(1)
-  const [selectedPaper, setSelectedPaper] = useState("ruled")
-  const [selectedInk, setSelectedInk] = useState("blue")
-  const [content, setContent] = useState("")
-  const [additionalQueries, setAdditionalQueries] = useState("")
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [isGenerated, setIsGenerated] = useState(false)
-  const [generatedImages, setGeneratedImages] = useState<string[]>([])
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedPaper, setSelectedPaper] = useState("ruled");
+  const [selectedInk, setSelectedInk] = useState("blue");
+  const [content, setContent] = useState("");
+  const [additionalQueries, setAdditionalQueries] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerated, setIsGenerated] = useState(false);
+  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
 
-  const maxLength = 2000
-  const selectedColor = inkColors.find((ink) => ink.id === selectedInk)
+  const maxLength = 2000;
+  const selectedColor = inkColors.find((ink) => ink.id === selectedInk);
 
-  const handleGenerate = async (pages: string[], ink: string, paper: string, additionalQueries: string) => {
+  const handleGenerate = async (
+    pages: string[],
+    ink: string,
+    paper: string,
+    additionalQueries: string
+  ) => {
     try {
-      setIsGenerating(true)
+      setIsGenerating(true);
       console.log("pages++++++", pages);
       // Simulate generation process
-      const result = await generateImages(pages, ink, paper, additionalQueries)
+      const result = await generateImages(pages, ink, paper, additionalQueries);
       console.log(result);
-      if ('error' in result) {
-        console.error('Error:', result.error);
+      if ("error" in result) {
+        console.error("Error:", result.error);
         setIsGenerating(false);
         return;
       }
       if (result.success && result.assignmentData) {
-        setIsGenerating(false)
-        setIsGenerated(true)
+        setIsGenerating(false);
+        setIsGenerated(true);
         // Save the generated image URLs
-        setGeneratedImages(result.assignmentData[0].imageURLs || [])
+        setGeneratedImages(result.assignmentData[0].imageURLs || []);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       setIsGenerating(false);
       return;
     }
-  }
+  };
 
   const nextStep = () => {
     if (currentStep < 5) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const prevStep = () => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1)
+      setCurrentStep(currentStep - 1);
     }
-  }
+  };
 
   const renderStep1 = () => (
     <>
@@ -118,7 +129,11 @@ export default function CreatePage() {
         </Text>
       </VStack>
 
-      <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6} mb={8}>
+      <Grid
+        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+        gap={6}
+        mb={8}
+      >
         {paperTypes.map((paper) => (
           <Card
             key={paper.id}
@@ -174,7 +189,7 @@ export default function CreatePage() {
         </Button>
       </Flex>
     </>
-  )
+  );
 
   const renderStep2 = () => (
     <>
@@ -187,7 +202,11 @@ export default function CreatePage() {
         </Text>
       </VStack>
 
-      <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6} mb={8}>
+      <Grid
+        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+        gap={6}
+        mb={8}
+      >
         {inkColors.map((ink) => (
           <Card
             key={ink.id}
@@ -266,7 +285,7 @@ export default function CreatePage() {
         </Button>
       </Flex>
     </>
-  )
+  );
 
   const renderStep3 = () => (
     <>
@@ -282,17 +301,29 @@ export default function CreatePage() {
       <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
         <CardBody p={6}>
           <Box mb={4}>
-            <Text as="label" display="block" fontSize="sm" fontWeight="medium" color="#1A1A1A" mb={2}>
+            <Text
+              as="label"
+              display="block"
+              fontSize="sm"
+              fontWeight="medium"
+              color="#1A1A1A"
+              mb={2}
+            >
               Assignment Text
             </Text>
             <Textarea
               placeholder="Paste your assignment text here..."
               value={content}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setContent(e.target.value)
+              }
               minH="300px"
               resize="none"
               borderColor="gray.300"
-              _focus={{ borderColor: "#FF6A00", boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)" }}
+              _focus={{
+                borderColor: "#FF6A00",
+                boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)",
+              }}
               maxLength={maxLength}
             />
             <Flex justify="space-between" align="center" mt={2}>
@@ -331,7 +362,7 @@ export default function CreatePage() {
         </Button>
       </Flex>
     </>
-  )
+  );
 
   const renderStep4 = () => (
     <>
@@ -340,7 +371,8 @@ export default function CreatePage() {
           Additional Prompts
         </Heading>
         <Text color="#666" textAlign="center">
-          Add any specific instructions or prompts for the AI to generate your assignment in a particular way
+          Add any specific instructions or prompts for the AI to generate your
+          assignment in a particular way
         </Text>
       </VStack>
 
@@ -351,7 +383,8 @@ export default function CreatePage() {
               Additional Prompts (Optional)
             </Heading>
             <Text color="#666" mb={4}>
-              Add any specific instructions or prompts for the AI to generate your assignment in a particular way
+              Add any specific instructions or prompts for the AI to generate
+              your assignment in a particular way
             </Text>
             <Textarea
               placeholder="e.g., Make it look more casual, use bullet points, add diagrams, etc..."
@@ -360,7 +393,10 @@ export default function CreatePage() {
               minH="120px"
               resize="none"
               borderColor="gray.300"
-              _focus={{ borderColor: "#FF6A00", boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)" }}
+              _focus={{
+                borderColor: "#FF6A00",
+                boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)",
+              }}
             />
           </Box>
         </CardBody>
@@ -389,7 +425,7 @@ export default function CreatePage() {
         </Button>
       </Flex>
     </>
-  )
+  );
 
   const renderStep5 = () => {
     const { pages, pageCount } = charCount(content);
@@ -414,19 +450,45 @@ export default function CreatePage() {
                     Generation Summary
                   </Heading>
                   <VStack spacing={4} align="stretch">
-                    <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="gray.50"
+                      borderRadius="md"
+                    >
                       <Text fontWeight="medium">Page Style:</Text>
-                      <Badge colorScheme="orange" variant="subtle">{paperTypes.find(p => p.id === selectedPaper)?.name}</Badge>
+                      <Badge colorScheme="orange" variant="subtle">
+                        {paperTypes.find((p) => p.id === selectedPaper)?.name}
+                      </Badge>
                     </HStack>
-                    <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="gray.50"
+                      borderRadius="md"
+                    >
                       <Text fontWeight="medium">Pages to Generate:</Text>
-                      <Badge colorScheme="blue" variant="subtle">{pageCount} pages</Badge>
+                      <Badge colorScheme="blue" variant="subtle">
+                        {pageCount} pages
+                      </Badge>
                     </HStack>
-                    <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="gray.50"
+                      borderRadius="md"
+                    >
                       <Text fontWeight="medium">Content Length:</Text>
-                      <Badge colorScheme="green" variant="subtle">~{content.length} characters</Badge>
+                      <Badge colorScheme="green" variant="subtle">
+                        ~{content.length} characters
+                      </Badge>
                     </HStack>
-                    <HStack justify="space-between" p={4} bg="orange.50" borderRadius="md">
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="orange.50"
+                      borderRadius="md"
+                    >
                       <Text fontWeight="medium">Estimated Time:</Text>
                       <Badge colorScheme="orange">2-3 minutes</Badge>
                     </HStack>
@@ -434,7 +496,14 @@ export default function CreatePage() {
                 </Box>
 
                 <Button
-                  onClick={() => handleGenerate(pages, selectedInk, selectedPaper, additionalQueries)}
+                  onClick={() =>
+                    handleGenerate(
+                      pages,
+                      selectedInk,
+                      selectedPaper,
+                      additionalQueries
+                    )
+                  }
                   bg="#FF6A00"
                   _hover={{ bg: "#FF8A33" }}
                   color="white"
@@ -502,19 +571,21 @@ export default function CreatePage() {
                 {generatedImages.length > 0 ? (
                   <VStack spacing={4}>
                     {generatedImages.map((imageUrl, index) => (
-                      <Box 
+                      <Box
                         key={index}
-                        aspectRatio="8.5/11" 
-                        position="relative" 
-                        bg="gray.50" 
-                        borderRadius="lg" 
+                        aspectRatio="8.5/11"
+                        position="relative"
+                        bg="gray.50"
+                        borderRadius="lg"
                         overflow="hidden"
                         w="full"
                         maxW="600px"
                       >
                         <Image
                           src={imageUrl}
-                          alt={`Generated handwritten assignment page ${index + 1}`}
+                          alt={`Generated handwritten assignment page ${
+                            index + 1
+                          }`}
                           w="full"
                           h="full"
                           objectFit="cover"
@@ -522,11 +593,18 @@ export default function CreatePage() {
                       </Box>
                     ))}
                     <Text fontSize="sm" color="#666" textAlign="center">
-                      {generatedImages.length} page{generatedImages.length > 1 ? 's' : ''} generated
+                      {generatedImages.length} page
+                      {generatedImages.length > 1 ? "s" : ""} generated
                     </Text>
                   </VStack>
                 ) : (
-                  <Box aspectRatio="8.5/11" position="relative" bg="gray.50" borderRadius="lg" overflow="hidden">
+                  <Box
+                    aspectRatio="8.5/11"
+                    position="relative"
+                    bg="gray.50"
+                    borderRadius="lg"
+                    overflow="hidden"
+                  >
                     <Image
                       src="/placeholder.svg?height=800&width=600"
                       alt="Generated handwritten assignment"
@@ -539,19 +617,23 @@ export default function CreatePage() {
               </CardBody>
             </Card>
 
-            <Flex direction={{ base: "column", sm: "row" }} gap={4} justify="center">
+            <Flex
+              direction={{ base: "column", sm: "row" }}
+              gap={4}
+              justify="center"
+            >
               {generatedImages.length > 0 && (
                 <>
-                  <Button 
-                    bg="#FF6A00" 
-                    _hover={{ bg: "#FF8A33" }} 
-                    color="white" 
-                    px={6} 
+                  <Button
+                    bg="#FF6A00"
+                    _hover={{ bg: "#FF8A33" }}
+                    color="white"
+                    px={6}
                     leftIcon={<Icon as={FiDownload} />}
                     onClick={() => {
                       // Download all images
                       generatedImages.forEach((imageUrl, index) => {
-                        const link = document.createElement('a');
+                        const link = document.createElement("a");
                         link.href = imageUrl;
                         link.download = `assignment-page-${index + 1}.png`;
                         document.body.appendChild(link);
@@ -563,7 +645,7 @@ export default function CreatePage() {
                     Download All Pages
                   </Button>
                   {generatedImages.length > 1 && (
-                    <Button 
+                    <Button
                       variant="outline"
                       borderColor="#FF6A00"
                       color="#FF6A00"
@@ -571,7 +653,7 @@ export default function CreatePage() {
                       px={6}
                       onClick={() => {
                         // Download as ZIP (you might want to implement this)
-                        console.log('Download as ZIP functionality');
+                        console.log("Download as ZIP functionality");
                       }}
                     >
                       Download as ZIP
@@ -607,22 +689,17 @@ export default function CreatePage() {
           </Flex>
         )}
       </>
-    )
-  }
+    );
+  };
 
   return (
-    <Box minH="100vh" bg="#FDF7EE">
-      <Header />
-
-      <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
-        <ProgressIndicator currentStep={currentStep} totalSteps={5} />
-
-        {currentStep === 1 && renderStep1()}
-        {currentStep === 2 && renderStep2()}
-        {currentStep === 3 && renderStep3()}
-        {currentStep === 4 && renderStep4()}
-        {currentStep === 5 && renderStep5()}
-      </Container>
-    </Box>
-  )
-} 
+    <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+      <ProgressIndicator currentStep={currentStep} totalSteps={5} />
+      {currentStep === 1 && renderStep1()}
+      {currentStep === 2 && renderStep2()}
+      {currentStep === 3 && renderStep3()}
+      {currentStep === 4 && renderStep4()}
+      {currentStep === 5 && renderStep5()}
+    </Container>
+  );
+}

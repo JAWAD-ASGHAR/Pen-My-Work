@@ -29,7 +29,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { getAssignmentById, type Assignment } from "@/server/actions/assignments"
 import LoadingSpinner from "../../../components/LoadingSpinner"
-import Header from "../../../components/Header"
+
 
 export default function AssignmentDetails() {
   const params = useParams()
@@ -265,14 +265,7 @@ export default function AssignmentDetails() {
   }
 
   return (
-    <Box minH="100vh" bg="#FDF7EE">
-      <Header 
-        showBackButton={true}
-        backUrl="/home"
-        backText="Back"
-        title="Assignment Details"
-      />
-
+    <>
       <Container maxW="full" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
         <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr" }} gap={8} minH="calc(100vh - 200px)">
           {/* Left Side - Assignment Info */}
@@ -519,6 +512,6 @@ export default function AssignmentDetails() {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </Box>
+    </>
   )
 }

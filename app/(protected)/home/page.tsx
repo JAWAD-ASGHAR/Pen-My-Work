@@ -29,7 +29,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getAssignments, type Assignment } from "@/server/actions/assignments";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import Header from "../../components/Header";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Dashboard() {
@@ -122,12 +121,21 @@ export default function Dashboard() {
   };
 
   return (
-    <Box minH="100vh" bg="#FDF7EE">
-      <Header title="Scribbly" showCreateButton={true} createUrl="/create" />
-
-      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+    <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
         {loading ? (
-          <LoadingSpinner message="Loading your assignments..." />
+          <Box
+            position="fixed"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            zIndex={20}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <LoadingSpinner message="Loading your assignments..." minHeight="auto" />
+          </Box>
         ) : error ? (
           <Center py={16}>
             <VStack spacing={4}>
@@ -541,6 +549,5 @@ export default function Dashboard() {
           </Box>
         )}
       </Container>
-    </Box>
   );
 }
