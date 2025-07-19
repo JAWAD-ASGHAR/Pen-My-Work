@@ -44,7 +44,7 @@ export const generateImages = protectedAction(async (user: AuthenticatedUser, pa
     const openaiAdapter = new OpenAIAdapter();
     const imageURLs = [];
     for (const systemMessage of systemMessages) {
-      const images = await openaiAdapter.generateImages(systemMessage, "ruled", user.id);
+      const images = await openaiAdapter.generateImages(systemMessage, paper as "grid" | "ruled" | "blank", user.id);
       if (images.success && images.url) {
         imageURLs.push(images.url);
       }
