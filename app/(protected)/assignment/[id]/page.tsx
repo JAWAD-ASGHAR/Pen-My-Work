@@ -21,6 +21,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Skeleton,
 } from "@chakra-ui/react";
 import {
   FiFileText,
@@ -309,17 +310,17 @@ export default function AssignmentDetails() {
 
                     {/* Ink Color */}
                     <HStack justify="space-between">
-                        <HStack>
-                      <Icon as={FiDroplet} color="#FF6A00" />
+                      <HStack>
+                        <Icon as={FiDroplet} color="#FF6A00" />
 
                         <Text fontSize="sm" fontWeight="medium" color="#1A1A1A">
                           Ink Color
                         </Text>
-                            </HStack>
-                          <Badge colorScheme="blue" variant="subtle">
-                            {assignment.ink.charAt(0).toUpperCase() +
-                              assignment.ink.slice(1)}
-                        </Badge>
+                      </HStack>
+                      <Badge colorScheme="blue" variant="subtle">
+                        {assignment.ink.charAt(0).toUpperCase() +
+                          assignment.ink.slice(1)}
+                      </Badge>
                     </HStack>
                   </VStack>
                 </CardBody>
@@ -398,6 +399,7 @@ export default function AssignmentDetails() {
                               w="full"
                               h="full"
                               objectFit="cover"
+                              fallback={<Skeleton startColor="gray.200" endColor="gray.300" w="full" h="full" borderRadius="lg" />}
                             />
                           </Box>
 
@@ -473,6 +475,7 @@ export default function AssignmentDetails() {
                   objectFit="contain"
                   bg="gray.50"
                   maxH="90vh"
+                  fallback={<Skeleton startColor="gray.200" endColor="gray.300" w="full" h="400px" borderRadius="lg" />}
                 />
 
                 {/* Page info overlay */}
