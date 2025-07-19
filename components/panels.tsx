@@ -15,7 +15,7 @@ const onboardingImages = [
 ]
 
 const fadeGradient = {
-  background: 'linear-gradient(to top, #FFFBEA 20%, rgba(255,251,234,0.7) 50%, rgba(255,255,255,0.0) 100%)',
+  background: 'linear-gradient(to top, #FDF7EE 20%, rgba(255,251,234,0.7) 50%, rgba(255,255,255,0.0) 100%)',
 };
 
 export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => (
@@ -24,7 +24,7 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => (
     w="full"
     mt={6}
     position="relative"
-    bg="#FFFBEA"
+    bg="#FDF7EE"
   >
     <Box position="relative" h="600px" overflow="hidden">
       <Grid

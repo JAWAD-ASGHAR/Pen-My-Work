@@ -3,20 +3,20 @@ import React, { forwardRef, useRef, useEffect, useState } from "react";
 import { Badge, Box, Button, Text, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-const screenTypes = [
-  "Create a Welcome Screen",
-  "Create an Invoice Pdf",
-  "Create a Project Brief",
-  "Create a Tasks Checklist",
-  "Create a Thank You Letter",
-  "Create a Feedback Request",
-  "Create a Next Steps Screen",
-  "Create a Contact Info File",
-  "Create a Timeline Screen",
-  "Create a Team Intro Screen",
+const assignmentTypes = [
+  "Write an Essay",
+  "Create Notes",
+  "Draft a Letter",
+  "Make a Checklist",
+  "Write a Report",
+  "Create a Journal",
+  "Draft a Proposal",
+  "Write a Story",
+  "Create a Summary",
+  "Draft a Memo",
 ];
 
-const BUTTON_TEXT = "Create onboarding screen ✨";
+const BUTTON_TEXT = "Start Generating Now ✨";
 const SCRAMBLE_CHARS = "!<>-_/[]{}—=+*^?#________";
 
 function scrambleText(text: string, chars: string) {
@@ -37,9 +37,9 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
     let scrambleFrame: NodeJS.Timeout;
     let running = false;
     const scrambleTimeout = setInterval(() => {
-      const nextIndex = (typeIndex + 1) % screenTypes.length;
+      const nextIndex = (typeIndex + 1) % assignmentTypes.length;
       setTypeIndex(nextIndex);
-      runScramble(screenTypes[nextIndex]);
+      runScramble(assignmentTypes[nextIndex]);
     }, 2000);
 
     const runScramble = (newType: string) => {
@@ -66,7 +66,7 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
     };
 
     // Initial scramble
-    runScramble(screenTypes[typeIndex]);
+    runScramble(assignmentTypes[typeIndex]);
 
     return () => {
       clearInterval(scrambleFrame);
@@ -92,21 +92,21 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
         fontSize="xs"
         mb={4}
       >
-        ✨ New: AI-powered onboarding screens for freelancers
+        ✨ AI-powered handwriting generator
       </Badge>
       <Box mb={4}>
         <Text as="h1" fontSize={{ base: "4xl", md: "6xl" }} fontWeight="bold" color="#181717" lineHeight="shorter">
-          Instantly create onboarding<br />screens
-          <Text as="span" color="orange.500"> for your clients</Text>
+          Instantly create assignments<br />as good as
+          <Text as="span" color="orange.500"> hand written</Text>
         </Text>
         <Text fontSize={{ base: "md", md: "lg" }} color="gray.600" maxW="2xl" mx="auto" mt={4} mb={2}>
-          Choose a template, let AI write the content, edit as you like, and export a polished and ready-to-use PDF.
+          Paste your content, choose your style, and get photo-realistic handwritten pages instantly. Perfect for assignments, notes, letters, and more.
         </Text>
       </Box>
       <Box maxW="md" mx="auto" mt={4}>
-        {/* Scrambled screen type display */}
+        {/* Scrambled assignment type display */}
         <Flex h={8} align="center" justify="center" fontSize="md" fontWeight="semibold" color="orange.500" mb={4}>
-          <span ref={scrambleRef}> {screenTypes[typeIndex]} </span>
+          <span ref={scrambleRef}> {assignmentTypes[typeIndex]} </span>
         </Flex>
         <Button
           w="full"
