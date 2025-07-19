@@ -41,7 +41,7 @@ export class OpenAIAdapter {
                 model: "gpt-image-1",
                 image: imageFile,
                 prompt: systemMessage,
-                size: "1024x1024",
+                size: "1024x1536",
                 quality:"high",
             });
             console.log("[Step 3] OpenAI response received:", JSON.stringify(response, null, 2));
