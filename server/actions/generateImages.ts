@@ -1,5 +1,7 @@
 "use server"
 
+import { OpenAIAdapter } from "@/llm/openai-adapter";
+
 export const generateSystemMessage = async (
   pageText: string,
   ink: string,
@@ -34,9 +36,13 @@ export const generateImages = async (pages: string[], ink: string, paper: string
     }
     
     console.log("systemMessages", systemMessages);
-    
-    // TODO: Implement actual image generation logic here
-    // For now, return a placeholder
+    console.log("paper", paper);
+    console.log("systemMessages[0]", systemMessages[0]);
+
+    const openaiAdapter = new OpenAIAdapter();
+    const images = await openaiAdapter.generateImages(systemMessages[0], "ruled");
+    console.log("images", images);
+
     return {
       success: true,
       message: "Image generation completed",
