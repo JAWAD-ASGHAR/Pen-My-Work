@@ -22,11 +22,10 @@ import {
   FiGrid,
   FiArrowRight,
   FiFileText,
-  FiDownload,
-  FiHome,
   FiPlay,
 } from "react-icons/fi";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ProgressIndicator from "../../components/ProgressIndicator";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { charCount } from "@/utils/char-count";
@@ -70,8 +69,7 @@ export default function CreatePage() {
   const [content, setContent] = useState("");
   const [additionalQueries, setAdditionalQueries] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isGenerated, setIsGenerated] = useState(false);
-  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
+  const router = useRouter();
 
   const maxLength = 2000;
   const selectedColor = inkColors.find((ink) => ink.id === selectedInk);
@@ -93,11 +91,11 @@ export default function CreatePage() {
         setIsGenerating(false);
         return;
       }
-      if (result.success && result.assignmentData) {
+      if (result.success && result.assignmentData && result.assignmentData.length > 0) {
         setIsGenerating(false);
-        setIsGenerated(true);
-        // Save the generated image URLs
-        setGeneratedImages(result.assignmentData[0].imageURLs || []);
+        // Redirect to the assignment details page
+        const assignmentId = result.assignmentData[0].id;
+        router.push(`/assignment/${assignmentId}`);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -441,7 +439,7 @@ export default function CreatePage() {
           </Text>
         </VStack>
 
-        {!isGenerated && !isGenerating && (
+        {!isGenerating && (
           <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
             <CardBody p={8}>
               <VStack spacing={8} align="stretch">
@@ -561,120 +559,7 @@ export default function CreatePage() {
           </Card>
         )}
 
-        {isGenerated && (
-          <VStack spacing={8}>
-            <Card bg="white" border="1px" borderColor="gray.200">
-              <CardBody p={6}>
-                <Heading size="md" color="#1A1A1A" mb={4} textAlign="center">
-                  Your Handwritten Assignment
-                </Heading>
-                {generatedImages.length > 0 ? (
-                  <VStack spacing={4}>
-                    {generatedImages.map((imageUrl, index) => (
-                      <Box
-                        key={index}
-                        aspectRatio="8.5/11"
-                        position="relative"
-                        bg="gray.50"
-                        borderRadius="lg"
-                        overflow="hidden"
-                        w="full"
-                        maxW="600px"
-                      >
-                        <Image
-                          src={imageUrl}
-                          alt={`Generated handwritten assignment page ${
-                            index + 1
-                          }`}
-                          w="full"
-                          h="full"
-                          objectFit="cover"
-                        />
-                      </Box>
-                    ))}
-                    <Text fontSize="sm" color="#666" textAlign="center">
-                      {generatedImages.length} page
-                      {generatedImages.length > 1 ? "s" : ""} generated
-                    </Text>
-                  </VStack>
-                ) : (
-                  <Box
-                    aspectRatio="8.5/11"
-                    position="relative"
-                    bg="gray.50"
-                    borderRadius="lg"
-                    overflow="hidden"
-                  >
-                    <Image
-                      src="/placeholder.svg?height=800&width=600"
-                      alt="Generated handwritten assignment"
-                      w="full"
-                      h="full"
-                      objectFit="cover"
-                    />
-                  </Box>
-                )}
-              </CardBody>
-            </Card>
-
-            <Flex
-              direction={{ base: "column", sm: "row" }}
-              gap={4}
-              justify="center"
-            >
-              {generatedImages.length > 0 && (
-                <>
-                  <Button
-                    bg="#FF6A00"
-                    _hover={{ bg: "#FF8A33" }}
-                    color="white"
-                    px={6}
-                    leftIcon={<Icon as={FiDownload} />}
-                    onClick={() => {
-                      // Download all images
-                      generatedImages.forEach((imageUrl, index) => {
-                        const link = document.createElement("a");
-                        link.href = imageUrl;
-                        link.download = `assignment-page-${index + 1}.png`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      });
-                    }}
-                  >
-                    Download All Pages
-                  </Button>
-                  {generatedImages.length > 1 && (
-                    <Button
-                      variant="outline"
-                      borderColor="#FF6A00"
-                      color="#FF6A00"
-                      bg="transparent"
-                      px={6}
-                      onClick={() => {
-                        // Download as ZIP (you might want to implement this)
-                        console.log("Download as ZIP functionality");
-                      }}
-                    >
-                      Download as ZIP
-                    </Button>
-                  )}
-                </>
-              )}
-              <Button
-                variant="outline"
-                borderColor="gray.200"
-                color="#666"
-                bg="transparent"
-                leftIcon={<Icon as={FiHome} />}
-              >
-                Back to Dashboard
-              </Button>
-            </Flex>
-          </VStack>
-        )}
-
-        {!isGenerated && (
+        {!isGenerating && (
           <Flex justify="space-between">
             <Button
               variant="outline"
