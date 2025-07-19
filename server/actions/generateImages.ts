@@ -1,6 +1,8 @@
 "use server"
 
+import { AuthenticatedUser, protectedAction } from "@/lib/auth-middleware";
 import { OpenAIAdapter } from "@/llm/openai-adapter";
+import { assignment, db } from "@/src/db";
 
 export const generateSystemMessage = async (
   pageText: string,
@@ -26,7 +28,7 @@ export const generateSystemMessage = async (
   ].join("\n");
 };
 
-export const generateImages = async (pages: string[], ink: string, paper: string, additionalQueries: string) => {
+export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string[], ink: string, paper: string, additionalQueries: string) => {
   try {
     console.log("pages", pages);
     let systemMessages = [];
@@ -40,13 +42,29 @@ export const generateImages = async (pages: string[], ink: string, paper: string
     console.log("systemMessages[0]", systemMessages[0]);
 
     const openaiAdapter = new OpenAIAdapter();
-    const images = await openaiAdapter.generateImages(systemMessages[0], "ruled");
-    console.log("images", images);
-
+    const imageURLs = [];
+    for (const systemMessage of systemMessages) {
+      const images = await openaiAdapter.generateImages(systemMessage, "ruled", user.id);
+      if (images.success && images.url) {
+        imageURLs.push(images.url);
+      }
+    }
+    console.log("imageURLs", imageURLs);
+    const assignmentData = await db.insert(assignment).values({
+        userId: user.id,
+        imageURLs: imageURLs,
+        paper: paper,
+        ink: ink, 
+        text: pages.join("\n"),
+        specialQuery: additionalQueries || null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    }).returning();
+    console.log("assignmentData", assignmentData);
     return {
       success: true,
       message: "Image generation completed",
-      systemMessages
+      assignmentData: assignmentData
     };
   } catch (error) {
     console.error("Error generating images:", error);
@@ -55,4 +73,4 @@ export const generateImages = async (pages: string[], ink: string, paper: string
       error: error instanceof Error ? error.message : "Unknown error occurred"
     };
   }
-}; 
+}); 

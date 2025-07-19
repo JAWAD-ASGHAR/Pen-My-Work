@@ -65,20 +65,34 @@ export default function CreatePage() {
   const [additionalQueries, setAdditionalQueries] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [isGenerated, setIsGenerated] = useState(false)
+  const [generatedImages, setGeneratedImages] = useState<string[]>([])
 
   const maxLength = 2000
   const selectedColor = inkColors.find((ink) => ink.id === selectedInk)
 
-  const handleGenerate = async (pages: string[],ink: string,paper: string,additionalQueries: string) => {
-    setIsGenerating(true)
-    console.log("pages++++++", pages);
-    // Simulate generation process
-    const result = await generateImages(pages,ink,paper,additionalQueries) 
-    console.log(result);
-    setTimeout(() => {
-      setIsGenerating(false)
-      setIsGenerated(true)
-    }, 3000)
+  const handleGenerate = async (pages: string[], ink: string, paper: string, additionalQueries: string) => {
+    try {
+      setIsGenerating(true)
+      console.log("pages++++++", pages);
+      // Simulate generation process
+      const result = await generateImages(pages, ink, paper, additionalQueries)
+      console.log(result);
+      if ('error' in result) {
+        console.error('Error:', result.error);
+        setIsGenerating(false);
+        return;
+      }
+      if (result.success && result.assignmentData) {
+        setIsGenerating(false)
+        setIsGenerated(true)
+        // Save the generated image URLs
+        setGeneratedImages(result.assignmentData[0].imageURLs || [])
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setIsGenerating(false);
+      return;
+    }
   }
 
   const nextStep = () => {
@@ -148,11 +162,11 @@ export default function CreatePage() {
       </Grid>
 
       <Flex justify="center">
-        <Button 
-          bg="#FF6A00" 
-          _hover={{ bg: "#FF8A33" }} 
-          color="white" 
-          px={8} 
+        <Button
+          bg="#FF6A00"
+          _hover={{ bg: "#FF8A33" }}
+          color="white"
+          px={8}
           rightIcon={<Icon as={FiArrowRight} />}
           onClick={nextStep}
         >
@@ -230,21 +244,21 @@ export default function CreatePage() {
       </Card>
 
       <Flex justify="space-between">
-        <Button 
-          variant="outline" 
-          borderColor="gray.200" 
-          color="#666" 
+        <Button
+          variant="outline"
+          borderColor="gray.200"
+          color="#666"
           bg="transparent"
           onClick={prevStep}
         >
           <ArrowBackIcon w={4} h={4} mr={2} />
           Previous
         </Button>
-        <Button 
-          bg="#FF6A00" 
-          _hover={{ bg: "#FF8A33" }} 
-          color="white" 
-          px={8} 
+        <Button
+          bg="#FF6A00"
+          _hover={{ bg: "#FF8A33" }}
+          color="white"
+          px={8}
           rightIcon={<Icon as={FiArrowRight} />}
           onClick={nextStep}
         >
@@ -294,21 +308,21 @@ export default function CreatePage() {
       </Card>
 
       <Flex justify="space-between">
-        <Button 
-          variant="outline" 
-          borderColor="gray.200" 
-          color="#666" 
+        <Button
+          variant="outline"
+          borderColor="gray.200"
+          color="#666"
           bg="transparent"
           onClick={prevStep}
         >
           <ArrowBackIcon w={4} h={4} mr={2} />
           Previous
         </Button>
-        <Button 
-          bg="#FF6A00" 
+        <Button
+          bg="#FF6A00"
           _hover={{ bg: "#FF8A33" }}
           color="white"
-          px={8} 
+          px={8}
           rightIcon={<Icon as={FiArrowRight} />}
           isDisabled={!content.trim()}
           onClick={nextStep}
@@ -323,7 +337,7 @@ export default function CreatePage() {
     <>
       <VStack spacing={8} align="center" mb={8}>
         <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Additional Prompts  
+          Additional Prompts
         </Heading>
         <Text color="#666" textAlign="center">
           Add any specific instructions or prompts for the AI to generate your assignment in a particular way
@@ -353,21 +367,21 @@ export default function CreatePage() {
       </Card>
 
       <Flex justify="space-between">
-        <Button 
-          variant="outline" 
-          borderColor="gray.200" 
-          color="#666" 
+        <Button
+          variant="outline"
+          borderColor="gray.200"
+          color="#666"
           bg="transparent"
           onClick={prevStep}
         >
           <ArrowBackIcon w={4} h={4} mr={2} />
           Previous
         </Button>
-        <Button 
-          bg="#FF6A00" 
+        <Button
+          bg="#FF6A00"
           _hover={{ bg: "#FF8A33" }}
           color="white"
-          px={8} 
+          px={8}
           rightIcon={<Icon as={FiArrowRight} />}
           onClick={nextStep}
         >
@@ -381,160 +395,225 @@ export default function CreatePage() {
     const { pages, pageCount } = charCount(content);
     console.log(pages, pageCount);
     return (
-    <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Generate Assignment
-        </Heading>
-        <Text color="#666" textAlign="center">
-          Create your handwritten assignment image
-        </Text>
-      </VStack>
+      <>
+        <VStack spacing={8} align="center" mb={8}>
+          <Heading size="2xl" color="#1A1A1A" textAlign="center">
+            Generate Assignment
+          </Heading>
+          <Text color="#666" textAlign="center">
+            Create your handwritten assignment image
+          </Text>
+        </VStack>
 
-      {!isGenerated && !isGenerating && (
-        <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-          <CardBody p={8}>
-            <VStack spacing={8} align="stretch">
-              <Box>
-                <Heading size="md" color="#1A1A1A" mb={4}>
-                  Generation Summary
-                </Heading>
-                <VStack spacing={4} align="stretch">
-                  <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
-                    <Text fontWeight="medium">Page Style:</Text>
-                    <Badge colorScheme="orange" variant="subtle">{paperTypes.find(p => p.id === selectedPaper)?.name}</Badge>
-                  </HStack>
-                  <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
-                    <Text fontWeight="medium">Pages to Generate:</Text>
-                    <Badge colorScheme="blue" variant="subtle">{pageCount} pages</Badge>
-                  </HStack>
-                  <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
-                    <Text fontWeight="medium">Content Length:</Text>
-                    <Badge colorScheme="green" variant="subtle">~{content.length} characters</Badge>
-                  </HStack>
-                  <HStack justify="space-between" p={4} bg="orange.50" borderRadius="md">
-                    <Text fontWeight="medium">Estimated Time:</Text>
-                    <Badge colorScheme="orange">2-3 minutes</Badge>
-                  </HStack>
-                </VStack>
-              </Box>
+        {!isGenerated && !isGenerating && (
+          <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
+            <CardBody p={8}>
+              <VStack spacing={8} align="stretch">
+                <Box>
+                  <Heading size="md" color="#1A1A1A" mb={4}>
+                    Generation Summary
+                  </Heading>
+                  <VStack spacing={4} align="stretch">
+                    <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
+                      <Text fontWeight="medium">Page Style:</Text>
+                      <Badge colorScheme="orange" variant="subtle">{paperTypes.find(p => p.id === selectedPaper)?.name}</Badge>
+                    </HStack>
+                    <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
+                      <Text fontWeight="medium">Pages to Generate:</Text>
+                      <Badge colorScheme="blue" variant="subtle">{pageCount} pages</Badge>
+                    </HStack>
+                    <HStack justify="space-between" p={4} bg="gray.50" borderRadius="md">
+                      <Text fontWeight="medium">Content Length:</Text>
+                      <Badge colorScheme="green" variant="subtle">~{content.length} characters</Badge>
+                    </HStack>
+                    <HStack justify="space-between" p={4} bg="orange.50" borderRadius="md">
+                      <Text fontWeight="medium">Estimated Time:</Text>
+                      <Badge colorScheme="orange">2-3 minutes</Badge>
+                    </HStack>
+                  </VStack>
+                </Box>
 
-              <Button
-                onClick={() => handleGenerate(pages,selectedInk,selectedPaper,additionalQueries)}
-                bg="#FF6A00"
-                _hover={{ bg: "#FF8A33" }}
-                color="white"
-                size="lg"
-                w="full"
-                leftIcon={<Icon as={FiPlay} />}
-              >
-                Generate Assignment
-              </Button>
-            </VStack>
-          </CardBody>
-        </Card>
-      )}
-
-      {isGenerating && (
-        <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-          <CardBody p={8} textAlign="center">
-            <Box
-              w="24"
-              h="24"
-              mx="auto"
-              mb={6}
-              bg="orange.50"
-              borderRadius="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Box
-                w="12"
-                h="12"
-                border="2px"
-                borderColor="#FF6A00"
-                borderTop="transparent"
-                borderRadius="full"
-                animation="spin 1s linear infinite"
-              ></Box>
-            </Box>
-            <Heading size="lg" color="#1A1A1A" mb={2}>
-              Writing with virtual ink...
-            </Heading>
-            <Text color="#666" mb={4}>
-              Please wait while we generate your handwritten assignment
-            </Text>
-            <Box w="full" bg="gray.200" borderRadius="full" h={2}>
-              <Box
-                bg="#FF6A00"
-                h="full"
-                borderRadius="full"
-                animation="pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
-                w="60%"
-              ></Box>
-            </Box>
-          </CardBody>
-        </Card>
-      )}
-
-      {isGenerated && (
-        <VStack spacing={8}>
-          <Card bg="white" border="1px" borderColor="gray.200">
-            <CardBody p={6}>
-              <Heading size="md" color="#1A1A1A" mb={4} textAlign="center">
-                Your Handwritten Assignment
-              </Heading>
-              <Box aspectRatio="8.5/11" position="relative" bg="gray.50" borderRadius="lg" overflow="hidden">
-                <Image
-                  src="/placeholder.svg?height=800&width=600"
-                  alt="Generated handwritten assignment"
+                <Button
+                  onClick={() => handleGenerate(pages, selectedInk, selectedPaper, additionalQueries)}
+                  bg="#FF6A00"
+                  _hover={{ bg: "#FF8A33" }}
+                  color="white"
+                  size="lg"
                   w="full"
+                  leftIcon={<Icon as={FiPlay} />}
+                >
+                  Generate Assignment
+                </Button>
+              </VStack>
+            </CardBody>
+          </Card>
+        )}
+
+        {isGenerating && (
+          <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
+            <CardBody p={8} textAlign="center">
+              <Box
+                w="24"
+                h="24"
+                mx="auto"
+                mb={6}
+                bg="orange.50"
+                borderRadius="full"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box
+                  w="12"
+                  h="12"
+                  border="2px"
+                  borderColor="#FF6A00"
+                  borderTop="transparent"
+                  borderRadius="full"
+                  animation="spin 1s linear infinite"
+                ></Box>
+              </Box>
+              <Heading size="lg" color="#1A1A1A" mb={2}>
+                Writing with virtual ink...
+              </Heading>
+              <Text color="#666" mb={4}>
+                Please wait while we generate your handwritten assignment
+              </Text>
+              <Box w="full" bg="gray.200" borderRadius="full" h={2}>
+                <Box
+                  bg="#FF6A00"
                   h="full"
-                  objectFit="cover"
-                />
+                  borderRadius="full"
+                  animation="pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
+                  w="60%"
+                ></Box>
               </Box>
             </CardBody>
           </Card>
+        )}
 
-          <Flex direction={{ base: "column", sm: "row" }} gap={4} justify="center">
-            <Button bg="#FF6A00" _hover={{ bg: "#FF8A33" }} color="white" px={6} leftIcon={<Icon as={FiDownload} />}>
-              Download Image
-            </Button>
+        {isGenerated && (
+          <VStack spacing={8}>
+            <Card bg="white" border="1px" borderColor="gray.200">
+              <CardBody p={6}>
+                <Heading size="md" color="#1A1A1A" mb={4} textAlign="center">
+                  Your Handwritten Assignment
+                </Heading>
+                {generatedImages.length > 0 ? (
+                  <VStack spacing={4}>
+                    {generatedImages.map((imageUrl, index) => (
+                      <Box 
+                        key={index}
+                        aspectRatio="8.5/11" 
+                        position="relative" 
+                        bg="gray.50" 
+                        borderRadius="lg" 
+                        overflow="hidden"
+                        w="full"
+                        maxW="600px"
+                      >
+                        <Image
+                          src={imageUrl}
+                          alt={`Generated handwritten assignment page ${index + 1}`}
+                          w="full"
+                          h="full"
+                          objectFit="cover"
+                        />
+                      </Box>
+                    ))}
+                    <Text fontSize="sm" color="#666" textAlign="center">
+                      {generatedImages.length} page{generatedImages.length > 1 ? 's' : ''} generated
+                    </Text>
+                  </VStack>
+                ) : (
+                  <Box aspectRatio="8.5/11" position="relative" bg="gray.50" borderRadius="lg" overflow="hidden">
+                    <Image
+                      src="/placeholder.svg?height=800&width=600"
+                      alt="Generated handwritten assignment"
+                      w="full"
+                      h="full"
+                      objectFit="cover"
+                    />
+                  </Box>
+                )}
+              </CardBody>
+            </Card>
+
+            <Flex direction={{ base: "column", sm: "row" }} gap={4} justify="center">
+              {generatedImages.length > 0 && (
+                <>
+                  <Button 
+                    bg="#FF6A00" 
+                    _hover={{ bg: "#FF8A33" }} 
+                    color="white" 
+                    px={6} 
+                    leftIcon={<Icon as={FiDownload} />}
+                    onClick={() => {
+                      // Download all images
+                      generatedImages.forEach((imageUrl, index) => {
+                        const link = document.createElement('a');
+                        link.href = imageUrl;
+                        link.download = `assignment-page-${index + 1}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      });
+                    }}
+                  >
+                    Download All Pages
+                  </Button>
+                  {generatedImages.length > 1 && (
+                    <Button 
+                      variant="outline"
+                      borderColor="#FF6A00"
+                      color="#FF6A00"
+                      bg="transparent"
+                      px={6}
+                      onClick={() => {
+                        // Download as ZIP (you might want to implement this)
+                        console.log('Download as ZIP functionality');
+                      }}
+                    >
+                      Download as ZIP
+                    </Button>
+                  )}
+                </>
+              )}
+              <Button
+                variant="outline"
+                borderColor="gray.200"
+                color="#666"
+                bg="transparent"
+                leftIcon={<Icon as={FiHome} />}
+              >
+                Back to Dashboard
+              </Button>
+            </Flex>
+          </VStack>
+        )}
+
+        {!isGenerated && (
+          <Flex justify="space-between">
             <Button
               variant="outline"
               borderColor="gray.200"
               color="#666"
               bg="transparent"
-              leftIcon={<Icon as={FiHome} />}
+              onClick={prevStep}
             >
-              Back to Dashboard
+              <ArrowBackIcon w={4} h={4} mr={2} />
+              Previous
             </Button>
           </Flex>
-        </VStack>
-      )}
-
-      {!isGenerated && (
-        <Flex justify="space-between">
-          <Button 
-            variant="outline" 
-            borderColor="gray.200" 
-            color="#666" 
-            bg="transparent"
-            onClick={prevStep}
-          >
-            <ArrowBackIcon w={4} h={4} mr={2} />
-            Previous
-          </Button>
-        </Flex>
-      )}
-    </>
-  )}
+        )}
+      </>
+    )
+  }
 
   return (
     <Box minH="100vh" bg="#FDF7EE">
       <Header />
-      
+
       <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
         <ProgressIndicator currentStep={currentStep} totalSteps={5} />
 

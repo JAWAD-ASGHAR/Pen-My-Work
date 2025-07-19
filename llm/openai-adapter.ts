@@ -3,6 +3,8 @@ import { encodeImage } from "@/utils/imageUtils";
 import { supabase } from "@/lib/supbase-client"; 
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
+import { db } from "@/src/db";
+import { assignment } from "@/src/db/schema";
 
 export class OpenAIAdapter {
     private client: OpenAI;
@@ -11,7 +13,7 @@ export class OpenAIAdapter {
         this.client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
     }
 
-    async generateImages(systemMessage: string, PAGE_TYPE: "grid" | "ruled" | "blank") {
+    async generateImages(systemMessage: string, PAGE_TYPE: "grid" | "ruled" | "blank",userId:string) {
         // Step 1: Choose background
         const baseImageName = {
             grid: "grid_a4.png",
@@ -86,7 +88,7 @@ export class OpenAIAdapter {
         }
 
         // Step 4: Upload to Supabase Storage
-        const fileName = `generated/${uuidv4()}.png`;
+        const fileName = `generated/${userId}/${uuidv4()}.png`;
         let uploadResult;
         try {
             uploadResult = await supabase.storage
@@ -117,7 +119,7 @@ export class OpenAIAdapter {
             console.error("[Step 5] Failed to get public URL:", err);
             return { success: false, error: "Failed to get public URL", details: err };
         }
-
+      
         return { success: true, url: publicUrlData.publicUrl };
     }
 }
