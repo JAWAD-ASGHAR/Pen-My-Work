@@ -63,7 +63,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
       >
         {/* Logo Left */}
         <Flex align="center" minW="120px" gap={2}>
-          <Image src="/Logo.png" alt="Client Craft" width={28} height={28} />
+          <Image src="/FAVORicon.png" alt="Client Craft" width={28} height={28} />
           <Text fontSize="xl" fontWeight="bold" color="gray.900">
           DJ BOTAA
           </Text>
