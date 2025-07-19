@@ -159,7 +159,7 @@ export default function Dashboard() {
           <Box>
             {/* Header Section */}
             <VStack spacing={2} align="start" mb={8}>
-              <Heading size="2xl" color="#1A1A1A">
+              <Heading size="xl" color="#1A1A1A">
                 Assignments Catalog
               </Heading>
               <Text color="#666">

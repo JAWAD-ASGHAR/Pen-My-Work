@@ -266,191 +266,30 @@ export default function AssignmentDetails() {
 
   return (
     <>
-      <Container maxW="full" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+      <VStack spacing={2} align="start" mb={8}>
+              <Heading size="xl" color="#1A1A1A">
+                Assignment Results
+              </Heading>
+              <Text color="#666">
+                View and download your handwritten assignment results
+              </Text>
+            </VStack>
         <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr" }} gap={8} minH="calc(100vh - 200px)">
           {/* Left Side - Assignment Info */}
           <VStack spacing={6} align="stretch">
-            <Card bg="white" border="1px" borderColor="gray.200" h="fit-content">
-              <CardBody p={6}>
-                <VStack spacing={4} align="stretch">
-                  <HStack justify="space-between" align="start">
-                    <VStack align="start" spacing={2}>
-                      <HStack spacing={1} color="#666" fontSize="sm">
-                        <Icon as={FiCalendar} w={4} h={4} />
-                        <Text>
-                          {formatDate(assignment.createdAt)} at {formatTime(assignment.createdAt)}
-                        </Text>
-                      </HStack>
-                      <HStack spacing={1} color="#666" fontSize="sm">
-                        <Icon as={FiDroplet} w={4} h={4} />
-                        <Text>{getStylesText(assignment)}</Text>
-                      </HStack>
-                      {assignment.specialQuery && (
-                        <Badge colorScheme="orange" variant="subtle">
-                          Custom Style: {assignment.specialQuery}
-                        </Badge>
-                      )}
-                    </VStack>
-                    
-                    <Box
-                      w="4"
-                      h="4"
-                      borderRadius="full"
-                      bg={getInkColor(assignment.ink)}
-                      border="2px solid white"
-                      boxShadow="0 2px 4px rgba(0,0,0,0.1)"
-                    />
-                  </HStack>
-                  
-                  <Divider />
-                  
-                  <Box>
-                    <Text color="#1A1A1A" fontSize="lg" fontWeight="medium" mb={3}>
-                      Content:
-                    </Text>
-                    <Text color="#666" fontSize="sm" lineHeight="tall" maxH="200px" overflowY="auto">
-                      {assignment.text}
-                    </Text>
-                  </Box>
-                </VStack>
-              </CardBody>
-            </Card>
+            
           </VStack>
 
           {/* Right Side - Generated Pages */}
           <VStack spacing={6} align="stretch">
-            <HStack justify="space-between" align="center">
-              <VStack align="start" spacing={1}>
-                <Heading size="lg" color="#1A1A1A">
-                  Generated Pages
-                </Heading>
-                <Text color="#666">
-                  {assignment.imageURLs?.length || 0} page{assignment.imageURLs?.length !== 1 ? 's' : ''} generated
-                </Text>
-              </VStack>
-              
-              {assignment.imageURLs?.length && (
-                <HStack spacing={3}>
-                  <Button
-                    onClick={downloadAsPDF}
-                    isLoading={downloading === 'pdf'}
-                    leftIcon={<Icon as={FiFile} />}
-                    bg="#FF6A00"
-                    _hover={{ bg: "#FF8A33" }}
-                    color="white"
-                    size="sm"
-                  >
-                    Download PDF
-                  </Button>
-                  <Button
-                    onClick={downloadAllImages}
-                    isLoading={downloading === 'all'}
-                    leftIcon={<Icon as={FiDownload} />}
-                    bg="blue.500"
-                    _hover={{ bg: "blue.600" }}
-                    color="white"
-                    size="sm"
-                  >
-                    Download All
-                  </Button>
-                </HStack>
-              )}
-            </HStack>
-
-            {assignment.imageURLs?.length ? (
-              <Grid templateColumns={{ base: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }} gap={4}>
-                {assignment.imageURLs.map((imageUrl, index) => (
-                  <Card
-                    key={index}
-                    bg="white"
-                    border="1px"
-                    borderColor="gray.200"
-                    _hover={{ 
-                      shadow: "lg",
-                      transform: "translateY(-2px)",
-                      borderColor: "#FF6A00"
-                    }}
-                    transition="all 0.2s"
-                    cursor="pointer"
-                    onClick={() => openPageModal(imageUrl, index)}
-                  >
-                    <CardBody p={0}>
-                      <Box position="relative" overflow="hidden" borderTopRadius="lg">
-                        <Image
-                          src={imageUrl}
-                          alt={`Page ${index + 1}`}
-                          w="full"
-                          h="200px"
-                          objectFit="cover"
-                          bg="gray.50"
-                        />
-                        
-                        {/* Page number overlay */}
-                        <Box
-                          position="absolute"
-                          top={2}
-                          left={2}
-                          bg="blackAlpha.700"
-                          color="white"
-                          px={2}
-                          py={1}
-                          borderRadius="md"
-                          fontSize="xs"
-                          fontWeight="medium"
-                        >
-                          Page {index + 1}
-                        </Box>
-                        
-                        {/* Download button overlay */}
-                        <Box
-                          position="absolute"
-                          bottom={2}
-                          right={2}
-                        >
-                          <Button
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              downloadImage(imageUrl, index)
-                            }}
-                            isLoading={downloading === `image-${index}`}
-                            size="xs"
-                            bg="white"
-                            _hover={{ bg: "gray.50" }}
-                            color="#1A1A1A"
-                            leftIcon={<Icon as={FiDownload} />}
-                            boxShadow="0 2px 8px rgba(0,0,0,0.15)"
-                          >
-                            Download
-                          </Button>
-                        </Box>
-                      </Box>
-                    </CardBody>
-                  </Card>
-                ))}
-              </Grid>
-            ) : (
-              <Card bg="white" border="1px" borderColor="gray.200">
-                <CardBody p={8}>
-                  <VStack spacing={4} align="center">
-                    <Icon as={FiImage} w={12} h={12} color="gray.400" />
-                    <VStack spacing={2} textAlign="center">
-                      <Heading size="md" color="#1A1A1A">
-                        No pages generated yet
-                      </Heading>
-                      <Text color="#666">
-                        Your assignment is still being processed. Check back later to download your handwritten pages.
-                      </Text>
-                    </VStack>
-                  </VStack>
-                </CardBody>
-              </Card>
-            )}
+         
           </VStack>
         </Grid>
       </Container>
 
       {/* Page Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow="none">
           <ModalCloseButton 
