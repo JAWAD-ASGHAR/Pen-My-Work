@@ -18,6 +18,7 @@ import {
   InputLeftElement,
   Flex,
   Spacer,
+  Badge,
 } from "@chakra-ui/react";
 import {
   FiFileText,
@@ -306,35 +307,42 @@ export default function Dashboard() {
                         >
                           {/* Document Header */}
                           <Box mb={3}>
-                            <HStack alignItems="center">
-                              <Icon
-                                as={
-                                  assignment.paper
-                                    ?.toLowerCase()
-                                    .includes("grid")
-                                    ? FiGrid
-                                    : assignment.paper
-                                        ?.toLowerCase()
-                                        .includes("ruled")
-                                    ? RxHamburgerMenu
-                                    : FiFileText
-                                }
-                                color="#FF6A00"
-                                fontWeight="bold"
-                                size={4}
-                              />
-                              <Text
-                                fontSize="lg"
-                                fontWeight="bold"
-                                color="#1A1A1A"
-                                mb={1}
-                              >
-                                Assignment
-                              </Text>
+                            <HStack alignItems="center" justifyContent="space-between">
+                              <HStack alignItems="center">
+                                <Icon
+                                  as={
+                                    assignment.paper
+                                      ?.toLowerCase()
+                                      .includes("grid")
+                                      ? FiGrid
+                                      : assignment.paper
+                                          ?.toLowerCase()
+                                          .includes("ruled")
+                                      ? RxHamburgerMenu
+                                      : FiFileText
+                                  }
+                                  color="#FF6A00"
+                                  fontWeight="bold"
+                                  size={4}
+                                />
+                                <Text
+                                  fontSize="lg"
+                                  fontWeight="bold"
+                                  color="#1A1A1A"
+                                  mb={1}
+                                >
+                                  Assignment
+                                </Text>
+                              </HStack>
+                              {assignment.imageURLs?.length && (
+                                <Badge colorScheme="orange" variant="subtle">
+                                  {assignment.imageURLs?.length} page{assignment.imageURLs?.length !== 1 ? 's' : ''}
+                                </Badge>
+                              )}
                             </HStack>
-                              <Text fontSize="xs" color="gray.500">
-                                Created: {formatDate(assignment.createdAt)}
-                              </Text>
+                            <Text fontSize="xs" color="gray.500">
+                              Created: {formatDate(assignment.createdAt)}
+                            </Text>
                           </Box>
 
                           {/* Document Content Preview */}
