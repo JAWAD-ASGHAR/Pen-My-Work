@@ -69,6 +69,19 @@ export default function Dashboard() {
     return parts.join(" | ")
   }
 
+  const getInkColor = (ink: string) => {
+    switch (ink.toLowerCase()) {
+      case 'blue':
+        return '#0052A3'
+      case 'black':
+        return '#0A0A0A'
+      case 'dark-gray':
+        return '#4A4A4A'
+      default:
+        return '#0A0A0A'
+    }
+  }
+
   return (
     <Box minH="100vh" bg="#FDF7EE">
       {/* Header */}
@@ -136,32 +149,108 @@ export default function Dashboard() {
                   bg="white"
                   border="1px"
                   borderColor="gray.200"
-                  _hover={{ shadow: "lg" }}
-                  transition="all 0.2s"
+                  _hover={{ 
+                    shadow: "xl",
+                    transform: "translateY(-4px)",
+                    borderColor: "#FF6A00"
+                  }}
+                  transition="all 0.3s ease"
                   cursor="pointer"
+                  position="relative"
+                  overflow="hidden"
                 >
                   <CardBody p={0}>
+                    {/* Preview Image */}
                     <Box aspectRatio="4/3" position="relative" overflow="hidden" borderTopRadius="lg">
-                      <Image
-                        src={assignment.resultImageURL || "/placeholder.svg"}
-                        alt="Assignment preview"
-                        w="full"
-                        h="full"
-                        objectFit="cover"
-                        fallbackSrc="/placeholder.svg"
+                      {assignment.imageURLs?.length ? (
+                        <Image
+                          src={assignment.imageURLs[0]}
+                          alt="Assignment preview"
+                          w="full"
+                          h="full"
+                          objectFit="cover"
+                          fallbackSrc="/placeholder.svg"
+                        />
+                      ) : (
+                        <Box
+                          w="full"
+                          h="full"
+                          bg="gray.100"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          position="relative"
+                        >
+                          <VStack spacing={2}>
+                            <Icon as={FiFileText} w={8} h={8} color="gray.400" />
+                            <Text fontSize="xs" color="gray.500" textAlign="center">
+                              Generating...
+                            </Text>
+                          </VStack>
+                        </Box>
+                      )}
+                      
+                      {/* Overlay with ink color indicator */}
+                      <Box
+                        position="absolute"
+                        top={3}
+                        right={3}
+                        w="4"
+                        h="4"
+                        borderRadius="full"
+                        bg={getInkColor(assignment.ink)}
+                        border="2px solid white"
+                        boxShadow="0 2px 4px rgba(0,0,0,0.1)"
                       />
                     </Box>
+                    
+                    {/* Content */}
                     <Box p={4}>
-                      <HStack spacing={1} color="#666" fontSize="sm" mb={2}>
+                      {/* Date and Time */}
+                      <HStack spacing={1} color="#666" fontSize="sm" mb={3}>
                         <Icon as={FiCalendar} w={4} h={4} />
-                        <Text>
+                        <Text fontWeight="medium">
                           {formatDate(assignment.createdAt)} at {formatTime(assignment.createdAt)}
                         </Text>
                       </HStack>
-                      <HStack spacing={1} color="#666" fontSize="sm">
+                      
+                      {/* Paper and Ink Styles */}
+                      <HStack spacing={1} color="#666" fontSize="sm" mb={3}>
                         <Icon as={FiDroplet} w={4} h={4} />
                         <Text>{getStylesText(assignment)}</Text>
                       </HStack>
+                      
+                      {/* Text Preview */}
+                      <Box>
+                        <Text 
+                          color="#1A1A1A" 
+                          fontSize="sm" 
+                          noOfLines={2}
+                          lineHeight="short"
+                        >
+                          {assignment.text.length > 100 
+                            ? `${assignment.text.substring(0, 100)}...` 
+                            : assignment.text
+                          }
+                        </Text>
+                      </Box>
+                      
+                      {/* Special Query Badge */}
+                      {assignment.specialQuery && (
+                        <Box mt={3}>
+                          <Text
+                            fontSize="xs"
+                            color="#FF6A00"
+                            bg="#FF6A00Alpha.100"
+                            px={2}
+                            py={1}
+                            borderRadius="full"
+                            display="inline-block"
+                          >
+                            Custom Style
+                          </Text>
+                        </Box>
+                      )}
                     </Box>
                   </CardBody>
                 </Card>
