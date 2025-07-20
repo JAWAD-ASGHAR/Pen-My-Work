@@ -4,14 +4,16 @@ import React from "react"
 import { Box, Grid } from "@chakra-ui/react"
 
 const onboardingImages = [
-  "https://template.canva.com/EAE2EsLtGM8/1/0/1131w-_f1IT_yoiJ4.jpg",
-  "https://template.canva.com/EAFZx9_nNDU/2/0/1131w-mhtWrp9n1es.jpg",
-  "https://template.canva.com/EADanzQWpnc/1/0/1131w--pccRM-VTP4.jpg",
-  "https://template.canva.com/EAFmXEUABvs/2/0/1131w-B9UQo4LjPZo.jpg",
-  "https://template.canva.com/EAFkofve1Hs/1/0/1131w-haJfX1AH-qM.jpg",
-  "https://template.canva.com/EAGdZyPjggk/1/0/1131w-S84LXkvjvvU.jpg",
-  "https://template.canva.com/EAFBPe1q9lI/1/0/1131w-PlFRUHzPxFE.jpg",
-  "https://template.canva.com/EAFPQp9X6OA/2/0/1131w-f1m-YmzFyos.jpg",
+  "/example-1.png",
+  "/example-2.png",
+  "/example-1.png",
+  "/example-2.png",
+  "/example-1.png",
+  "/example-2.png",
+  "/example-1.png",
+  "/example-2.png",
+  "/example-1.png",
+  "/example-2.png",
 ]
 
 const fadeGradient = {
