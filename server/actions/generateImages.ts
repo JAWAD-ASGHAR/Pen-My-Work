@@ -14,17 +14,24 @@ export const generateSystemMessage = async (
     ? `\nAdditional instructions: ${additionalQueries}`
     : "";
 
+  const ruledPaperInstructions = paper === 'ruled' 
+    ? `For ruled paper: Write only within the ruled lines. Do not write in the left margin area outside the lines. Align text to start at the left edge of the ruled lines.`
+    : "";
+
   return [
     `Generate a photorealistic image of ${paper == 'blank' ? 'blank white A4 paper (no lines, no grid)' : paper} paper with handwritten text.`,
     `The text should be written in ${ink} ink with neat student handwriting style.`,
     `The handwriting should look natural and realistic, as if written by a student.`,
     ``,
-    `IMPORTANT: Start writing from the very top of the page. Do not leave any empty space at the top.`,
+    `IMPORTANT: Start writing from the begining of the page.`,
     `Use consistent, normal-sized handwriting. Do not make the text too large or too small.`,
     `Maintain consistent line spacing throughout the page.`,
+    ruledPaperInstructions,
     ``,
-    `Use the exact following text content. Preserve all line breaks exactly as given, including mid-word or awkward breaks.`,
-    `Do not add or remove any words or lines.`,
+    `CRITICAL: Write exactly the text provided below. Do not add, remove, or modify any words, punctuation, or formatting.`,
+    `Do not make assumptions about what should be written. Write only what is explicitly given.`,
+    `Preserve all line breaks, spaces, and formatting exactly as provided in the text.`,
+    `Do not complete sentences, add context, or fill in missing information.`,
     `Write the text naturally on the ${paper}, as a student would write in a notebook.`,
     additional,
     ``, 
@@ -49,6 +56,9 @@ export const generateImages = protectedAction(async (user: AuthenticatedUser, pa
             if (images.success && images.url) {
                 imageURLs.push(images.url);
             }
+            console.log("systemMessage", systemMessage);
+            console.log("paper", paper);
+
         }
         console.log("imageURLs", imageURLs);
         const assignmentData = await db.insert(assignment).values({
@@ -65,7 +75,18 @@ export const generateImages = protectedAction(async (user: AuthenticatedUser, pa
         return {
             success: true,
             message: "Image generation completed",
-            assignmentData: assignmentData
+            assignmentData: [
+                {
+                    id: "5a94a70b-3038-4671-a822-ef39f9d425b0",
+                    imageURL: ["https://handwritten-assignments.s3.us-east-1.amazonaws.com/generated/1726790400000/1726790400000.png"],
+                    paper: paper,
+                    ink: ink,
+                    text: pages.join("\n"),
+                    specialQuery: additionalQueries || null,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                }
+            ]
         };
     } catch (error) {
         console.error("Error generating images:", error);

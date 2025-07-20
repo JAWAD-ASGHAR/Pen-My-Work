@@ -82,8 +82,6 @@ export default function CreatePage() {
   ) => {
     try {
       setIsGenerating(true);
-      console.log("pages++++++", pages);
-      // Simulate generation process
       const result = await generateImages(pages, ink, paper, additionalQueries);
       console.log(result);
       if ("error" in result) {
