@@ -18,10 +18,10 @@ export const metadata: Metadata = {
   description: "DJ BOTAA",
   icons: {
     icon: [
-      { url: "/FAVORicon.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon.png", sizes: "192x192", type: "image/png" },
     ],
-    shortcut: "/FAVORicon.png",
-    apple: "/FAVORicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
