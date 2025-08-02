@@ -14,14 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JD CHAWAL",
-  description: "JD CHAWAL",
+  title: "PEN MY WORK",
+  description: "PEN MY WORK",
   icons: {
     icon: [
-      { url: "/FAVORicon.jpeg", sizes: "192x192", type: "image/jpeg" },
+      { url: "/Logo.png", sizes: "192x192", type: "image/png" },
     ],
-    shortcut: "/FAVORicon.jpeg",
-    apple: "/FAVORicon.jpeg",
+    shortcut: "/Logo.png",
+    apple: "/Logo.png",
   },
 };
 
