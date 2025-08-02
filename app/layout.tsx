@@ -14,14 +14,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DJ BOTAA",
-  description: "DJ BOTAA",
+  title: "PEN MY WORK",
+  description: "PEN MY WORK",
   icons: {
     icon: [
+<<<<<<< HEAD
       { url: "/favicon.png", sizes: "192x192", type: "image/png" },
     ],
     shortcut: "/favicon.png",
     apple: "/favicon.png",
+=======
+      { url: "/Logo.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/Logo.png",
+    apple: "/Logo.png",
+>>>>>>> 4f99ec357cd0ca3026e0f13bbbe34758f2acd97e
   },
 };
 

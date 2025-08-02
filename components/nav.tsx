@@ -63,9 +63,15 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
       >
         {/* Logo Left */}
         <Flex align="center" minW="120px" gap={2}>
+<<<<<<< HEAD
           <Image src="/Logo.png" alt="Client Craft" width={28} height={28} />
           <Text fontSize="xl" fontWeight="bold" color="gray.900">
           Penify
+=======
+          <Image src="/Logo.png" alt="PEN MY WORK" width={28} height={28} />
+          <Text fontSize="xl" fontWeight="bold" color="gray.900">
+          PEN MY WORK 
+>>>>>>> 4f99ec357cd0ca3026e0f13bbbe34758f2acd97e
           </Text>
         </Flex>
         {/* Nav Centered */}
@@ -166,7 +172,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
               <Flex align="center" gap={2}>
                 <FiZap style={{ width: "24px", height: "24px", color: "#f97316" }} />
                 <Text fontSize="xl" fontWeight="bold" color="gray.900">
-                  DJ BOTAA
+                  PEN MY WORK
                 </Text>
               </Flex>
               <IconButton
