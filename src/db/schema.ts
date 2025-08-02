@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 export const assignment = pgTable("assignment", {

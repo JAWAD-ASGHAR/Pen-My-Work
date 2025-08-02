@@ -44,7 +44,7 @@ export default function SignInPage() {
         router.push("/home");
       }
     });
-  }, []);
+  }, [router]);
 
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
