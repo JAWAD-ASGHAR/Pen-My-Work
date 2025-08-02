@@ -32,6 +32,8 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@esbuild-kit/core-utils": "^3.3.2",
+    "@esbuild-kit/esm-loader": "^2.6.5",
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^18.3.23",
@@ -41,5 +43,8 @@
     "eslint-config-next": "15.3.5",
     "tsx": "^4.20.3",
     "typescript": "^5"
+  },
+  "overrides": {
+    "esbuild": "^0.25.0"
   }
 }
