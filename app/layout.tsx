@@ -18,10 +18,10 @@ export const metadata: Metadata = {
   description: "Transform your digital text into realistic handwritten pages with Pen My Work",
   icons: {
     icon: [
-      { url: "/FAVORicon.jpeg", sizes: "192x192", type: "image/jpeg" },
+      { url: "/favicon.png", sizes: "192x192", type: "image/png" },
     ],
-    shortcut: "/FAVORicon.jpeg",
-    apple: "/FAVORicon.jpeg",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
