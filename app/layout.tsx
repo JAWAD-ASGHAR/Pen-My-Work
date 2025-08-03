@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JD CHAWAL",
-  description: "JD CHAWAL",
+  title: "Pen My Work",
+  description: "Transform your digital text into realistic handwritten pages with Pen My Work",
   icons: {
     icon: [
       { url: "/FAVORicon.jpeg", sizes: "192x192", type: "image/jpeg" },

@@ -15,7 +15,7 @@ export default function ProtectedLayout({
   return (
     <Box minH="100vh" bg="#FDF7EE">
       <Header 
-        title="Scribbly"
+        title="Pen My Work"
         showCreateButton={isHomePage}
         createUrl="/create"
       />

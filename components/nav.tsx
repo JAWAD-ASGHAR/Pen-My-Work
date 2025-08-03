@@ -166,7 +166,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
               <Flex align="center" gap={2}>
                 <FiZap style={{ width: "24px", height: "24px", color: "#f97316" }} />
                 <Text fontSize="xl" fontWeight="bold" color="gray.900">
-                  JD CHAWAL
+                  Pen My Work
                 </Text>
               </Flex>
               <IconButton
