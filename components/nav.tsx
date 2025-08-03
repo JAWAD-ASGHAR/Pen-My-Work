@@ -65,7 +65,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
         <Flex align="center" minW="120px" gap={2}>
           <Image src="/Logo.png" alt="Client Craft" width={28} height={28} />
           <Text fontSize="xl" fontWeight="bold" color="gray.900">
-          Penify
+          Pen My Work
           </Text>
         </Flex>
         {/* Nav Centered */}

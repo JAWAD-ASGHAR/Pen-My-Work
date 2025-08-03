@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PEN MY WORK",
-  description: "PEN MY WORK",
+  title: "Pen My Work",
+  description: "Transform your digital text into realistic handwritten pages with Pen My Work",
   icons: {
     icon: [
       { url: "/favicon.png", sizes: "192x192", type: "image/png" },

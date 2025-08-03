@@ -30,7 +30,7 @@ export default function Header({
   showBackButton = false, 
   backUrl = "/home", 
   backText = "Back",
-  title = "Scribbly",
+  title = "Pen My Work",
   showCreateButton = false,
   createUrl = "/create",
   children
