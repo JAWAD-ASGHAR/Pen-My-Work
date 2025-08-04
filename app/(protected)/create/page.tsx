@@ -16,6 +16,11 @@ import {
   VStack,
   Textarea,
   Badge,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  Portal,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { FiGrid, FiArrowRight, FiFileText, FiPlay } from "react-icons/fi";
@@ -115,8 +120,8 @@ export default function CreatePage() {
   const [selectedWritingStyle, setSelectedWritingStyle] = useState("caveat");
   const [selectedInk, setSelectedInk] = useState("blue");
   const [customColor, setCustomColor] = useState("#FF6A00");
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [content, setContent] = useState("");
-  const [additionalQueries, setAdditionalQueries] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter();
 
@@ -163,7 +168,7 @@ export default function CreatePage() {
   };
 
   const nextStep = () => {
-    if (currentStep < 6) {
+    if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -280,7 +285,8 @@ export default function CreatePage() {
                   fontSize={style.fontSize}
                   transition="opacity 0.2s"
                 >
-                  {style.name} --- The quick brown fox jumps over the lazy dog
+                  {/* {style.name} --- */}
+                   The quick brown fox jumps over the lazy dog
                 </Text>
             </Box>
           </CardBody>
@@ -330,68 +336,167 @@ export default function CreatePage() {
         mb={8}
       >
         {inkColors.map((ink) => (
-          <Card
-            key={ink.id}
-            cursor="pointer"
-            transition="all 0.2s"
-            onClick={() => {
-              if (ink.id === "custom") {
-                // For custom color, create a centered color picker
-                const colorInput = document.createElement('input');
-                colorInput.type = 'color';
-                colorInput.value = customColor;
-                colorInput.style.position = 'fixed';
-                colorInput.style.top = '50%';
-                colorInput.style.left = '50%';
-                colorInput.style.transform = 'translate(-50%, -50%)';
-                colorInput.style.zIndex = '9999';
-                colorInput.style.opacity = '0';
-                colorInput.style.pointerEvents = 'none';
-                document.body.appendChild(colorInput);
-                
-                colorInput.addEventListener('change', (e) => {
-                  setCustomColor((e.target as HTMLInputElement).value);
-                  setSelectedInk("custom");
-                  document.body.removeChild(colorInput);
-                });
-                
-                colorInput.addEventListener('cancel', () => {
-                  document.body.removeChild(colorInput);
-                });
-                
-                // Trigger the color picker
-                colorInput.click();
-              } else {
-                setSelectedInk(ink.id);
-              }
-            }}
-            bg={selectedInk === ink.id ? "orange.50" : "white"}
-            border="1px"
-            borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
-            _hover={{ shadow: "md" }}
-          >
-            <CardBody p={6} textAlign="center">
-              <Box
-                w="16"
-                h="16"
-                borderRadius="full"
-                mx="auto"
-                mb={4}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                bg={ink.id === "custom" ? customColor : ink.color}
-              >
-                <Box w="8" h="8" bg="white" borderRadius="full"></Box>
-              </Box>
-              <Heading size="md" color="#1A1A1A" mb={1}>
-                {ink.name}
-              </Heading>
-              <Text fontSize="sm" color="#666">
-                {ink.id === "custom" ? customColor : ink.hex}
-              </Text>
-            </CardBody>
-          </Card>
+          ink.id === "custom" ? (
+            <Popover
+              key={ink.id}
+              isOpen={isColorPickerOpen}
+              onClose={() => setIsColorPickerOpen(false)}
+              placement="top"
+            >
+              <PopoverTrigger>
+                <Card
+                  cursor="pointer"
+                  transition="all 0.2s"
+                  onClick={() => setSelectedInk("custom")}
+                  bg={selectedInk === ink.id ? "orange.50" : "white"}
+                  border="1px"
+                  borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
+                  _hover={{ shadow: "md" }}
+                >
+                  <CardBody p={6} textAlign="center">
+                    <Box
+                      w="16"
+                      h="16"
+                      borderRadius="full"
+                      mx="auto"
+                      mb={4}
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      bg={customColor}
+                      cursor="pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsColorPickerOpen(true);
+                      }}
+                      _hover={{ transform: "scale(1.05)" }}
+                      transition="transform 0.2s"
+                    >
+                      <Box w="8" h="8" bg="white" borderRadius="full"></Box>
+                    </Box>
+                    <Heading size="md" color="#1A1A1A" mb={1}>
+                      {ink.name}
+                    </Heading>
+                    <Text 
+                      fontSize="sm" 
+                      color="#666"
+                      cursor="pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsColorPickerOpen(true);
+                      }}
+                      _hover={{ color: "#FF6A00" }}
+                      transition="color 0.2s"
+                    >
+                      {customColor}
+                    </Text>
+                  </CardBody>
+                </Card>
+              </PopoverTrigger>
+              <Portal>
+                <PopoverContent p={4} w="300px">
+                  <PopoverBody>
+                    <VStack spacing={4}>
+                      <Heading size="md" color="#1A1A1A" textAlign="center">
+                        Choose Custom Color
+                      </Heading>
+                      <Box>
+                        <Text fontSize="sm" color="#666" mb={2}>
+                          Color Picker
+                        </Text>
+                        <input
+                          type="color"
+                          value={customColor}
+                          onChange={(e) => {
+                            setCustomColor(e.target.value);
+                            setSelectedInk("custom");
+                          }}
+                          style={{
+                            width: "100%",
+                            height: "60px",
+                            border: "2px solid #FF6A00",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Box>
+                      <HStack justify="space-between" w="full">
+                        <Text fontSize="sm" color="#666">
+                          Selected Color:
+                        </Text>
+                        <input
+                          type="text"
+                          value={customColor}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            // Only update if it's a valid hex color
+                            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                              setCustomColor(value);
+                              setSelectedInk("custom");
+                            } else if (value.length <= 7) {
+                              // Allow typing but don't update color until valid
+                              setCustomColor(value);
+                            }
+                          }}
+                          style={{
+                            fontSize: "16px",
+                            fontWeight: "bold",
+                            color: "#1A1A1A",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                            padding: "4px 8px",
+                            width: "80px",
+                            textAlign: "center",
+                          }}
+                        />
+                      </HStack>
+                      <Button
+                        colorScheme="orange"
+                        size="sm"
+                        onClick={() => setIsColorPickerOpen(false)}
+                        w="full"
+                      >
+                        Done
+                      </Button>
+                    </VStack>
+                  </PopoverBody>
+                </PopoverContent>
+              </Portal>
+            </Popover>
+          ) : (
+            <Card
+              key={ink.id}
+              cursor="pointer"
+              transition="all 0.2s"
+              onClick={() => setSelectedInk(ink.id)}
+              bg={selectedInk === ink.id ? "orange.50" : "white"}
+              border="1px"
+              borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
+              _hover={{ shadow: "md" }}
+            >
+              <CardBody p={6} textAlign="center">
+                <Box
+                  w="16"
+                  h="16"
+                  borderRadius="full"
+                  mx="auto"
+                  mb={4}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  bg={ink.color}
+                >
+                  <Box w="8" h="8" bg="white" borderRadius="full"></Box>
+                </Box>
+                <Heading size="md" color="#1A1A1A" mb={1}>
+                  {ink.name}
+                </Heading>
+                <Text fontSize="sm" color="#666">
+                  {ink.hex}
+                </Text>
+              </CardBody>
+            </Card>
+          )
         ))}
       </Grid>
 
@@ -403,7 +508,8 @@ export default function CreatePage() {
           </Heading>
           <Box bg="gray.50" p={6} borderRadius="lg">
             <Text
-              fontSize="2xl"
+              fontSize={writingStyles.find((s) => s.id === selectedWritingStyle)
+                  ?.fontSize || "24px"}
               textAlign="center"
               color={selectedColor?.color}
               fontFamily={
@@ -511,70 +617,7 @@ export default function CreatePage() {
           px={8}
           rightIcon={<Icon as={FiArrowRight} />}
           isDisabled={!content.trim()}
-          onClick={nextStep}
-        >
-          Next Step
-        </Button>
-      </Flex>
-    </>
-  );
-
-  const renderStep5 = () => (
-    <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Additional Prompts
-        </Heading>
-        <Text color="#666" textAlign="center">
-          Add any specific instructions or prompts for the AI to generate your
-          assignment in a particular way
-        </Text>
-      </VStack>
-
-      <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-        <CardBody p={8}>
-          <Box>
-            <Heading size="md" color="#1A1A1A" mb={4}>
-              Additional Prompts (Optional)
-            </Heading>
-            <Text color="#666" mb={4}>
-              Add any specific instructions or prompts for the AI to generate
-              your assignment in a particular way
-            </Text>
-            <Textarea
-              placeholder="e.g., Make it look more casual, use bullet points, add diagrams, etc..."
-              value={additionalQueries}
-              onChange={(e) => setAdditionalQueries(e.target.value)}
-              minH="120px"
-              resize="none"
-              borderColor="gray.300"
-              _focus={{
-                borderColor: "#FF6A00",
-                boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)",
-              }}
-            />
-          </Box>
-        </CardBody>
-      </Card>
-
-      <Flex justify="space-between">
-        <Button
-          variant="outline"
-          borderColor="gray.200"
-          color="#666"
-          bg="transparent"
-          onClick={prevStep}
-        >
-          <ArrowBackIcon w={4} h={4} mr={2} />
-          Previous
-        </Button>
-        <Button
-          bg="#FF6A00"
-          _hover={{ bg: "#FF8A33" }}
-          color="white"
-          px={8}
-          rightIcon={<Icon as={FiArrowRight} />}
-          onClick={nextStep}
+          onClick={() => setCurrentStep(5)}
         >
           Continue to Generate
         </Button>
@@ -582,7 +625,9 @@ export default function CreatePage() {
     </>
   );
 
-  const renderStep6 = () => {
+
+
+  const renderStep5 = () => {
     const { pages, pageCount } = charCount(content);
     console.log(pages, pageCount);
     return (
@@ -656,7 +701,7 @@ export default function CreatePage() {
                       pages,
                       selectedInk,
                       selectedPaper,
-                      additionalQueries
+                      ""
                     )
                   }
                   bg="#FF6A00"
@@ -736,13 +781,12 @@ export default function CreatePage() {
 
   return (
     <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
-      <ProgressIndicator currentStep={currentStep} totalSteps={6} />
+      <ProgressIndicator currentStep={currentStep} totalSteps={5} />
       {currentStep === 1 && renderStep1()}
       {currentStep === 2 && renderStep2()}
       {currentStep === 3 && renderStep3()}
       {currentStep === 4 && renderStep4()}
       {currentStep === 5 && renderStep5()}
-      {currentStep === 6 && renderStep6()}
     </Container>
   );
 }
