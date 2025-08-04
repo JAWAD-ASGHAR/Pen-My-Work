@@ -15,10 +15,11 @@ const LinedPaper: React.FC<LinedPaperProps> = ({
   fontSize, 
   paperRef 
 }) => {
-  // Constants for perfect line alignment
-  const lineHeightPx = 20; // px, matches the line interval in the background
-  const leftPadding = 10; // px, just past the red margin line
-  const topPadding = 40; // px, top margin
+  // Constants for 30 lines distributed evenly
+  const totalLines = 30;
+  const availableHeight = 762; // A4 height (842px) - top/bottom padding (80px)
+  const lineHeightPx = availableHeight / totalLines; // Distribute lines evenly
+  const leftPadding = 5; // px, just past the red margin line
 
   // Helper: Split text into paragraphs, then words, and wrap to fit the paper width
   const paperWidthPx = 595 - 2 * 50 - leftPadding; // total width - horizontal padding - left margin
@@ -72,9 +73,9 @@ const LinedPaper: React.FC<LinedPaperProps> = ({
             repeating-linear-gradient(
               0deg,
               transparent,
-              transparent 19px,
-              #000000 19px,
-              #000000 20px
+              transparent ${lineHeightPx - 1}px,
+              #000000 ${lineHeightPx - 1}px,
+              #000000 ${lineHeightPx}px
             ),
             linear-gradient(
               90deg,
@@ -86,10 +87,14 @@ const LinedPaper: React.FC<LinedPaperProps> = ({
             ),
             #ffffff
           `,
-          backgroundSize: '100% 20px, 100% 20px, 100% 100%',
+          backgroundSize: `100% ${lineHeightPx}px, 100% ${lineHeightPx}px, 100% 100%`,
           padding: '40px 50px',
           boxSizing: 'border-box',
           overflow: 'hidden',
+          minHeight: '842px',
+          maxHeight: '842px',
+          minWidth: '595px',
+          maxWidth: '595px',
         }}
       >
         <div
@@ -100,7 +105,7 @@ const LinedPaper: React.FC<LinedPaperProps> = ({
             color: textColor,
             paddingLeft: `${leftPadding}px`,
             width: '100%',
-            height: '100%',
+            height: '762px', // A4 height (842px) - top/bottom padding (80px)
             position: 'relative',
             top: '5px',
             fontFamily: fontFamily,
@@ -108,10 +113,11 @@ const LinedPaper: React.FC<LinedPaperProps> = ({
             boxSizing: 'border-box',
             pointerEvents: 'none',
             userSelect: 'none',
+            overflow: 'hidden',
           }}
         >
           {/* Render each wrapped line absolutely aligned to the line grid */}
-          {wrappedLines.map((line, idx) => (
+          {wrappedLines.slice(0, totalLines).map((line, idx) => (
             <span
               key={idx}
               style={{

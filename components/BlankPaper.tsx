@@ -71,6 +71,10 @@ const BlankPaper: React.FC<BlankPaperProps> = ({
           padding: '50px',
           boxSizing: 'border-box',
           overflow: 'hidden',
+          minHeight: '842px',
+          maxHeight: '842px',
+          minWidth: '595px',
+          maxWidth: '595px',
         }}
       >
         <div
@@ -82,13 +86,14 @@ const BlankPaper: React.FC<BlankPaperProps> = ({
             paddingLeft: `${leftPadding}px`,
             paddingTop: `${topPadding}px`,
             width: '100%',
-            height: '100%',
+            height: '742px', // A4 height (842px) - top/bottom padding (100px)
             position: 'relative',
             fontFamily: fontFamily,
             whiteSpace: 'pre-line',
             boxSizing: 'border-box',
             pointerEvents: 'none',
             userSelect: 'none',
+            overflow: 'hidden',
           }}
         >
           {/* Render each wrapped line with proper spacing */}

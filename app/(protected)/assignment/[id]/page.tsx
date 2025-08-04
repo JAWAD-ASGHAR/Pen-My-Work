@@ -227,7 +227,7 @@ export default function AssignmentDetails() {
             Assignment Results
           </Heading>
           <Text color="#666" mb={10}>
-            View and download your handwritten assignment results
+            View and download your handwritten results
           </Text>
 
           <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr" }} gap={8}>
