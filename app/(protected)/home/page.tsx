@@ -19,16 +19,33 @@ import {
   Flex,
   Spacer,
   Badge,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import {
   FiFileText,
   FiPlusCircle,
   FiSearch,
   FiGrid,
+  FiMoreVertical,
+  FiTrash2,
 } from "react-icons/fi";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getAssignments, type Assignment } from "@/server/actions/assignments";
+import {
+  getAssignments,
+  deleteAssignment,
+  type Assignment,
+} from "@/server/actions/assignments";
 import { RxHamburgerMenu } from "react-icons/rx";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -38,6 +55,11 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
+  const [deletingAssignment, setDeletingAssignment] = useState<string | null>(
+    null
+  );
+  const [assignmentToDelete, setAssignmentToDelete] = useState<Assignment | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -121,81 +143,119 @@ export default function Dashboard() {
     }).length;
   };
 
+  const handleDeleteAssignment = async (assignmentId: string) => {
+    const assignment = assignments.find(a => a.id === assignmentId);
+    if (assignment) {
+      setAssignmentToDelete(assignment);
+      onOpen();
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!assignmentToDelete) return;
+
+    try {
+      setDeletingAssignment(assignmentToDelete.id);
+      const result = await deleteAssignment(assignmentToDelete.id);
+
+      if (result.success) {
+        // Remove the assignment from the local state
+        setAssignments((prev) =>
+          prev.filter((assignment) => assignment.id !== assignmentToDelete.id)
+        );
+        onClose();
+        setAssignmentToDelete(null);
+      } else {
+        console.error("Error deleting assignment:", result.error);
+        alert("Failed to delete assignment. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+      alert("Failed to delete assignment. Please try again.");
+    } finally {
+      setDeletingAssignment(null);
+    }
+  };
+
   return (
-    <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
-        {loading ? (
-          <Box
-            position="fixed"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            zIndex={20}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <LoadingSpinner message="Loading your assignments..." minHeight="auto" />
-          </Box>
-        ) : error ? (
-          <Center py={16}>
-            <VStack spacing={4}>
-              <Icon as={FiFileText} w={12} h={12} color="red.400" />
-              <Heading size="md" color="#1A1A1A">
-                {error}
-              </Heading>
-              <Text color="#666">Please try again later</Text>
-              <Button
-                onClick={() => window.location.reload()}
-                bg="#FF6A00"
-                _hover={{ bg: "#FF8A33" }}
-                color="white"
-              >
-                Retry
-              </Button>
-            </VStack>
-          </Center>
-        ) : hasAssignments ? (
-          <Box>
-            {/* Header Section */}
-            <VStack spacing={2} align="start" mb={8}>
-              <Heading size="xl" color="#1A1A1A">
-                Assignments Catalog
-              </Heading>
-              <Text color="#666">
-                Choose from your handwritten assignments or create a new one
-              </Text>
-            </VStack>
-
-            {/* Search and Upload Section */}
-            <Flex
-              mb={6}
-              gap={4}
-              direction={{ base: "column", md: "row" }}
-              align="center"
+    <>
+      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+      {loading ? (
+        <Box
+          position="fixed"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          zIndex={20}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <LoadingSpinner
+            message="Loading your assignments..."
+            minHeight="auto"
+          />
+        </Box>
+      ) : error ? (
+        <Center py={16}>
+          <VStack spacing={4}>
+            <Icon as={FiFileText} w={12} h={12} color="red.400" />
+            <Heading size="md" color="#1A1A1A">
+              {error}
+            </Heading>
+            <Text color="#666">Please try again later</Text>
+            <Button
+              onClick={() => window.location.reload()}
+              bg="#FF6A00"
+              _hover={{ bg: "#FF8A33" }}
+              color="white"
             >
-              <InputGroup maxW={{ base: "full", md: "400px" }}>
-                <InputLeftElement pointerEvents="none">
-                  <Icon as={FiSearch} color="gray.400" />
-                </InputLeftElement>
-                <Input
-                  placeholder="Search assignments..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  bg="white"
-                  border="1px solid"
-                  borderColor="gray.200"
-                  _focus={{
-                    borderColor: "#FF6A00",
-                    boxShadow: "0 0 0 1px #FF6A00",
-                  }}
-                />
-              </InputGroup>
+              Retry
+            </Button>
+          </VStack>
+        </Center>
+      ) : hasAssignments ? (
+        <Box>
+          {/* Header Section */}
+          <VStack spacing={2} align="start" mb={8}>
+            <Heading size="xl" color="#1A1A1A">
+              Assignments Catalog
+            </Heading>
+            <Text color="#666">
+              Choose from your handwritten assignments or create a new one
+            </Text>
+          </VStack>
 
-              <Spacer />
+          {/* Search and Upload Section */}
+          <Flex
+            mb={6}
+            gap={4}
+            direction={{ base: "column", md: "row" }}
+            align="center"
+          >
+            <InputGroup maxW={{ base: "full", md: "400px" }}>
+              <InputLeftElement pointerEvents="none">
+                <Icon as={FiSearch} color="gray.400" />
+              </InputLeftElement>
+              <Input
+                placeholder="Search assignments..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                bg="white"
+                border="1px solid"
+                borderColor="gray.200"
+                _focus={{
+                  borderColor: "#FF6A00",
+                  boxShadow: "0 0 0 1px #FF6A00",
+                }}
+              />
+            </InputGroup>
 
-              {/* Filter Buttons */}
-              <HStack spacing={3} mb={8} flexWrap="wrap">
+            <Spacer />
+
+            {/* Filter Buttons */}
+            <HStack spacing={3} mb={8} flexWrap="wrap">
               <Button
                 variant={selectedFilter === "all" ? "solid" : "outline"}
                 colorScheme="orange"
@@ -233,68 +293,107 @@ export default function Dashboard() {
                 Grid ({getFilterCount("grid")})
               </Button>
             </HStack>
-            </Flex>
+          </Flex>
 
-
-            {/* Assignments Grid */}
-            {filteredAssignments.length > 0 ? (
-              <Grid
-                templateColumns={{
-                  base: "1fr",
-                  md: "repeat(2, 1fr)",
-                  lg: "repeat(3, 1fr)",
-                }}
-                gap={6}
-              >
-                {/* Create New Assignment Card */}
-                <Link href="/create">
-                  <Card
-                    bg="gray.50"
-                    border="2px dashed"
-                    borderColor="gray.300"
-                    _hover={{
-                      borderColor: "#FF6A00",
-                      bg: "gray.100",
-                    }}
-                    transition="all 0.3s ease"
-                    cursor="pointer"
-                    height="300px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <VStack spacing={4}>
-                      <Icon as={FiPlusCircle} w={12} h={12} color="gray.400" />
-                      <Text
-                        color="gray.600"
-                        fontSize="sm"
-                        textAlign="center"
-                        fontWeight="medium"
+          {/* Assignments Grid */}
+          {filteredAssignments.length > 0 ? (
+            <Grid
+              templateColumns={{
+                base: "1fr",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(3, 1fr)",
+              }}
+              gap={6}
+            >
+              {/* Create New Assignment Card */}
+              <Link href="/create">
+                <Card
+                  bg="gray.50"
+                  border="2px dashed"
+                  borderColor="gray.300"
+                  _hover={{
+                    borderColor: "#FF6A00",
+                    bg: "gray.100",
+                  }}
+                  transition="all 0.3s ease"
+                  cursor="pointer"
+                  height="300px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <VStack spacing={4}>
+                    <Icon as={FiPlusCircle} w={12} h={12} color="gray.400" />
+                    <Text
+                      color="gray.600"
+                      fontSize="sm"
+                      textAlign="center"
+                      fontWeight="medium"
+                    >
+                      Create a new assignment
+                    </Text>
+                  </VStack>
+                </Card>
+              </Link>
+              {filteredAssignments.map((assignment) => (
+                <Card
+                  key={assignment.id}
+                  bg="white"
+                  border="1px"
+                  borderColor="gray.200"
+                  _hover={{
+                    shadow: "xl",
+                    transform: "translateY(-4px)",
+                    borderColor: "#FF6A00",
+                  }}
+                  transition="all 0.3s ease"
+                  position="relative"
+                  overflow="hidden"
+                  height="300px"
+                >
+                  {/* Assignment Menu */}
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      position="absolute"
+                      top={2}
+                      right={2}
+                      zIndex={10}
+                      size="sm"
+                      variant="ghost"
+                      color="gray.600"
+                      _hover={{ bg: "gray.100" }}
+                    >
+                      <Icon as={FiMoreVertical} />
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        icon={<Icon as={FiFileText} />}
+                        onClick={() => {
+                          window.location.href = `/assignment/${assignment.id}`;
+                        }}
                       >
-                        Create a new assignment
-                      </Text>
-                    </VStack>
-                  </Card>
-                </Link>
-                {filteredAssignments.map((assignment) => (
-                  <Link
-                    href={`/assignment/${assignment.id}`}
-                    key={assignment.id}
-                  >
-                    <Card
-                      bg="white"
-                      border="1px"
-                      borderColor="gray.200"
-                      _hover={{
-                        shadow: "xl",
-                        transform: "translateY(-4px)",
-                        borderColor: "#FF6A00",
-                      }}
-                      transition="all 0.3s ease"
+                        View Details
+                      </MenuItem>
+                      <MenuItem
+                        icon={<Icon as={FiTrash2} />}
+                        color="red.500"
+                        onClick={() => handleDeleteAssignment(assignment.id)}
+                        isDisabled={deletingAssignment === assignment.id}
+                      >
+                        {deletingAssignment === assignment.id
+                          ? "Deleting..."
+                          : "Delete Assignment"}
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+
+                  <Link href={`/assignment/${assignment.id}`}>
+                    <Box
                       cursor="pointer"
-                      position="relative"
-                      overflow="hidden"
-                      height="300px"
+                      height="full"
+                      _hover={{ opacity: 0.9 }}
+                      transition="opacity 0.2s"
                     >
                       <CardBody p={0} height="full">
                         {/* Document Preview */}
@@ -307,7 +406,10 @@ export default function Dashboard() {
                         >
                           {/* Document Header */}
                           <Box mb={3}>
-                            <HStack alignItems="center" justifyContent="space-between">
+                            <HStack
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
                               <HStack alignItems="center">
                                 <Icon
                                   as={
@@ -334,11 +436,6 @@ export default function Dashboard() {
                                   Assignment
                                 </Text>
                               </HStack>
-                              {assignment.imageURLs?.length && (
-                                <Badge colorScheme="orange" variant="subtle">
-                                  {assignment.imageURLs?.length} page{assignment.imageURLs?.length !== 1 ? 's' : ''}
-                                </Badge>
-                              )}
                             </HStack>
                             <Text fontSize="xs" color="gray.500">
                               Created: {formatDate(assignment.createdAt)}
@@ -399,163 +496,195 @@ export default function Dashboard() {
                             borderTop="1px solid"
                             borderColor="gray.200"
                           >
-                            <HStack spacing={2} fontSize="xs" color="gray.500">
-                              <Text>{getStylesText(assignment)}</Text>
-                            </HStack>
+                            <Flex justify="space-between" align="center">
+                              <HStack spacing={2} fontSize="xs" color="gray.500">
+                                <Text>{getStylesText(assignment)}</Text>
+                              </HStack>
+
+                              {assignment.imageURLs?.length && (
+                                <Badge colorScheme="orange" variant="subtle">
+                                  {assignment.imageURLs?.length} page
+                                  {assignment.imageURLs?.length !== 1 ? "s" : ""}
+                                </Badge>
+                              )}
+                            </Flex>
                           </Box>
                         </Box>
                       </CardBody>
-                    </Card>
-                  </Link>
-                ))}
-              </Grid>
-            ) : (
-              <Center py={16}>
-                <VStack spacing={4}>
-                  <Icon as={FiFileText} w={12} h={12} color="gray.400" />
-                  <Heading size="md" color="#1A1A1A">
-                    No assignments found
-                  </Heading>
-                  <Text color="#666">
-                    {searchQuery
-                      ? "Try adjusting your search or filters"
-                      : "Create your first assignment to get started"}
-                  </Text>
-                  {!searchQuery && (
-                    <Link href="/create">
-                      <Button
-                        bg="#FF6A00"
-                        _hover={{ bg: "#FF8A33" }}
-                        color="white"
-                        leftIcon={<Icon as={FiPlusCircle} />}
-                      >
-                        Create Assignment
-                      </Button>
-                    </Link>
-                  )}
-                </VStack>
-              </Center>
-            )}
-          </Box>
-        ) : (
-          <Box py={16}>
-            <Container maxW="4xl">
-              <VStack spacing={12} align="center">
-                {/* Hero Section */}
-                <VStack spacing={8} textAlign="center">
-                  <Box position="relative">
-                    {/* Main illustration */}
-                    <Box
-                      w="48"
-                      h="48"
-                      mx="auto"
-                      mb={8}
-                      bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
-                      borderRadius="full"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="0 20px 40px rgba(255, 106, 0, 0.3)"
-                      position="relative"
-                      _before={{
-                        content: '""',
-                        position: "absolute",
-                        top: "-8px",
-                        left: "-8px",
-                        right: "-8px",
-                        bottom: "-8px",
-                        bg: "linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)",
-                        borderRadius: "full",
-                        opacity: 0.2,
-                        zIndex: -1,
-                      }}
-                    >
-                      <Icon as={FiFileText} w="24" h="24" color="white" />
                     </Box>
-
-                    {/* Floating elements */}
-                    <Box
-                      position="absolute"
-                      top="20%"
-                      right="-20px"
-                      w="6"
-                      h="6"
-                      bg="blue.400"
-                      borderRadius="full"
-                      opacity={0.8}
-                      animation="float 3s ease-in-out infinite"
-                    />
-                    <Box
-                      position="absolute"
-                      bottom="10%"
-                      left="-15px"
-                      w="4"
-                      h="4"
-                      bg="green.400"
-                      borderRadius="full"
-                      opacity={0.6}
-                      animation="float 2.5s ease-in-out infinite reverse"
-                    />
-                  </Box>
-
-                  <VStack spacing={4}>
-                    <Heading
-                      size="2xl"
-                      color="#1A1A1A"
-                      fontWeight="bold"
-                      bgGradient="linear(to-r, #1A1A1A, #FF6A00)"
-                      bgClip="text"
-                    >
-                      Ready to Create Magic?
-                    </Heading>
-                    <Text
-                      fontSize="xl"
-                      color="#666"
-                      maxW="2xl"
-                      lineHeight="tall"
-                    >
-                      Transform your ideas into beautiful handwritten content.
-                      Whether it&apos;s assignments, notes, or creative
-                      projects, let&apos;s bring your words to life.
-                    </Text>
-                  </VStack>
-                </VStack>
-
-                {/* CTA Section */}
-                <Box textAlign="center">
-                  <Text color="#666" fontSize="lg" mb={4}>
-                    Start your journey with your first assignment
-                  </Text>
+                  </Link>
+                </Card>
+              ))}
+            </Grid>
+          ) : (
+            <Center py={16}>
+              <VStack spacing={4}>
+                <Icon as={FiFileText} w={12} h={12} color="gray.400" />
+                <Heading size="md" color="#1A1A1A">
+                  No assignments found
+                </Heading>
+                <Text color="#666">
+                  {searchQuery
+                    ? "Try adjusting your search or filters"
+                    : "Create your first assignment to get started"}
+                </Text>
+                {!searchQuery && (
                   <Link href="/create">
                     <Button
-                      size="lg"
-                      bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
-                      _hover={{
-                        bg: "linear-gradient(135deg, #FF8A33 0%, #FF6A00 100%)",
-                        transform: "translateY(-2px)",
-                        boxShadow: "0 10px 25px rgba(255, 106, 0, 0.4)",
-                      }}
-                      _active={{
-                        transform: "translateY(0px)",
-                      }}
+                      bg="#FF6A00"
+                      _hover={{ bg: "#FF8A33" }}
                       color="white"
                       leftIcon={<Icon as={FiPlusCircle} />}
-                      px={8}
-                      py={6}
-                      fontSize="lg"
-                      fontWeight="semibold"
-                      borderRadius="xl"
-                      boxShadow="0 8px 20px rgba(255, 106, 0, 0.3)"
-                      transition="all 0.2s"
                     >
-                      Create Your First Assignment
+                      Create Assignment
                     </Button>
                   </Link>
-                </Box>
+                )}
               </VStack>
-            </Container>
-          </Box>
-        )}
-      </Container>
-  );
+            </Center>
+          )}
+        </Box>
+      ) : (
+        <Box py={16}>
+          <Container maxW="4xl">
+            <VStack spacing={12} align="center">
+              {/* Hero Section */}
+              <VStack spacing={8} textAlign="center">
+                <Box position="relative">
+                  {/* Main illustration */}
+                  <Box
+                    w="48"
+                    h="48"
+                    mx="auto"
+                    mb={8}
+                    bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
+                    borderRadius="full"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    boxShadow="0 20px 40px rgba(255, 106, 0, 0.3)"
+                    position="relative"
+                    _before={{
+                      content: '""',
+                      position: "absolute",
+                      top: "-8px",
+                      left: "-8px",
+                      right: "-8px",
+                      bottom: "-8px",
+                      bg: "linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)",
+                      borderRadius: "full",
+                      opacity: 0.2,
+                      zIndex: -1,
+                    }}
+                  >
+                    <Icon as={FiFileText} w="24" h="24" color="white" />
+                  </Box>
+
+                  {/* Floating elements */}
+                  <Box
+                    position="absolute"
+                    top="20%"
+                    right="-20px"
+                    w="6"
+                    h="6"
+                    bg="blue.400"
+                    borderRadius="full"
+                    opacity={0.8}
+                    animation="float 3s ease-in-out infinite"
+                  />
+                  <Box
+                    position="absolute"
+                    bottom="10%"
+                    left="-15px"
+                    w="4"
+                    h="4"
+                    bg="green.400"
+                    borderRadius="full"
+                    opacity={0.6}
+                    animation="float 2.5s ease-in-out infinite reverse"
+                  />
+                </Box>
+
+                <VStack spacing={4}>
+                  <Heading
+                    size="2xl"
+                    color="#1A1A1A"
+                    fontWeight="bold"
+                    bgGradient="linear(to-r, #1A1A1A, #FF6A00)"
+                    bgClip="text"
+                  >
+                    Ready to Create Magic?
+                  </Heading>
+                  <Text fontSize="xl" color="#666" maxW="2xl" lineHeight="tall">
+                    Transform your ideas into beautiful handwritten content.
+                    Whether it&apos;s assignments, notes, or creative projects,
+                    let&apos;s bring your words to life.
+                  </Text>
+                </VStack>
+              </VStack>
+
+              {/* CTA Section */}
+              <Box textAlign="center">
+                <Text color="#666" fontSize="lg" mb={4}>
+                  Start your journey with your first assignment
+                </Text>
+                <Link href="/create">
+                  <Button
+                    size="lg"
+                    bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
+                    _hover={{
+                      bg: "linear-gradient(135deg, #FF8A33 0%, #FF6A00 100%)",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 10px 25px rgba(255, 106, 0, 0.4)",
+                    }}
+                    _active={{
+                      transform: "translateY(0px)",
+                    }}
+                    color="white"
+                    leftIcon={<Icon as={FiPlusCircle} />}
+                    px={8}
+                    py={6}
+                    fontSize="lg"
+                    fontWeight="semibold"
+                    borderRadius="xl"
+                    boxShadow="0 8px 20px rgba(255, 106, 0, 0.3)"
+                    transition="all 0.2s"
+                  >
+                    Create Your First Assignment
+                  </Button>
+                </Link>
+              </Box>
+            </VStack>
+          </Container>
+        </Box>
+       )}
+     </Container>
+
+     {/* Delete Confirmation Modal */}
+     <Modal isOpen={isOpen} onClose={onClose}>
+       <ModalOverlay />
+       <ModalContent>
+         <ModalHeader>Delete Assignment</ModalHeader>
+         <ModalBody>
+           <Text>
+             Are you sure you want to delete &quot;{assignmentToDelete?.text?.substring(0, 50)}...&quot;?
+             This action cannot be undone.
+           </Text>
+         </ModalBody>
+         <ModalFooter>
+           <Button variant="ghost" mr={3} onClick={onClose}>
+             Cancel
+           </Button>
+           <Button
+             colorScheme="red"
+             onClick={confirmDelete}
+             isLoading={deletingAssignment === assignmentToDelete?.id}
+           >
+             Delete
+           </Button>
+         </ModalFooter>
+       </ModalContent>
+     </Modal>
+   </>
+ );
 }

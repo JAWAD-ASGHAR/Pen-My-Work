@@ -138,27 +138,51 @@ export default function CreatePage() {
   ) => {
     try {
       setIsGenerating(true);
+      // Commented out image generation logic - now using direct rendering
+      // const result = await generateImages(
+      //   pages,
+      //   ink,
+      //   paper,
+      //   additionalQueries
+      // );
+      // console.log(result);
+      // if ("error" in result) {
+      //   console.error("Error:", result.error);
+      //   setIsGenerating(false);
+      //   return;
+      // }
+      // if (
+      //   result.success &&
+      //   result.assignmentData &&
+      //   result.assignmentData.length > 0
+      // ) {
+      //   setIsGenerating(false);
+      //   // Redirect to the assignment details page
+      //   const assignmentId = result.assignmentData[0].id;
+      //   router.push(`/assignment/${assignmentId}`);
+      // }
+      
+      // Direct assignment creation without image generation
       const result = await generateImages(
         pages,
         ink,
         paper,
         additionalQueries
       );
-      console.log(result);
+      
       if ("error" in result) {
-        console.error("Error:", result.error);
+        console.error("Error creating assignment:", result.error);
         setIsGenerating(false);
         return;
       }
-      if (
-        result.success &&
-        result.assignmentData &&
-        result.assignmentData.length > 0
-      ) {
+      
+      if (result.success && result.assignmentData && result.assignmentData.length > 0) {
         setIsGenerating(false);
-        // Redirect to the assignment details page
         const assignmentId = result.assignmentData[0].id;
         router.push(`/assignment/${assignmentId}`);
+      } else {
+        console.error("Error creating assignment:", result);
+        setIsGenerating(false);
       }
     } catch (error) {
       console.error("Error:", error);

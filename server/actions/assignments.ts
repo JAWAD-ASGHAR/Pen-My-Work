@@ -88,4 +88,28 @@ export async function getAssignmentById(id: string): Promise<Assignment | null> 
     console.error("Error fetching assignment:", error)
     return null
   }
+}
+
+export async function deleteAssignment(id: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const headersList = await headers()
+    const session = await auth.api.getSession({ headers: headersList })
+    
+    if (!session?.user?.id) {
+      throw new Error("Unauthorized")
+    }
+
+    // Delete the assignment
+    await db
+      .delete(assignment)
+      .where(eq(assignment.id, id))
+
+    return { success: true }
+  } catch (error) {
+    console.error("Error deleting assignment:", error)
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : "Unknown error occurred" 
+    }
+  }
 } 
