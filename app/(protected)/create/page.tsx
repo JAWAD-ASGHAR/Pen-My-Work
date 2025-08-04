@@ -1,117 +1,16 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  Text,
-  VStack,
-  Textarea,
-  Badge,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  Portal,
-} from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import { FiGrid, FiArrowRight, FiFileText, FiPlay } from "react-icons/fi";
+import { Container } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIndicator from "@/components/ProgressIndicator";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { charCount } from "@/utils/char-count";
 import { generateImages } from "@/server/actions/generateImages";
-
-const paperTypes = [
-  {
-    id: "ruled",
-    name: "Ruled",
-    description: "Traditional lined paper",
-    icon: RxHamburgerMenu,
-    preview: "/lines-page.png",
-  },
-  {
-    id: "blank",
-    name: "Blank",
-    description: "Clean white paper",
-    icon: FiFileText,
-    preview: "/blank-page.png",
-  },
-  {
-    id: "grid",
-    name: "Grid",
-    description: "Graph paper with grid lines",
-    icon: FiGrid,
-    preview: "/grid-page.png",
-  },
-];
-
-const inkColors = [
-  { id: "blue", name: "Blue", color: "#0052A3", hex: "#0052A3" },
-  { id: "black", name: "Black", color: "#0A0A0A", hex: "#0A0A0A" },
-  { id: "custom", name: "Custom", color: "#FF6A00", hex: "#FF6A00" },
-];
-
-const writingStyles = [
-  {
-    id: "caveat",
-    name: "Caveat",
-    description: "Natural handwritten style",
-    fontFamily: "'Caveat', cursive",
-    fontSize: "30px",
-  },
-  {
-    id: "gloria",
-    name: "Gloria Hallelujah",
-    description: "Playful and expressive",
-    fontFamily: "'Gloria Hallelujah', cursive",
-    fontSize: "20px",
-  },
-  {
-    id: "patrick",
-    name: "Patrick Hand",
-    description: "Clear and readable",
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: "24px",
-  },
-  {
-    id: "permanent-marker",
-    name: "Permanent Marker",
-    description: "Bold and confident",
-    fontFamily: "'Permanent Marker', cursive",
-    fontSize: "20px",
-  },
-  {
-    id: "reenie-beanie",
-    name: "Reenie Beanie",
-    description: "Casual and friendly",
-    fontFamily: "'Reenie Beanie', cursive",
-    fontSize: "30px",
-  },
-  {
-    id: "shadows-into-light",
-    name: "Shadows Into Light",
-    description: "Elegant and flowing",
-    fontFamily: "'Shadows Into Light', cursive",
-    fontSize: "24px",
-  },
-  {
-    id: "edu-sa-hand",
-    name: "Edu SA Hand",
-    description: "Professional handwritten",
-    fontFamily: "'Edu SA Hand', cursive",
-    fontSize: "24px",
-  },
-];
+import { charCount } from "@/utils/char-count";
+import Step1PaperType from "@/components/create/Step1PaperType";
+import Step2WritingStyle from "@/components/create/Step2WritingStyle";
+import Step3InkColor from "@/components/create/Step3InkColor";
+import Step4Content from "@/components/create/Step4Content";
+import Step5Generate from "@/components/create/Step5Generate";
 
 export default function CreatePage() {
   // State for all steps
@@ -125,11 +24,6 @@ export default function CreatePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter();
 
-  const maxLength = 2000;
-  const selectedColor = selectedInk === "custom" 
-    ? { id: "custom", name: "Custom", color: customColor, hex: customColor }
-    : inkColors.find((ink) => ink.id === selectedInk);
-
   const handleGenerate = async (
     pages: string[],
     ink: string,
@@ -138,29 +32,6 @@ export default function CreatePage() {
   ) => {
     try {
       setIsGenerating(true);
-      // Commented out image generation logic - now using direct rendering
-      // const result = await generateImages(
-      //   pages,
-      //   ink,
-      //   paper,
-      //   additionalQueries
-      // );
-      // console.log(result);
-      // if ("error" in result) {
-      //   console.error("Error:", result.error);
-      //   setIsGenerating(false);
-      //   return;
-      // }
-      // if (
-      //   result.success &&
-      //   result.assignmentData &&
-      //   result.assignmentData.length > 0
-      // ) {
-      //   setIsGenerating(false);
-      //   // Redirect to the assignment details page
-      //   const assignmentId = result.assignmentData[0].id;
-      //   router.push(`/assignment/${assignmentId}`);
-      // }
       
       // Direct assignment creation without image generation
       const result = await generateImages(
@@ -203,614 +74,65 @@ export default function CreatePage() {
     }
   };
 
-  const renderStep1 = () => (
-    <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Choose Paper Type
-        </Heading>
-        <Text color="#666" textAlign="center">
-          Select the type of paper for your assignment
-        </Text>
-      </VStack>
-
-      <Grid
-        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-        gap={6}
-        mb={8}
-      >
-        {paperTypes.map((paper) => (
-          <Card
-            key={paper.id}
-            cursor="pointer"
-            transition="all 0.2s"
-            onClick={() => setSelectedPaper(paper.id)}
-            bg={selectedPaper === paper.id ? "orange.50" : "white"}
-            border="1px"
-            borderColor={selectedPaper === paper.id ? "#FF6A00" : "gray.200"}
-            _hover={{ shadow: "md" }}
-          >
-            <CardBody p={6} textAlign="center">
-              <Box
-                aspectRatio="3/4"
-                position="relative"
-                mb={4}
-                bg="gray.50"
-                borderRadius="lg"
-                overflow="hidden"
-              >
-                <Image
-                  src={paper.preview || "/placeholder.svg"}
-                  alt={`${paper.name} paper preview`}
-                  w="full"
-                  h="full"
-                  objectFit="cover"
-                />
-              </Box>
-              <HStack spacing={2} justify="center" mb={2}>
-                <Icon as={paper.icon} w={5} h={5} color="#FF6A00" />
-                <Heading size="md" color="#1A1A1A">
-                  {paper.name}
-                </Heading>
-              </HStack>
-              <Text fontSize="sm" color="#666">
-                {paper.description}
-              </Text>
-            </CardBody>
-          </Card>
-        ))}
-      </Grid>
-
-      <Flex justify="center">
-        <Button
-          bg="#FF6A00"
-          _hover={{ bg: "#FF8A33" }}
-          color="white"
-          px={8}
-          rightIcon={<Icon as={FiArrowRight} />}
-          onClick={nextStep}
-        >
-          Next Step
-        </Button>
-      </Flex>
-    </>
-  );
-  const renderStep2 = () => (
-    <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Choose Writing Style
-        </Heading>
-        <Text color="#666" textAlign="center">
-          Select the handwriting style for your assignment
-        </Text>
-      </VStack>
-
-      {writingStyles.map((style) => (
-        <Card
-          key={style.id}
-          bg={selectedWritingStyle === style.id ? "orange.50" : "white"}
-          border="1px"
-          borderColor={
-            selectedWritingStyle === style.id ? "#FF6A00" : "gray.200"
-          }
-          mb={4}
-          cursor="pointer"
-          onClick={() => setSelectedWritingStyle(style.id)}
-          _hover={{ shadow: "md" }}
-          transition="all 0.2s"
-        >
-          <CardBody p={8}>
-            <Box bg="gray.50" p={6} borderRadius="lg">
-                <Text
-                  textAlign="center"
-                  color="#1A1A1A"
-                  fontFamily={style.fontFamily}
-                  fontSize={style.fontSize}
-                  transition="opacity 0.2s"
-                >
-                  {/* {style.name} --- */}
-                   The quick brown fox jumps over the lazy dog
-                </Text>
-            </Box>
-          </CardBody>
-        </Card>
-      ))}
-
-      <Flex justify="space-between">
-        <Button
-          variant="outline"
-          borderColor="gray.200"
-          color="#666"
-          bg="transparent"
-          onClick={prevStep}
-        >
-          <ArrowBackIcon w={4} h={4} mr={2} />
-          Previous
-        </Button>
-        <Button
-          bg="#FF6A00"
-          _hover={{ bg: "#FF8A33" }}
-          color="white"
-          px={8}
-          rightIcon={<Icon as={FiArrowRight} />}
-          onClick={nextStep}
-          isDisabled={!selectedWritingStyle}
-        >
-          Next Step
-        </Button>
-      </Flex>
-    </>
-  );
-
-  const renderStep3 = () => (
-    <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Choose Ink Color
-        </Heading>
-        <Text color="#666" textAlign="center">
-          Select the ink color for your handwriting
-        </Text>
-      </VStack>
-
-      <Grid
-        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-        gap={6}
-        mb={8}
-      >
-        {inkColors.map((ink) => (
-          ink.id === "custom" ? (
-            <Popover
-              key={ink.id}
-              isOpen={isColorPickerOpen}
-              onClose={() => setIsColorPickerOpen(false)}
-              placement="top"
-            >
-              <PopoverTrigger>
-                <Card
-                  cursor="pointer"
-                  transition="all 0.2s"
-                  onClick={() => setSelectedInk("custom")}
-                  bg={selectedInk === ink.id ? "orange.50" : "white"}
-                  border="1px"
-                  borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
-                  _hover={{ shadow: "md" }}
-                >
-                  <CardBody p={6} textAlign="center">
-                    <Box
-                      w="16"
-                      h="16"
-                      borderRadius="full"
-                      mx="auto"
-                      mb={4}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      bg={customColor}
-                      cursor="pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsColorPickerOpen(true);
-                      }}
-                      _hover={{ transform: "scale(1.05)" }}
-                      transition="transform 0.2s"
-                    >
-                      <Box w="8" h="8" bg="white" borderRadius="full"></Box>
-                    </Box>
-                    <Heading size="md" color="#1A1A1A" mb={1}>
-                      {ink.name}
-                    </Heading>
-                    <Text 
-                      fontSize="sm" 
-                      color="#666"
-                      cursor="pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setIsColorPickerOpen(true);
-                      }}
-                      _hover={{ color: "#FF6A00" }}
-                      transition="color 0.2s"
-                    >
-                      {customColor}
-                    </Text>
-                  </CardBody>
-                </Card>
-              </PopoverTrigger>
-              <Portal>
-                <PopoverContent p={4} w="300px">
-                  <PopoverBody>
-                    <VStack spacing={4}>
-                      <Heading size="md" color="#1A1A1A" textAlign="center">
-                        Choose Custom Color
-                      </Heading>
-                      <Box>
-                        <Text fontSize="sm" color="#666" mb={2}>
-                          Color Picker
-                        </Text>
-                        <input
-                          type="color"
-                          value={customColor}
-                          onChange={(e) => {
-                            setCustomColor(e.target.value);
-                            setSelectedInk("custom");
-                          }}
-                          style={{
-                            width: "100%",
-                            height: "60px",
-                            border: "2px solid #FF6A00",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                          }}
-                        />
-                      </Box>
-                      <HStack justify="space-between" w="full">
-                        <Text fontSize="sm" color="#666">
-                          Selected Color:
-                        </Text>
-                        <input
-                          type="text"
-                          value={customColor}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            // Only update if it's a valid hex color
-                            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
-                              setCustomColor(value);
-                              setSelectedInk("custom");
-                            } else if (value.length <= 7) {
-                              // Allow typing but don't update color until valid
-                              setCustomColor(value);
-                            }
-                          }}
-                          style={{
-                            fontSize: "16px",
-                            fontWeight: "bold",
-                            color: "#1A1A1A",
-                            border: "1px solid #ddd",
-                            borderRadius: "4px",
-                            padding: "4px 8px",
-                            width: "80px",
-                            textAlign: "center",
-                          }}
-                        />
-                      </HStack>
-                      <Button
-                        colorScheme="orange"
-                        size="sm"
-                        onClick={() => setIsColorPickerOpen(false)}
-                        w="full"
-                      >
-                        Done
-                      </Button>
-                    </VStack>
-                  </PopoverBody>
-                </PopoverContent>
-              </Portal>
-            </Popover>
-          ) : (
-            <Card
-              key={ink.id}
-              cursor="pointer"
-              transition="all 0.2s"
-              onClick={() => setSelectedInk(ink.id)}
-              bg={selectedInk === ink.id ? "orange.50" : "white"}
-              border="1px"
-              borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
-              _hover={{ shadow: "md" }}
-            >
-              <CardBody p={6} textAlign="center">
-                <Box
-                  w="16"
-                  h="16"
-                  borderRadius="full"
-                  mx="auto"
-                  mb={4}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  bg={ink.color}
-                >
-                  <Box w="8" h="8" bg="white" borderRadius="full"></Box>
-                </Box>
-                <Heading size="md" color="#1A1A1A" mb={1}>
-                  {ink.name}
-                </Heading>
-                <Text fontSize="sm" color="#666">
-                  {ink.hex}
-                </Text>
-              </CardBody>
-            </Card>
-          )
-        ))}
-      </Grid>
-
-      {/* Handwriting Preview */}
-      <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-        <CardBody p={8}>
-          <Heading size="md" color="#1A1A1A" mb={4} textAlign="center">
-            Preview
-          </Heading>
-          <Box bg="gray.50" p={6} borderRadius="lg">
-            <Text
-              fontSize={writingStyles.find((s) => s.id === selectedWritingStyle)
-                  ?.fontSize || "24px"}
-              textAlign="center"
-              color={selectedColor?.color}
-              fontFamily={
-                writingStyles.find((s) => s.id === selectedWritingStyle)
-                  ?.fontFamily || "'Patrick Hand', cursive"
-              }
-            >
-              The quick brown fox jumps over the lazy dog
-            </Text>
-          </Box>
-        </CardBody>
-      </Card>
-
-      <Flex justify="space-between">
-        <Button
-          variant="outline"
-          borderColor="gray.200"
-          color="#666"
-          bg="transparent"
-          onClick={prevStep}
-        >
-          <ArrowBackIcon w={4} h={4} mr={2} />
-          Previous
-        </Button>
-        <Button
-          bg="#FF6A00"
-          _hover={{ bg: "#FF8A33" }}
-          color="white"
-          px={8}
-          rightIcon={<Icon as={FiArrowRight} />}
-          onClick={nextStep}
-        >
-          Next Step
-        </Button>
-      </Flex>
-    </>
-  );
-
-  const renderStep4 = () => (
-    <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
-          Enter Content
-        </Heading>
-        <Text color="#666" textAlign="center">
-          Paste or type your assignment text
-        </Text>
-      </VStack>
-
-      <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-        <CardBody p={6}>
-          <Box mb={4}>
-            <Text
-              as="label"
-              display="block"
-              fontSize="sm"
-              fontWeight="medium"
-              color="#1A1A1A"
-              mb={2}
-            >
-              Assignment Text
-            </Text>
-            <Textarea
-              placeholder="Paste your assignment text here..."
-              value={content}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setContent(e.target.value)
-              }
-              minH="300px"
-              resize="none"
-              borderColor="gray.300"
-              _focus={{
-                borderColor: "#FF6A00",
-                boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)",
-              }}
-              maxLength={maxLength}
-            />
-            <Flex justify="space-between" align="center" mt={2}>
-              <Text fontSize="sm" color="#666">
-                Supports basic formatting with **bold** and *italic* text
-              </Text>
-              <Text fontSize="sm" color="#666">
-                {content.length}/{maxLength} characters
-              </Text>
-            </Flex>
-          </Box>
-        </CardBody>
-      </Card>
-
-      <Flex justify="space-between">
-        <Button
-          variant="outline"
-          borderColor="gray.200"
-          color="#666"
-          bg="transparent"
-          onClick={prevStep}
-        >
-          <ArrowBackIcon w={4} h={4} mr={2} />
-          Previous
-        </Button>
-        <Button
-          bg="#FF6A00"
-          _hover={{ bg: "#FF8A33" }}
-          color="white"
-          px={8}
-          rightIcon={<Icon as={FiArrowRight} />}
-          isDisabled={!content.trim()}
-          onClick={() => setCurrentStep(5)}
-        >
-          Continue to Generate
-        </Button>
-      </Flex>
-    </>
-  );
-
-
-
-  const renderStep5 = () => {
-    const { pages, pageCount } = charCount(content);
-    console.log(pages, pageCount);
-    return (
-      <>
-        <VStack spacing={8} align="center" mb={8}>
-          <Heading size="2xl" color="#1A1A1A" textAlign="center">
-            Generate Assignment
-          </Heading>
-          <Text color="#666" textAlign="center">
-            Create your handwritten assignment image
-          </Text>
-        </VStack>
-
-        {!isGenerating && (
-          <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-            <CardBody p={8}>
-              <VStack spacing={8} align="stretch">
-                <Box>
-                  <Heading size="md" color="#1A1A1A" mb={4}>
-                    Generation Summary
-                  </Heading>
-                  <VStack spacing={4} align="stretch">
-                    <HStack
-                      justify="space-between"
-                      p={4}
-                      bg="gray.50"
-                      borderRadius="md"
-                    >
-                      <Text fontWeight="medium">Page Style:</Text>
-                      <Badge colorScheme="orange" variant="subtle">
-                        {paperTypes.find((p) => p.id === selectedPaper)?.name}
-                      </Badge>
-                    </HStack>
-                    <HStack
-                      justify="space-between"
-                      p={4}
-                      bg="gray.50"
-                      borderRadius="md"
-                    >
-                      <Text fontWeight="medium">Pages to Generate:</Text>
-                      <Badge colorScheme="blue" variant="subtle">
-                        {pageCount} pages
-                      </Badge>
-                    </HStack>
-                    <HStack
-                      justify="space-between"
-                      p={4}
-                      bg="gray.50"
-                      borderRadius="md"
-                    >
-                      <Text fontWeight="medium">Content Length:</Text>
-                      <Badge colorScheme="green" variant="subtle">
-                        ~{content.length} characters
-                      </Badge>
-                    </HStack>
-                    <HStack
-                      justify="space-between"
-                      p={4}
-                      bg="orange.50"
-                      borderRadius="md"
-                    >
-                      <Text fontWeight="medium">Estimated Time:</Text>
-                      <Badge colorScheme="orange">2-3 minutes</Badge>
-                    </HStack>
-                  </VStack>
-                </Box>
-
-                <Button
-                  onClick={() =>
-                    handleGenerate(
-                      pages,
-                      selectedInk,
-                      selectedPaper,
-                      ""
-                    )
-                  }
-                  bg="#FF6A00"
-                  _hover={{ bg: "#FF8A33" }}
-                  color="white"
-                  size="lg"
-                  w="full"
-                  leftIcon={<Icon as={FiPlay} />}
-                >
-                  Generate Assignment
-                </Button>
-              </VStack>
-            </CardBody>
-          </Card>
-        )}
-
-        {isGenerating && (
-          <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-            <CardBody p={8} textAlign="center">
-              <Box
-                w="24"
-                h="24"
-                mx="auto"
-                mb={6}
-                bg="orange.50"
-                borderRadius="full"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Box
-                  w="12"
-                  h="12"
-                  border="2px"
-                  borderColor="#FF6A00"
-                  borderTop="transparent"
-                  borderRadius="full"
-                  animation="spin 1s linear infinite"
-                ></Box>
-              </Box>
-              <Heading size="lg" color="#1A1A1A" mb={2}>
-                Writing with virtual ink...
-              </Heading>
-              <Text color="#666" mb={4}>
-                Please wait while we generate your handwritten assignment
-              </Text>
-              <Box w="full" bg="gray.200" borderRadius="full" h={2}>
-                <Box
-                  bg="#FF6A00"
-                  h="full"
-                  borderRadius="full"
-                  animation="pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
-                  w="60%"
-                ></Box>
-              </Box>
-            </CardBody>
-          </Card>
-        )}
-
-        {!isGenerating && (
-          <Flex justify="space-between">
-            <Button
-              variant="outline"
-              borderColor="gray.200"
-              color="#666"
-              bg="transparent"
-              onClick={prevStep}
-            >
-              <ArrowBackIcon w={4} h={4} mr={2} />
-              Previous
-            </Button>
-          </Flex>
-        )}
-      </>
-    );
+  const handleGenerateClick = () => {
+    const { pages } = charCount(content);
+    handleGenerate(pages, selectedInk, selectedPaper, "");
   };
 
   return (
     <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
       <ProgressIndicator currentStep={currentStep} totalSteps={5} />
-      {currentStep === 1 && renderStep1()}
-      {currentStep === 2 && renderStep2()}
-      {currentStep === 3 && renderStep3()}
-      {currentStep === 4 && renderStep4()}
-      {currentStep === 5 && renderStep5()}
+      
+      {currentStep === 1 && (
+        <Step1PaperType
+          selectedPaper={selectedPaper}
+          setSelectedPaper={setSelectedPaper}
+          onNext={nextStep}
+        />
+      )}
+      
+      {currentStep === 2 && (
+        <Step2WritingStyle
+          selectedWritingStyle={selectedWritingStyle}
+          setSelectedWritingStyle={setSelectedWritingStyle}
+          onNext={nextStep}
+          onPrevious={prevStep}
+        />
+      )}
+      
+      {currentStep === 3 && (
+        <Step3InkColor
+          selectedInk={selectedInk}
+          setSelectedInk={setSelectedInk}
+          customColor={customColor}
+          setCustomColor={setCustomColor}
+          isColorPickerOpen={isColorPickerOpen}
+          setIsColorPickerOpen={setIsColorPickerOpen}
+          selectedWritingStyle={selectedWritingStyle}
+          onNext={nextStep}
+          onPrevious={prevStep}
+        />
+      )}
+      
+      {currentStep === 4 && (
+        <Step4Content
+          content={content}
+          setContent={setContent}
+          onNext={nextStep}
+          onPrevious={prevStep}
+        />
+      )}
+      
+      {currentStep === 5 && (
+        <Step5Generate
+          content={content}
+          selectedPaper={selectedPaper}
+          selectedInk={selectedInk}
+          isGenerating={isGenerating}
+          onGenerate={handleGenerateClick}
+          onPrevious={prevStep}
+        />
+      )}
     </Container>
   );
-}
+} 
