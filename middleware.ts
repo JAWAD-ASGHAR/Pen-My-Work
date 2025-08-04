@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = ["/", "/sign-in"];
+const publicRoutes = ["/"];
+
+const authRoutes = ["/sign-in"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isPublicRoute = publicRoutes.includes(pathname);
 
   if (isPublicRoute) return NextResponse.next();
-
+  
+  const isAuthRoute = authRoutes.includes(pathname);
+  
+  // Check session for auth routes
   const sessionRes = await fetch(`${request.nextUrl.origin}/api/auth/get-session`, {
     method: "GET",
     headers: {
@@ -16,8 +21,19 @@ export async function middleware(request: NextRequest) {
   });
 
   if (!sessionRes.ok) {
-    const signinUrl = new URL("/sign-in", request.url);
-    return NextResponse.redirect(signinUrl);
+    // If no session and trying to access protected route, redirect to sign-in
+    if (!isAuthRoute) {
+      const signinUrl = new URL("/sign-in", request.url);
+      return NextResponse.redirect(signinUrl);
+    }
+    // If no session and on auth route, allow access
+    return NextResponse.next();
+  }
+
+  // If has session and on auth route, redirect to home
+  if (isAuthRoute) {
+    const homeUrl = new URL("/home", request.url);
+    return NextResponse.redirect(homeUrl);
   }
 
   return NextResponse.next();
@@ -25,6 +41,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sign-in|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
