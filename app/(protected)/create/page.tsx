@@ -53,7 +53,7 @@ const paperTypes = [
 const inkColors = [
   { id: "blue", name: "Blue", color: "#0052A3", hex: "#0052A3" },
   { id: "black", name: "Black", color: "#0A0A0A", hex: "#0A0A0A" },
-  { id: "dark-gray", name: "Dark Gray", color: "#4A4A4A", hex: "#4A4A4A" },
+  { id: "custom", name: "Custom", color: "#FF6A00", hex: "#FF6A00" },
 ];
 
 const writingStyles = [
@@ -114,13 +114,16 @@ export default function CreatePage() {
   const [selectedPaper, setSelectedPaper] = useState("ruled");
   const [selectedWritingStyle, setSelectedWritingStyle] = useState("caveat");
   const [selectedInk, setSelectedInk] = useState("blue");
+  const [customColor, setCustomColor] = useState("#FF6A00");
   const [content, setContent] = useState("");
   const [additionalQueries, setAdditionalQueries] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const router = useRouter();
 
   const maxLength = 2000;
-  const selectedColor = inkColors.find((ink) => ink.id === selectedInk);
+  const selectedColor = selectedInk === "custom" 
+    ? { id: "custom", name: "Custom", color: customColor, hex: customColor }
+    : inkColors.find((ink) => ink.id === selectedInk);
 
   const handleGenerate = async (
     pages: string[],
@@ -331,7 +334,37 @@ export default function CreatePage() {
             key={ink.id}
             cursor="pointer"
             transition="all 0.2s"
-            onClick={() => setSelectedInk(ink.id)}
+            onClick={() => {
+              if (ink.id === "custom") {
+                // For custom color, create a centered color picker
+                const colorInput = document.createElement('input');
+                colorInput.type = 'color';
+                colorInput.value = customColor;
+                colorInput.style.position = 'fixed';
+                colorInput.style.top = '50%';
+                colorInput.style.left = '50%';
+                colorInput.style.transform = 'translate(-50%, -50%)';
+                colorInput.style.zIndex = '9999';
+                colorInput.style.opacity = '0';
+                colorInput.style.pointerEvents = 'none';
+                document.body.appendChild(colorInput);
+                
+                colorInput.addEventListener('change', (e) => {
+                  setCustomColor((e.target as HTMLInputElement).value);
+                  setSelectedInk("custom");
+                  document.body.removeChild(colorInput);
+                });
+                
+                colorInput.addEventListener('cancel', () => {
+                  document.body.removeChild(colorInput);
+                });
+                
+                // Trigger the color picker
+                colorInput.click();
+              } else {
+                setSelectedInk(ink.id);
+              }
+            }}
             bg={selectedInk === ink.id ? "orange.50" : "white"}
             border="1px"
             borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
@@ -347,7 +380,7 @@ export default function CreatePage() {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                bg={ink.color}
+                bg={ink.id === "custom" ? customColor : ink.color}
               >
                 <Box w="8" h="8" bg="white" borderRadius="full"></Box>
               </Box>
@@ -355,7 +388,7 @@ export default function CreatePage() {
                 {ink.name}
               </Heading>
               <Text fontSize="sm" color="#666">
-                {ink.hex}
+                {ink.id === "custom" ? customColor : ink.hex}
               </Text>
             </CardBody>
           </Card>
