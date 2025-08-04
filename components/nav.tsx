@@ -1,10 +1,10 @@
 
 // Named export only! No default export.
 import React, { useEffect } from "react";
-import { Box, Flex, Text, Button, IconButton, Link } from "@chakra-ui/react";
+import { Box, Flex, Button, IconButton, Link } from "@chakra-ui/react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import Image from "next/image";
-import { FiMenu, FiX, FiZap } from "react-icons/fi";
+import { FiMenu, FiX } from "react-icons/fi";
+import { Logo } from "./Logo";
 
 type HeaderProps = {
   scrolled: boolean;
@@ -62,11 +62,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
         style={{ willChange: "transform, padding, box-shadow" }}
       >
         {/* Logo Left */}
-        <Flex align="center" minW="120px" gap={2}>
-          <Image src="/Logo.png" alt="Client Craft" width={28} height={28} />
-          <Text fontSize="xl" fontWeight="bold" color="gray.900">
-          Pen My Work
-          </Text>
+        <Flex align="center" minW="120px">
+          <Logo size="md" />
         </Flex>
         {/* Nav Centered */}
         <Flex
@@ -163,11 +160,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             animation="fadeIn 0.2s"
           >
             <Flex align="center" justify="space-between" mb={8} px={6} pt={6}>
-              <Flex align="center" gap={2}>
-                <FiZap style={{ width: "24px", height: "24px", color: "#f97316" }} />
-                <Text fontSize="xl" fontWeight="bold" color="gray.900">
-                  PEN MY WORK
-                </Text>
+              <Flex align="center">
+                <Logo size="md" />
               </Flex>
               <IconButton
                 aria-label="Close menu"

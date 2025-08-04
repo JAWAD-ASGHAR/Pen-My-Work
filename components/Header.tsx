@@ -5,14 +5,14 @@ import {
   Button,
   Container,
   Flex,
-  Heading,
   HStack,
   Icon,
 } from "@chakra-ui/react"
 import { ArrowBackIcon } from "@chakra-ui/icons"
-import { FiFileText, FiHome } from "react-icons/fi"
+import { FiHome } from "react-icons/fi"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Logo } from "./Logo"
 // import { useRouter } from "next/navigation"
 // import { authClient } from "@/lib/auth-client"
 
@@ -20,7 +20,6 @@ interface HeaderProps {
   showBackButton?: boolean
   backUrl?: string
   backText?: string
-  title?: string
   showCreateButton?: boolean
   createUrl?: string
   children?: React.ReactNode
@@ -30,7 +29,6 @@ export default function Header({
   showBackButton = false, 
   backUrl = "/home", 
   backText = "Back",
-  title = "Pen My Work",
   showCreateButton = false,
   createUrl = "/create",
   children
@@ -74,12 +72,9 @@ export default function Header({
               </>
             )}
             <Link href={isHomePage ? "/" : "/home"}>
-              <HStack spacing={2} cursor="pointer" _hover={{ opacity: 0.8 }} transition="opacity 0.2s">
-                <Icon as={FiFileText} h={6} w={6} color="#FF6A00" />
-                <Heading size="lg" color="#1A1A1A" fontFamily="sans">
-                  {title}
-                </Heading>
-              </HStack>
+              <Box cursor="pointer" _hover={{ opacity: 0.8 }} transition="opacity 0.2s">
+                <Logo size="md" />
+              </Box>
             </Link>
           </HStack>
           

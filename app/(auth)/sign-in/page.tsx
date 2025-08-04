@@ -13,12 +13,13 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
-import { FiPenTool, FiArrowLeft, FiMail, FiStar } from "react-icons/fi"
+import { FiArrowLeft, FiMail, FiStar } from "react-icons/fi"
 import { FcGoogle } from "react-icons/fc"
 import Link from "next/link"
 import { authClient } from "@/lib/auth-client"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { Logo } from "@/components/Logo"
 
 // Animation keyframes
 const float = keyframes`
@@ -86,19 +87,9 @@ export default function SignInPage() {
         <Container maxW="7xl">
           <Flex align="center" justify="space-between">
             <Link href="/">
-              <Flex align="center" gap={3} cursor="pointer" _hover={{ transform: "scale(1.05)" }} transition="transform 0.2s">
-                <Box
-                  p={2}
-                  bgGradient="linear(45deg, #FF6A00, #FF8A33)"
-                  borderRadius="xl"
-                  boxShadow="lg"
-                >
-                  <Icon as={FiPenTool} h={6} w={6} color="white" />
-                </Box>
-                <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-                  ScriptAI
-                </Text>
-              </Flex>
+              <Box cursor="pointer" _hover={{ transform: "scale(1.05)" }} transition="transform 0.2s">
+                <Logo size="lg" textColor={textColor} />
+              </Box>
             </Link>
             <Link href="/">
               <Button
