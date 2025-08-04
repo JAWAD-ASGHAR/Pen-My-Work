@@ -140,12 +140,12 @@ const Paper: React.FC<PaperProps> = ({
   const getPadding = () => {
     switch (paperType) {
       case 'lined':
-        return '40px 50px';
+        return '30px 0px 0px 50px';
       case 'blank':
       case 'grid':
-        return '50px';
+        return '0px 50px';
       default:
-        return '50px';
+        return '0px 50px';
     }
   };
 
@@ -172,11 +172,10 @@ const Paper: React.FC<PaperProps> = ({
             fontSize: fontSize,
             lineHeight: `${lineHeightPx}px`,
             color: textColor,
-            paddingLeft: `${leftPadding}px`,
             width: '100%',
             height: getTextContainerHeight(),
             position: 'relative',
-            top: paperType === 'lined' ? '5px' : '0px',
+            top: '0px',
             fontFamily: fontFamily,
             whiteSpace: 'pre-line',
             boxSizing: 'border-box',
