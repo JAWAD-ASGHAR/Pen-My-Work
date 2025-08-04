@@ -14,7 +14,7 @@ interface LoadingSpinnerProps {
 
 export default function LoadingSpinner({
   message = "Loading...",
-  size = 20,
+  size = 10,
   color = "#FF6A00",
   margin = 4,
   speedMultiplier = 1,

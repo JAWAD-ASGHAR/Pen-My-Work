@@ -48,9 +48,9 @@ export default function CreatePage() {
       }
       
       if (result.success && result.assignmentData && result.assignmentData.length > 0) {
-        setIsGenerating(false);
         const assignmentId = result.assignmentData[0].id;
         router.push(`/assignment/${assignmentId}`);
+        // Don't set isGenerating to false - let the redirect happen while loading
       } else {
         console.error("Error creating assignment:", result);
         setIsGenerating(false);
@@ -135,4 +135,4 @@ export default function CreatePage() {
       )}
     </Container>
   );
-} 
+}
