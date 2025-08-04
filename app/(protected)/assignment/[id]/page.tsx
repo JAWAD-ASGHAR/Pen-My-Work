@@ -9,27 +9,21 @@ import {
   Grid,
   Heading,
   Icon,
-  Image,
   Text,
   VStack,
   Badge,
   HStack,
   useToast,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Skeleton,
 } from "@chakra-ui/react";
+import LinedPaper from "@/components/LinedPaper";
+import BlankPaper from "@/components/BlankPaper";
+import GridPaper from "@/components/GridPaper";
 import {
   FiFileText,
   FiDownload,
   FiArrowLeft,
   FiCalendar,
   FiDroplet,
-  FiImage,
   FiFile,
 } from "react-icons/fi";
 import Link from "next/link";
@@ -44,15 +38,11 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 export default function AssignmentDetails() {
   const params = useParams();
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [assignment, setAssignment] = useState<Assignment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState<string | null>(null);
-  const [selectedPage, setSelectedPage] = useState<{
-    url: string;
-    index: number;
-  } | null>(null);
+  const [paperContent, setPaperContent] = useState<string>("");
 
   useEffect(() => {
     const fetchAssignment = async () => {
@@ -60,6 +50,10 @@ export default function AssignmentDetails() {
         setLoading(true);
         const data = await getAssignmentById(params.id as string);
         setAssignment(data);
+        // Set the paper content from the assignment
+        if (data?.text) {
+          setPaperContent(data.text);
+        }
       } catch (err) {
         setError("Failed to load assignment");
         console.error("Error fetching assignment:", err);
@@ -81,45 +75,9 @@ export default function AssignmentDetails() {
     }).format(new Date(date));
   };
 
-  const openPageModal = (imageUrl: string, index: number) => {
-    setSelectedPage({ url: imageUrl, index });
-    onOpen();
-  };
 
-  const downloadImage = async (imageUrl: string, index: number) => {
-    try {
-      setDownloading(`image-${index}`);
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `assignment-${assignment?.id}-page-${index + 1}.png`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
 
-      toast({
-        title: "Download successful",
-        description: `Page ${index + 1} downloaded successfully`,
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (err) {
-      console.error("Error downloading image:", err);
-      toast({
-        title: "Download failed",
-        description: "Failed to download the image",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    } finally {
-      setDownloading(null);
-    }
-  };
+
 
   const downloadAllImages = async () => {
     if (!assignment?.imageURLs?.length) return;
@@ -362,88 +320,59 @@ export default function AssignmentDetails() {
               </Card>
             </VStack>
 
-            {/* Right Side - Generated Pages */}
+            {/* Right Side - Generated Paper */}
             <VStack spacing={6} align="stretch">
-              {assignment.imageURLs && assignment.imageURLs.length > 0 ? (
-                <Grid
-                  templateColumns={{
-                    base: "1fr",
-                    md: "repeat(2, 1fr)",
-                    lg: "repeat(2, 1fr)",
-                  }}
-                  gap={6}
-                >
-                  {assignment.imageURLs.map((imageUrl, index) => (
-                    <Card
-                      key={index}
-                      cursor="pointer"
-                      transition="all 0.2s"
-                      onClick={() => openPageModal(imageUrl, index)}
-                      bg="white"
-                      border="1px"
-                      borderColor="gray.200"
-                      _hover={{ shadow: "md", transform: "translateY(-2px)" }}
-                    >
-                      <CardBody p={4}>
-                        <VStack spacing={3}>
-                          <Box
-                            aspectRatio="3/4"
-                            position="relative"
-                            bg="gray.50"
-                            borderRadius="lg"
-                            overflow="hidden"
-                          >
-                            <Image
-                              src={imageUrl}
-                              alt={`Page ${index + 1}`}
-                              w="full"
-                              h="full"
-                              objectFit="cover"
-                              fallback={<Skeleton startColor="gray.200" endColor="gray.300" w="full" h="full" borderRadius="lg" />}
-                            />
-                          </Box>
-
-                          <VStack spacing={2} w="full">
-                            <HStack
-                              spacing={2}
-                              justify="space-between"
-                              w="full"
-                            >
-                              <Text
-                                fontSize="sm"
-                                fontWeight="medium"
-                                color="#1A1A1A"
-                              >
-                                Page {index + 1}
-                              </Text>
-                              <Button
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  downloadImage(imageUrl, index);
-                                }}
-                                isLoading={downloading === `image-${index}`}
-                                leftIcon={<Icon as={FiDownload} />}
-                                variant="ghost"
-                                color="#FF6A00"
-                                _hover={{ bg: "orange.50" }}
-                              >
-                                Download
-                              </Button>
-                            </HStack>
-                          </VStack>
-                        </VStack>
-                      </CardBody>
-                    </Card>
-                  ))}
-                </Grid>
+              {paperContent ? (
+                <Card bg="white" border="1px" borderColor="gray.200">
+                  <CardBody p={6}>
+                    <VStack spacing={4} align="stretch">
+                      <Heading size="md" color="#1A1A1A" mb={4}>
+                        Assignment Preview
+                      </Heading>
+                      
+                      {/* Render the appropriate paper based on selection */}
+                      {assignment.paper === "ruled" && (
+                        <LinedPaper
+                          text={paperContent}
+                          textColor={assignment.ink === "custom" ? "#FF6A00" : 
+                            assignment.ink === "blue" ? "#0052A3" : 
+                            assignment.ink === "black" ? "#0A0A0A" : "#4A4A4A"}
+                          fontFamily="'Caveat', cursive"
+                          fontSize="30px"
+                        />
+                      )}
+                      
+                      {assignment.paper === "blank" && (
+                        <BlankPaper
+                          text={paperContent}
+                          textColor={assignment.ink === "custom" ? "#FF6A00" : 
+                            assignment.ink === "blue" ? "#0052A3" : 
+                            assignment.ink === "black" ? "#0A0A0A" : "#4A4A4A"}
+                          fontFamily="'Caveat', cursive"
+                          fontSize="30px"
+                        />
+                      )}
+                      
+                      {assignment.paper === "grid" && (
+                        <GridPaper
+                          text={paperContent}
+                          textColor={assignment.ink === "custom" ? "#FF6A00" : 
+                            assignment.ink === "blue" ? "#0052A3" : 
+                            assignment.ink === "black" ? "#0A0A0A" : "#4A4A4A"}
+                          fontFamily="'Caveat', cursive"
+                          fontSize="30px"
+                        />
+                      )}
+                    </VStack>
+                  </CardBody>
+                </Card>
               ) : (
                 <Card bg="white" border="1px" borderColor="gray.200">
                   <CardBody p={8}>
                     <VStack spacing={4} align="center">
-                      <Icon as={FiImage} w={12} h={12} color="gray.400" />
+                      <Icon as={FiFileText} w={12} h={12} color="gray.400" />
                       <Text color="#666" textAlign="center">
-                        No generated pages found for this assignment.
+                        No content found for this assignment.
                       </Text>
                     </VStack>
                   </CardBody>
@@ -454,68 +383,6 @@ export default function AssignmentDetails() {
         </Container>
       </Box>
 
-      {/* Page Modal */}
-      <Modal isOpen={isOpen} onClose={onClose} size="lg" isCentered>
-        <ModalOverlay />
-        <ModalContent bg="transparent" boxShadow="none">
-          <ModalCloseButton
-            color="white"
-            bg="blackAlpha.600"
-            _hover={{ bg: "blackAlpha.700" }}
-            borderRadius="full"
-            zIndex={10}
-          />
-          <ModalBody p={0}>
-            {selectedPage && (
-              <Box position="relative">
-                <Image
-                  src={selectedPage.url}
-                  alt={`Page ${selectedPage.index + 1}`}
-                  w="full"
-                  objectFit="contain"
-                  bg="gray.50"
-                  maxH="90vh"
-                  fallback={<Skeleton startColor="gray.200" endColor="gray.300" w="full" h="400px" borderRadius="lg" />}
-                />
-
-                {/* Page info overlay */}
-                <Box
-                  position="absolute"
-                  top={4}
-                  left={4}
-                  bg="blackAlpha.700"
-                  color="white"
-                  px={3}
-                  py={2}
-                  borderRadius="md"
-                  fontSize="sm"
-                  fontWeight="medium"
-                >
-                  Page {selectedPage.index + 1}
-                </Box>
-
-                {/* Download button overlay */}
-                <Box position="absolute" bottom={4} right={4}>
-                  <Button
-                    onClick={() =>
-                      downloadImage(selectedPage.url, selectedPage.index)
-                    }
-                    isLoading={downloading === `image-${selectedPage.index}`}
-                    size="md"
-                    bg="white"
-                    _hover={{ bg: "gray.50" }}
-                    color="#1A1A1A"
-                    leftIcon={<Icon as={FiDownload} />}
-                    boxShadow="0 4px 12px rgba(0,0,0,0.15)"
-                  >
-                    Download
-                  </Button>
-                </Box>
-              </Box>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </>
   );
 }
