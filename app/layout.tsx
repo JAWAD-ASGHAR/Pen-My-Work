@@ -69,7 +69,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${gloriaHallelujah.variable} ${patrickHand.variable} ${permanentMarker.variable} ${reenieBeanie.variable} ${shadowsIntoLight.variable}`}>
+      <body 
+        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${gloriaHallelujah.variable} ${patrickHand.variable} ${permanentMarker.variable} ${reenieBeanie.variable} ${shadowsIntoLight.variable}`}
+        suppressHydrationWarning={true}
+      >
         <Providers>
           {children}
         </Providers>

@@ -127,7 +127,6 @@ export default function CreatePage() {
         <Step5Generate
           content={content}
           selectedPaper={selectedPaper}
-          selectedInk={selectedInk}
           isGenerating={isGenerating}
           onGenerate={handleGenerateClick}
           onPrevious={prevStep}

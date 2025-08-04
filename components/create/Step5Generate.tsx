@@ -12,7 +12,7 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { FiPlay } from "react-icons/fi";
+import { FiPlay, FiFileText } from "react-icons/fi";
 import { charCount } from "@/utils/char-count";
 
 const paperTypes = [
@@ -36,7 +36,6 @@ const paperTypes = [
 interface Step5GenerateProps {
   content: string;
   selectedPaper: string;
-  selectedInk: string;
   isGenerating: boolean;
   onGenerate: () => void;
   onPrevious: () => void;
@@ -45,12 +44,11 @@ interface Step5GenerateProps {
 export default function Step5Generate({
   content,
   selectedPaper,
-  selectedInk,
   isGenerating,
   onGenerate,
   onPrevious,
 }: Step5GenerateProps) {
-  const { pages, pageCount } = charCount(content);
+  const { pageCount } = charCount(content);
 
   return (
     <>
@@ -147,15 +145,13 @@ export default function Step5Generate({
               alignItems="center"
               justifyContent="center"
             >
-              <Box
+              <Icon
+                as={FiFileText}
                 w="12"
                 h="12"
-                border="2px"
-                borderColor="#FF6A00"
-                borderTop="transparent"
-                borderRadius="full"
-                animation="spin 1s linear infinite"
-              ></Box>
+                color="#FF6A00"
+                animation="bounce 1s ease-in-out infinite"
+              />
             </Box>
             <Heading size="lg" color="#1A1A1A" mb={2}>
               Writing with virtual ink...
@@ -163,15 +159,19 @@ export default function Step5Generate({
             <Text color="#666" mb={4}>
               Please wait while we generate your handwritten assignment
             </Text>
-            <Box w="full" bg="gray.200" borderRadius="full" h={2}>
+            <Box w="full" bg="gray.200" borderRadius="full" h={3} overflow="hidden">
               <Box
-                bg="#FF6A00"
+                bg="linear-gradient(90deg, #FF6A00, #FF8A33)"
                 h="full"
                 borderRadius="full"
-                animation="pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
-                w="60%"
+                animation="loadingProgress 2s ease-in-out infinite"
+                w="100%"
+                transform="translateX(-100%)"
               ></Box>
             </Box>
+            <Text fontSize="sm" color="#666" mt={3}>
+              This may take a few moments...
+            </Text>
           </CardBody>
         </Card>
       )}
