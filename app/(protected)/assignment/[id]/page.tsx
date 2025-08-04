@@ -49,6 +49,7 @@ export default function AssignmentDetails() {
       try {
         setLoading(true);
         const data = await getAssignmentById(params.id as string);
+        console.log('+++++++++++++++++',data);
         setAssignment(data);
         // Set the paper content from the assignment
         if (data?.text) {
@@ -275,10 +276,19 @@ export default function AssignmentDetails() {
                           Ink Color
                         </Text>
                       </HStack>
-                      <Badge colorScheme="blue" variant="subtle">
-                        {assignment.ink.charAt(0).toUpperCase() +
-                          assignment.ink.slice(1)}
-                      </Badge>
+                      <HStack>
+                        <Box
+                          w="4"
+                          h="4"
+                          borderRadius="full"
+                          bg={assignment.ink}
+                          border="1px"
+                          borderColor="gray.300"
+                        />
+                        <Text fontSize="sm" color="#666">
+                          {assignment.ink}
+                        </Text>
+                      </HStack>
                     </HStack>
                   </VStack>
                 </CardBody>
@@ -334,9 +344,7 @@ export default function AssignmentDetails() {
                       {assignment.paper === "ruled" && (
                         <LinedPaper
                           text={paperContent}
-                          textColor={assignment.ink === "custom" ? "#FF6A00" : 
-                            assignment.ink === "blue" ? "#0052A3" : 
-                            assignment.ink === "black" ? "#0A0A0A" : "#4A4A4A"}
+                          textColor={assignment.ink}
                           fontFamily="'Caveat', cursive"
                           fontSize="30px"
                         />
@@ -345,9 +353,7 @@ export default function AssignmentDetails() {
                       {assignment.paper === "blank" && (
                         <BlankPaper
                           text={paperContent}
-                          textColor={assignment.ink === "custom" ? "#FF6A00" : 
-                            assignment.ink === "blue" ? "#0052A3" : 
-                            assignment.ink === "black" ? "#0A0A0A" : "#4A4A4A"}
+                          textColor={assignment.ink}
                           fontFamily="'Caveat', cursive"
                           fontSize="30px"
                         />
@@ -356,9 +362,7 @@ export default function AssignmentDetails() {
                       {assignment.paper === "grid" && (
                         <GridPaper
                           text={paperContent}
-                          textColor={assignment.ink === "custom" ? "#FF6A00" : 
-                            assignment.ink === "blue" ? "#0052A3" : 
-                            assignment.ink === "black" ? "#0A0A0A" : "#4A4A4A"}
+                          textColor={assignment.ink}
                           fontFamily="'Caveat', cursive"
                           fontSize="30px"
                         />

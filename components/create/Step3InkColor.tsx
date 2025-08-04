@@ -78,7 +78,7 @@ const writingStyles = [
 ];
 
 interface Step3InkColorProps {
-  selectedInk: string;
+  selectedInk: string; // This will now store hex codes
   setSelectedInk: (ink: string) => void;
   customColor: string;
   setCustomColor: (color: string) => void;
@@ -100,9 +100,11 @@ export default function Step3InkColor({
   onNext,
   onPrevious,
 }: Step3InkColorProps) {
-  const selectedColor = selectedInk === "custom" 
+  // Determine if we're using a predefined color or custom color
+  const isCustomColor = selectedInk === customColor;
+  const selectedColor = isCustomColor 
     ? { id: "custom", name: "Custom", color: customColor, hex: customColor }
-    : inkColors.find((ink) => ink.id === selectedInk);
+    : inkColors.find((ink) => ink.hex === selectedInk) || { id: "custom", name: "Custom", color: selectedInk, hex: selectedInk };
 
   return (
     <>
@@ -132,10 +134,10 @@ export default function Step3InkColor({
                 <Card
                   cursor="pointer"
                   transition="all 0.2s"
-                  onClick={() => setSelectedInk("custom")}
-                  bg={selectedInk === ink.id ? "orange.50" : "white"}
+                  onClick={() => setSelectedInk(customColor)}
+                  bg={selectedInk === customColor ? "orange.50" : "white"}
                   border="1px"
-                  borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
+                  borderColor={selectedInk === customColor ? "#FF6A00" : "gray.200"}
                   _hover={{ shadow: "md" }}
                 >
                   <CardBody p={6} textAlign="center">
@@ -194,7 +196,7 @@ export default function Step3InkColor({
                           value={customColor}
                           onChange={(e) => {
                             setCustomColor(e.target.value);
-                            setSelectedInk("custom");
+                            setSelectedInk(e.target.value);
                           }}
                           style={{
                             width: "100%",
@@ -217,7 +219,7 @@ export default function Step3InkColor({
                             // Only update if it's a valid hex color
                             if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
                               setCustomColor(value);
-                              setSelectedInk("custom");
+                              setSelectedInk(value);
                             } else if (value.length <= 7) {
                               // Allow typing but don't update color until valid
                               setCustomColor(value);
@@ -253,10 +255,10 @@ export default function Step3InkColor({
               key={ink.id}
               cursor="pointer"
               transition="all 0.2s"
-              onClick={() => setSelectedInk(ink.id)}
-              bg={selectedInk === ink.id ? "orange.50" : "white"}
+              onClick={() => setSelectedInk(ink.hex)}
+              bg={selectedInk === ink.hex ? "orange.50" : "white"}
               border="1px"
-              borderColor={selectedInk === ink.id ? "#FF6A00" : "gray.200"}
+              borderColor={selectedInk === ink.hex ? "#FF6A00" : "gray.200"}
               _hover={{ shadow: "md" }}
             >
               <CardBody p={6} textAlign="center">

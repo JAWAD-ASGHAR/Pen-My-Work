@@ -17,7 +17,7 @@ export default function CreatePage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPaper, setSelectedPaper] = useState("ruled");
   const [selectedWritingStyle, setSelectedWritingStyle] = useState("caveat");
-  const [selectedInk, setSelectedInk] = useState("blue");
+  const [selectedInk, setSelectedInk] = useState("#0052A3"); // Initialize with blue hex code
   const [customColor, setCustomColor] = useState("#FF6A00");
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [content, setContent] = useState("");
