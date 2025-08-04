@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Dancing_Script, Patrick_Hand, Indie_Flower, Architects_Daughter } from "next/font/google";
+import { Caveat, Gloria_Hallelujah, Patrick_Hand, Permanent_Marker, Reenie_Beanie, Shadows_Into_Light } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 
@@ -14,9 +14,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const dancingScript = Dancing_Script({
-  variable: "--font-dancing-script",
+const caveat = Caveat({
+  variable: "--font-caveat",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const gloriaHallelujah = Gloria_Hallelujah({
+  variable: "--font-gloria-hallelujah",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const patrickHand = Patrick_Hand({
@@ -25,14 +32,20 @@ const patrickHand = Patrick_Hand({
   weight: "400",
 });
 
-const indieFlower = Indie_Flower({
-  variable: "--font-indie-flower",
+const permanentMarker = Permanent_Marker({
+  variable: "--font-permanent-marker",
   subsets: ["latin"],
   weight: "400",
 });
 
-const architectsDaughter = Architects_Daughter({
-  variable: "--font-architects-daughter",
+const reenieBeanie = Reenie_Beanie({
+  variable: "--font-reenie-beanie",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const shadowsIntoLight = Shadows_Into_Light({
+  variable: "--font-shadows-into-light",
   subsets: ["latin"],
   weight: "400",
 });
@@ -56,7 +69,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${dancingScript.variable} ${patrickHand.variable} ${indieFlower.variable} ${architectsDaughter.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${gloriaHallelujah.variable} ${patrickHand.variable} ${permanentMarker.variable} ${reenieBeanie.variable} ${shadowsIntoLight.variable}`}>
         <Providers>
           {children}
         </Providers>

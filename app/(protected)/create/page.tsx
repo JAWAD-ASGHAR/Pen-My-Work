@@ -58,28 +58,53 @@ const inkColors = [
 
 const writingStyles = [
   {
-    id: "cursive",
-    name: "Cursive",
-    description: "Elegant flowing handwriting",
-    fontFamily: "var(--font-dancing-script)",
+    id: "caveat",
+    name: "Caveat",
+    description: "Natural handwritten style",
+    fontFamily: "'Caveat', cursive",
+    fontSize: "30px",
   },
   {
-    id: "print",
-    name: "Print",
-    description: "Clear block letters",
-    fontFamily: "var(--font-patrick-hand)",
+    id: "gloria",
+    name: "Gloria Hallelujah",
+    description: "Playful and expressive",
+    fontFamily: "'Gloria Hallelujah', cursive",
+    fontSize: "20px",
   },
   {
-    id: "neat",
-    name: "Neat",
-    description: "Clean and organized",
-    fontFamily: "var(--font-indie-flower)",
+    id: "patrick",
+    name: "Patrick Hand",
+    description: "Clear and readable",
+    fontFamily: "'Patrick Hand', cursive",
+    fontSize: "24px",
   },
   {
-    id: "casual",
-    name: "Casual",
-    description: "Relaxed everyday style",
-    fontFamily: "var(--font-architects-daughter)",
+    id: "permanent-marker",
+    name: "Permanent Marker",
+    description: "Bold and confident",
+    fontFamily: "'Permanent Marker', cursive",
+    fontSize: "20px",
+  },
+  {
+    id: "reenie-beanie",
+    name: "Reenie Beanie",
+    description: "Casual and friendly",
+    fontFamily: "'Reenie Beanie', cursive",
+    fontSize: "30px",
+  },
+  {
+    id: "shadows-into-light",
+    name: "Shadows Into Light",
+    description: "Elegant and flowing",
+    fontFamily: "'Shadows Into Light', cursive",
+    fontSize: "24px",
+  },
+  {
+    id: "edu-sa-hand",
+    name: "Edu SA Hand",
+    description: "Professional handwritten",
+    fontFamily: "'Edu SA Hand', cursive",
+    fontSize: "24px",
   },
 ];
 
@@ -87,7 +112,7 @@ export default function CreatePage() {
   // State for all steps
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPaper, setSelectedPaper] = useState("ruled");
-  const [selectedWritingStyle, setSelectedWritingStyle] = useState("cursive");
+  const [selectedWritingStyle, setSelectedWritingStyle] = useState("caveat");
   const [selectedInk, setSelectedInk] = useState("blue");
   const [content, setContent] = useState("");
   const [additionalQueries, setAdditionalQueries] = useState("");
@@ -101,7 +126,6 @@ export default function CreatePage() {
     pages: string[],
     ink: string,
     paper: string,
-    writingStyle: string,
     additionalQueries: string
   ) => {
     try {
@@ -110,7 +134,6 @@ export default function CreatePage() {
         pages,
         ink,
         paper,
-        writingStyle,
         additionalQueries
       );
       console.log(result);
@@ -248,11 +271,10 @@ export default function CreatePage() {
           <CardBody p={8}>
             <Box bg="gray.50" p={6} borderRadius="lg">
                 <Text
-                  fontSize="lg"
                   textAlign="center"
                   color="#1A1A1A"
                   fontFamily={style.fontFamily}
-
+                  fontSize={style.fontSize}
                   transition="opacity 0.2s"
                 >
                   {style.name} --- The quick brown fox jumps over the lazy dog
@@ -353,7 +375,7 @@ export default function CreatePage() {
               color={selectedColor?.color}
               fontFamily={
                 writingStyles.find((s) => s.id === selectedWritingStyle)
-                  ?.fontFamily || "Patrick Hand, cursive"
+                  ?.fontFamily || "'Patrick Hand', cursive"
               }
             >
               The quick brown fox jumps over the lazy dog
@@ -601,7 +623,6 @@ export default function CreatePage() {
                       pages,
                       selectedInk,
                       selectedPaper,
-                      selectedWritingStyle,
                       additionalQueries
                     )
                   }
