@@ -18,12 +18,7 @@ import {
   Badge,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import {
-  FiGrid,
-  FiArrowRight,
-  FiFileText,
-  FiPlay,
-} from "react-icons/fi";
+import { FiGrid, FiArrowRight, FiFileText, FiPlay } from "react-icons/fi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIndicator from "@/components/ProgressIndicator";
@@ -61,10 +56,38 @@ const inkColors = [
   { id: "dark-gray", name: "Dark Gray", color: "#4A4A4A", hex: "#4A4A4A" },
 ];
 
+const writingStyles = [
+  {
+    id: "cursive",
+    name: "Cursive",
+    description: "Elegant flowing handwriting",
+    fontFamily: "var(--font-dancing-script)",
+  },
+  {
+    id: "print",
+    name: "Print",
+    description: "Clear block letters",
+    fontFamily: "var(--font-patrick-hand)",
+  },
+  {
+    id: "neat",
+    name: "Neat",
+    description: "Clean and organized",
+    fontFamily: "var(--font-indie-flower)",
+  },
+  {
+    id: "casual",
+    name: "Casual",
+    description: "Relaxed everyday style",
+    fontFamily: "var(--font-architects-daughter)",
+  },
+];
+
 export default function CreatePage() {
   // State for all steps
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPaper, setSelectedPaper] = useState("ruled");
+  const [selectedWritingStyle, setSelectedWritingStyle] = useState("cursive");
   const [selectedInk, setSelectedInk] = useState("blue");
   const [content, setContent] = useState("");
   const [additionalQueries, setAdditionalQueries] = useState("");
@@ -78,18 +101,29 @@ export default function CreatePage() {
     pages: string[],
     ink: string,
     paper: string,
+    writingStyle: string,
     additionalQueries: string
   ) => {
     try {
       setIsGenerating(true);
-      const result = await generateImages(pages, ink, paper, additionalQueries);
+      const result = await generateImages(
+        pages,
+        ink,
+        paper,
+        writingStyle,
+        additionalQueries
+      );
       console.log(result);
       if ("error" in result) {
         console.error("Error:", result.error);
         setIsGenerating(false);
         return;
       }
-      if (result.success && result.assignmentData && result.assignmentData.length > 0) {
+      if (
+        result.success &&
+        result.assignmentData &&
+        result.assignmentData.length > 0
+      ) {
         setIsGenerating(false);
         // Redirect to the assignment details page
         const assignmentId = result.assignmentData[0].id;
@@ -103,7 +137,7 @@ export default function CreatePage() {
   };
 
   const nextStep = () => {
-    if (currentStep < 5) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -186,8 +220,75 @@ export default function CreatePage() {
       </Flex>
     </>
   );
-
   const renderStep2 = () => (
+    <>
+      <VStack spacing={8} align="center" mb={8}>
+        <Heading size="2xl" color="#1A1A1A" textAlign="center">
+          Choose Writing Style
+        </Heading>
+        <Text color="#666" textAlign="center">
+          Select the handwriting style for your assignment
+        </Text>
+      </VStack>
+
+      {writingStyles.map((style) => (
+        <Card
+          key={style.id}
+          bg={selectedWritingStyle === style.id ? "orange.50" : "white"}
+          border="1px"
+          borderColor={
+            selectedWritingStyle === style.id ? "#FF6A00" : "gray.200"
+          }
+          mb={4}
+          cursor="pointer"
+          onClick={() => setSelectedWritingStyle(style.id)}
+          _hover={{ shadow: "md" }}
+          transition="all 0.2s"
+        >
+          <CardBody p={8}>
+            <Box bg="gray.50" p={6} borderRadius="lg">
+                <Text
+                  fontSize="lg"
+                  textAlign="center"
+                  color="#1A1A1A"
+                  fontFamily={style.fontFamily}
+
+                  transition="opacity 0.2s"
+                >
+                  {style.name} --- The quick brown fox jumps over the lazy dog
+                </Text>
+            </Box>
+          </CardBody>
+        </Card>
+      ))}
+
+      <Flex justify="space-between">
+        <Button
+          variant="outline"
+          borderColor="gray.200"
+          color="#666"
+          bg="transparent"
+          onClick={prevStep}
+        >
+          <ArrowBackIcon w={4} h={4} mr={2} />
+          Previous
+        </Button>
+        <Button
+          bg="#FF6A00"
+          _hover={{ bg: "#FF8A33" }}
+          color="white"
+          px={8}
+          rightIcon={<Icon as={FiArrowRight} />}
+          onClick={nextStep}
+          isDisabled={!selectedWritingStyle}
+        >
+          Next Step
+        </Button>
+      </Flex>
+    </>
+  );
+
+  const renderStep3 = () => (
     <>
       <VStack spacing={8} align="center" mb={8}>
         <Heading size="2xl" color="#1A1A1A" textAlign="center">
@@ -250,7 +351,10 @@ export default function CreatePage() {
               fontSize="2xl"
               textAlign="center"
               color={selectedColor?.color}
-              fontFamily="Patrick Hand, cursive"
+              fontFamily={
+                writingStyles.find((s) => s.id === selectedWritingStyle)
+                  ?.fontFamily || "Patrick Hand, cursive"
+              }
             >
               The quick brown fox jumps over the lazy dog
             </Text>
@@ -283,7 +387,7 @@ export default function CreatePage() {
     </>
   );
 
-  const renderStep3 = () => (
+  const renderStep4 = () => (
     <>
       <VStack spacing={8} align="center" mb={8}>
         <Heading size="2xl" color="#1A1A1A" textAlign="center">
@@ -360,7 +464,7 @@ export default function CreatePage() {
     </>
   );
 
-  const renderStep4 = () => (
+  const renderStep5 = () => (
     <>
       <VStack spacing={8} align="center" mb={8}>
         <Heading size="2xl" color="#1A1A1A" textAlign="center">
@@ -423,7 +527,7 @@ export default function CreatePage() {
     </>
   );
 
-  const renderStep5 = () => {
+  const renderStep6 = () => {
     const { pages, pageCount } = charCount(content);
     console.log(pages, pageCount);
     return (
@@ -497,6 +601,7 @@ export default function CreatePage() {
                       pages,
                       selectedInk,
                       selectedPaper,
+                      selectedWritingStyle,
                       additionalQueries
                     )
                   }
@@ -577,12 +682,13 @@ export default function CreatePage() {
 
   return (
     <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
-      <ProgressIndicator currentStep={currentStep} totalSteps={5} />
+      <ProgressIndicator currentStep={currentStep} totalSteps={6} />
       {currentStep === 1 && renderStep1()}
       {currentStep === 2 && renderStep2()}
       {currentStep === 3 && renderStep3()}
       {currentStep === 4 && renderStep4()}
       {currentStep === 5 && renderStep5()}
+      {currentStep === 6 && renderStep6()}
     </Container>
   );
 }
