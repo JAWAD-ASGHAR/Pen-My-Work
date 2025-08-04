@@ -74,10 +74,6 @@ export default function AssignmentDetails() {
     }).format(new Date(date));
   };
 
-
-
-
-
   const downloadAllImages = async () => {
     if (!assignment?.imageURLs?.length) return;
 
@@ -216,128 +212,126 @@ export default function AssignmentDetails() {
   }
 
   return (
-    <>
-      <Box minH="100vh" bg="#FDF7EE">
-        <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
-          {/* Header */}
+    <Box minH="100vh" bg="#FDF7EE">
+      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+        <Grid templateColumns={{ base: "1fr", lg: "400px 1fr" }} gap={8} minH="calc(100vh - 100px)">
+          {/* Left Side - Fixed Section */}
+          <VStack spacing={6} align="stretch" position="sticky" top={8} h="fit-content">
+            {/* Main Heading */}
+            <Box>
+              <Heading size="xl" color="#1A1A1A" mb={2}>
+                Assignment Results
+              </Heading>
+              <Text color="#666" fontSize="sm">
+                View and download your handwritten results
+              </Text>
+            </Box>
 
-          <Heading size="xl" color="#1A1A1A">
-            Assignment Results
-          </Heading>
-          <Text color="#666" mb={10}>
-            View and download your handwritten results
-          </Text>
+            {/* Assignment Details Card */}
+            <Card bg="white" border="1px" borderColor="gray.200" shadow="sm">
+              <CardBody p={6}>
+                <VStack spacing={4} align="stretch">
+                  <Heading size="md" color="#1A1A1A">
+                    Assignment Information
+                  </Heading>
 
-          <Grid templateColumns={{ base: "1fr", lg: "1fr 2fr" }} gap={8}>
-            {/* Left Side - Assignment Info */}
-            <VStack spacing={6} align="stretch">
-              {/* Assignment Details Card */}
-              <Card bg="white" border="1px" borderColor="gray.200">
-                <CardBody p={6}>
-                  <VStack spacing={4} align="stretch">
-                    <Heading size="md" color="#1A1A1A">
-                      Assignment Information
-                    </Heading>
-
-                    {/* Date and Time */}
-                    <HStack justify="space-between">
-                      <HStack>
-                        <Icon as={FiCalendar} color="#FF6A00" />
-                        <Text fontSize="sm" color="#666">
-                          Created on
-                        </Text>
-                      </HStack>
-                      <Text>{formatDate(assignment.createdAt)}</Text>
+                  {/* Date and Time */}
+                  <HStack justify="space-between">
+                    <HStack>
+                      <Icon as={FiCalendar} color="#FF6A00" />
+                      <Text fontSize="sm" color="#666">
+                        Created on
+                      </Text>
                     </HStack>
+                    <Text>{formatDate(assignment.createdAt)}</Text>
+                  </HStack>
 
-                    {/* Paper Type */}
-                    <HStack justify="space-between">
-                      <HStack>
-                        <Icon as={FiFile} color="#FF6A00" />
-
-                        <Text fontSize="sm" fontWeight="medium" color="#1A1A1A">
-                          Paper Type
-                        </Text>
-                      </HStack>
-                      <Badge colorScheme="orange" variant="subtle">
-                        {assignment.paper.charAt(0).toUpperCase() +
-                          assignment.paper.slice(1)}
-                      </Badge>
+                  {/* Paper Type */}
+                  <HStack justify="space-between">
+                    <HStack>
+                      <Icon as={FiFile} color="#FF6A00" />
+                      <Text fontSize="sm" fontWeight="medium" color="#1A1A1A">
+                        Paper Type
+                      </Text>
                     </HStack>
+                    <Badge colorScheme="orange" variant="subtle">
+                      {assignment.paper.charAt(0).toUpperCase() +
+                        assignment.paper.slice(1)}
+                    </Badge>
+                  </HStack>
 
-                    {/* Ink Color */}
-                    <HStack justify="space-between">
-                      <HStack>
-                        <Icon as={FiDroplet} color="#FF6A00" />
-
-                        <Text fontSize="sm" fontWeight="medium" color="#1A1A1A">
-                          Ink Color
-                        </Text>
-                      </HStack>
-                      <HStack>
-                        <Box
-                          w="4"
-                          h="4"
-                          borderRadius="full"
-                          bg={assignment.ink}
-                          border="1px"
-                          borderColor="gray.300"
-                        />
-                        <Text fontSize="sm" color="#666">
-                          {assignment.ink}
-                        </Text>
-                      </HStack>
+                  {/* Ink Color */}
+                  <HStack justify="space-between">
+                    <HStack>
+                      <Icon as={FiDroplet} color="#FF6A00" />
+                      <Text fontSize="sm" fontWeight="medium" color="#1A1A1A">
+                        Ink Color
+                      </Text>
                     </HStack>
-                  </VStack>
-                </CardBody>
-              </Card>
+                    <HStack>
+                      <Box
+                        w="4"
+                        h="4"
+                        borderRadius="full"
+                        bg={assignment.ink}
+                        border="1px"
+                        borderColor="gray.300"
+                      />
+                      <Text fontSize="sm" color="#666">
+                        {assignment.ink}
+                      </Text>
+                    </HStack>
+                  </HStack>
+                </VStack>
+              </CardBody>
+            </Card>
 
-              {/* Download Options Card */}
-              <Card bg="white" border="1px" borderColor="gray.200">
-                <CardBody p={6}>
-                  <VStack spacing={4} align="stretch">
-                    <Heading size="md" color="#1A1A1A">
-                      Download Options
-                    </Heading>
+            {/* Download Options Card */}
+            <Card bg="white" border="1px" borderColor="gray.200" shadow="sm">
+              <CardBody p={6}>
+                <VStack spacing={4} align="stretch">
+                  <Heading size="md" color="#1A1A1A">
+                    Download Options
+                  </Heading>
 
-                    <Button
-                      onClick={downloadAllImages}
-                      isLoading={downloading === "all"}
-                      leftIcon={<Icon as={FiDownload} />}
-                      bg="#FF6A00"
-                      _hover={{ bg: "#FF8A33" }}
-                      color="white"
-                      size="md"
+                  <Button
+                    onClick={downloadAllImages}
+                    isLoading={downloading === "all"}
+                    leftIcon={<Icon as={FiDownload} />}
+                    bg="#FF6A00"
+                    _hover={{ bg: "#FF8A33" }}
+                    color="white"
+                    size="md"
+                  >
+                    Download All as ZIP
+                  </Button>
+
+                  <Button
+                    onClick={downloadAsPDF}
+                    isLoading={downloading === "pdf"}
+                    leftIcon={<Icon as={FiFileText} />}
+                    variant="outline"
+                    borderColor="gray.300"
+                    color="#1A1A1A"
+                    size="md"
+                  >
+                    Download as PDF
+                  </Button>
+                </VStack>
+              </CardBody>
+            </Card>
+          </VStack>
+
+          {/* Right Side - Scrollable Section */}
+          <Box overflowY="auto" mt={28} maxH="calc(100vh - 100px)" bg="transparent">
+            {paperContent ? (
+
+                    <Box 
+                      display="flex" 
+                      justifyContent="center" 
+                      alignItems="flex-start"
+                      bg="transparent"
                     >
-                      Download All as ZIP
-                    </Button>
-
-                    <Button
-                      onClick={downloadAsPDF}
-                      isLoading={downloading === "pdf"}
-                      leftIcon={<Icon as={FiFileText} />}
-                      variant="outline"
-                      borderColor="gray.300"
-                      color="#1A1A1A"
-                      size="md"
-                    >
-                      Download as PDF
-                    </Button>
-                  </VStack>
-                </CardBody>
-              </Card>
-            </VStack>
-
-            {/* Right Side - Generated Paper */}
-            <VStack spacing={6} align="stretch">
-              {paperContent ? (
-                <Card bg="white" border="1px" borderColor="gray.200">
-                  <CardBody p={6}>
-                    <VStack spacing={4} align="stretch">
-                      <Heading size="md" color="#1A1A1A" mb={4}>
-                        Assignment Preview
-                      </Heading>
-                      
                       {/* Render the appropriate paper based on selection */}
                       <Paper
                         text={paperContent}
@@ -349,26 +343,23 @@ export default function AssignmentDetails() {
                           assignment.paper === "grid" ? "grid" : "blank"
                         }
                       />
-                    </VStack>
-                  </CardBody>
-                </Card>
-              ) : (
-                <Card bg="white" border="1px" borderColor="gray.200">
-                  <CardBody p={8}>
-                    <VStack spacing={4} align="center">
-                      <Icon as={FiFileText} w={12} h={12} color="gray.400" />
-                      <Text color="#666" textAlign="center">
-                        No content found for this assignment.
-                      </Text>
-                    </VStack>
-                  </CardBody>
-                </Card>
-              )}
-            </VStack>
-          </Grid>
-        </Container>
-      </Box>
+                    </Box>
 
-    </>
+            ) : (
+              <Card bg="white" border="1px" borderColor="gray.200" shadow="sm">
+                <CardBody p={8}>
+                  <VStack spacing={4} align="center">
+                    <Icon as={FiFileText} w={12} h={12} color="gray.400" />
+                    <Text color="#666" textAlign="center">
+                      No content found for this assignment.
+                    </Text>
+                  </VStack>
+                </CardBody>
+              </Card>
+            )}
+          </Box>
+        </Grid>
+      </Container>
+    </Box>
   );
 }
