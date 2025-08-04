@@ -4,7 +4,7 @@ interface PaperProps {
   text: string;
   textColor: string;
   fontFamily: string;
-  fontSize: string;
+  fontSize?: string;
   paperType: 'lined' | 'blank' | 'grid';
   paperRef?: React.RefObject<HTMLDivElement>;
 }
@@ -13,7 +13,7 @@ const Paper: React.FC<PaperProps> = ({
   text, 
   textColor, 
   fontFamily, 
-  fontSize, 
+  fontSize = '25px', 
   paperType,
   paperRef 
 }) => {

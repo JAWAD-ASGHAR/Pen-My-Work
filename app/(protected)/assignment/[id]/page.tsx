@@ -343,7 +343,6 @@ export default function AssignmentDetails() {
                         text={paperContent}
                         textColor={assignment.ink}
                         fontFamily="'Caveat', cursive"
-                        fontSize="30px"
                         paperType={
                           assignment.paper === "ruled" ? "lined" :
                           assignment.paper === "blank" ? "blank" :
