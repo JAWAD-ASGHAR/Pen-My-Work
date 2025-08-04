@@ -13,7 +13,7 @@ const Paper: React.FC<PaperProps> = ({
   text, 
   textColor, 
   fontFamily, 
-  fontSize = '25px', 
+  fontSize = '22px', 
   paperType,
   paperRef 
 }) => {
@@ -21,6 +21,7 @@ const Paper: React.FC<PaperProps> = ({
   const totalLines = 30;
   const availableHeight = 762; // A4 height (842px) - top/bottom padding (80px)
   const lineHeightPx = availableHeight / totalLines; // Distribute lines evenly
+  const textLineSpacing = lineHeightPx * 0.00001; // Reduce spacing for more natural handwritten look
   const leftPadding = 5; // px, just past the red margin line
 
   // Helper: Split text into paragraphs, then words, and wrap to fit the paper width
@@ -191,7 +192,7 @@ const Paper: React.FC<PaperProps> = ({
               style={{
                 display: 'block',
                 position: 'relative',
-                top: `${idx * lineHeightPx}px`,
+                top: `${idx * textLineSpacing}px`,
                 left: 0,
                 right: 0,
                 width: '100%',
