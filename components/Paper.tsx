@@ -13,12 +13,12 @@ const Paper: React.FC<PaperProps> = ({
   text, 
   textColor, 
   fontFamily, 
-  fontSize = '22px', 
+  fontSize = '24px', 
   paperType,
   paperRef 
 }) => {
   // Constants for A4 paper
-  const totalLines = 30;
+  const totalLines = 25;
   const availableHeight = 762; // A4 height (842px) - top/bottom padding (80px)
   const lineHeightPx = availableHeight / totalLines; // Distribute lines evenly
   const textLineSpacing = lineHeightPx * 0.00001; // Reduce spacing for more natural handwritten look
@@ -89,7 +89,7 @@ const Paper: React.FC<PaperProps> = ({
           #ffffff
         `;
       case 'grid':
-        const gridSize = 20;
+        const gridSize = 30;
         return `
           repeating-linear-gradient(
             0deg,
@@ -128,24 +128,25 @@ const Paper: React.FC<PaperProps> = ({
   const getTextContainerHeight = () => {
     switch (paperType) {
       case 'lined':
-        return '762px'; // A4 height (842px) - top/bottom padding (80px)
+        return '842px'; // A4 height (842px) - no top/bottom padding
       case 'blank':
       case 'grid':
-        return '742px'; // A4 height (842px) - top/bottom padding (100px)
+        return '842px'; // A4 height (842px) - no top/bottom padding
       default:
-        return '742px';
+        return '842px';
     }
   };
 
   const getPadding = () => {
     switch (paperType) {
       case 'lined':
-        return '30px 0px 0px 50px';
+        return '35px 0px 0px 50px'; // top right bottom left - only left padding for red margin
       case 'blank':
+        return '20px 20px 20px 20px'; // top right bottom left - only left padding for red margin
       case 'grid':
-        return '0px 50px';
+        return '35px 30px 30px 30px'; // top right bottom left - only left padding for red margin
       default:
-        return '0px 50px';
+        return '35px 0px 0px 50px';// top right bottom left - only left padding for red margin
     }
   };
 
