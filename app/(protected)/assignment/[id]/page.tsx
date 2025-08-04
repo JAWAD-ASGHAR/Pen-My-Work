@@ -15,9 +15,7 @@ import {
   HStack,
   useToast,
 } from "@chakra-ui/react";
-import LinedPaper from "@/components/LinedPaper";
-import BlankPaper from "@/components/BlankPaper";
-import GridPaper from "@/components/GridPaper";
+import Paper from "@/components/Paper";
 import {
   FiFileText,
   FiDownload,
@@ -341,32 +339,17 @@ export default function AssignmentDetails() {
                       </Heading>
                       
                       {/* Render the appropriate paper based on selection */}
-                      {assignment.paper === "ruled" && (
-                        <LinedPaper
-                          text={paperContent}
-                          textColor={assignment.ink}
-                          fontFamily="'Caveat', cursive"
-                          fontSize="30px"
-                        />
-                      )}
-                      
-                      {assignment.paper === "blank" && (
-                        <BlankPaper
-                          text={paperContent}
-                          textColor={assignment.ink}
-                          fontFamily="'Caveat', cursive"
-                          fontSize="30px"
-                        />
-                      )}
-                      
-                      {assignment.paper === "grid" && (
-                        <GridPaper
-                          text={paperContent}
-                          textColor={assignment.ink}
-                          fontFamily="'Caveat', cursive"
-                          fontSize="30px"
-                        />
-                      )}
+                      <Paper
+                        text={paperContent}
+                        textColor={assignment.ink}
+                        fontFamily="'Caveat', cursive"
+                        fontSize="30px"
+                        paperType={
+                          assignment.paper === "ruled" ? "lined" :
+                          assignment.paper === "blank" ? "blank" :
+                          assignment.paper === "grid" ? "grid" : "blank"
+                        }
+                      />
                     </VStack>
                   </CardBody>
                 </Card>
