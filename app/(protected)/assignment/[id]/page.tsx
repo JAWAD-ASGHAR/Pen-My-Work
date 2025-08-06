@@ -24,6 +24,7 @@ import {
   FiFile,
 } from "react-icons/fi";
 import Link from "next/link";
+import { charCount } from "@/utils/char-count";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
@@ -32,6 +33,10 @@ import {
 } from "@/server/actions/assignments";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Paper from "@/components/Paper";
+import html2canvas from "html2canvas";
+import { useRef } from "react";
+import JSZip from "jszip";
+import jsPDF from "jspdf";
 
 export default function AssignmentDetails() {
   const params = useParams();
@@ -40,6 +45,8 @@ export default function AssignmentDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState<string | null>(null);
+  // Add refs for each page
+  const paperRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const fetchAssignment = async () => {
@@ -73,7 +80,16 @@ export default function AssignmentDetails() {
   const downloadImage = async (index: number) => {
     try {
       setDownloading(`image-${index}`);
-      // Simulate download for Paper component
+      const paperNode = paperRefs.current[index];
+      if (!paperNode) throw new Error("Paper not found");
+      const canvas = await html2canvas(paperNode, { backgroundColor: null });
+      const dataUrl = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `assignment-page-${index + 1}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       toast({
         title: "Download successful",
         description: `Page ${index + 1} downloaded successfully`,
@@ -97,10 +113,26 @@ export default function AssignmentDetails() {
 
   const downloadAllImages = async () => {
     if (!assignment) return;
-
     try {
       setDownloading("all");
-      
+      const zip = new JSZip();
+      // Render each Paper to PNG and add to zip
+      for (let i = 0; i < paperRefs.current.length; i++) {
+        const paperNode = paperRefs.current[i];
+        if (!paperNode) continue;
+        const canvas = await html2canvas(paperNode, { backgroundColor: null });
+        const dataUrl = canvas.toDataURL("image/png");
+        // Remove prefix for zip
+        const imgData = dataUrl.split(",")[1];
+        zip.file(`assignment-page-${i + 1}.png`, imgData, { base64: true });
+      }
+      const content = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = "assignment-pages.zip";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       toast({
         title: "Download successful",
         description: `All pages downloaded as ZIP`,
@@ -124,10 +156,18 @@ export default function AssignmentDetails() {
 
   const downloadAsPDF = async () => {
     if (!assignment) return;
-
     try {
       setDownloading("pdf");
-      
+      const pdf = new jsPDF({ unit: "px", format: [595, 842] }); // A4 size in px
+      for (let i = 0; i < paperRefs.current.length; i++) {
+        const paperNode = paperRefs.current[i];
+        if (!paperNode) continue;
+        const canvas = await html2canvas(paperNode, { backgroundColor: null });
+        const imgData = canvas.toDataURL("image/png");
+        if (i > 0) pdf.addPage([595, 842], "p");
+        pdf.addImage(imgData, "PNG", 0, 0, 595, 842);
+      }
+      pdf.save("assignment.pdf");
       toast({
         title: "PDF downloaded",
         description: "Assignment downloaded as PDF successfully",
@@ -182,7 +222,7 @@ export default function AssignmentDetails() {
   }
 
   // Split text into pages for rendering
-  const textPages = assignment.text.split('\n\n').filter(page => page.trim().length > 0);
+  const { pages: textPages } = charCount(assignment.text);
 
   return (
     <>
@@ -362,6 +402,7 @@ export default function AssignmentDetails() {
                                 assignment.paper === "blank" ? "blank" :
                                 assignment.paper === "grid" ? "grid" : "blank"
                               }
+                              paperRef={(el: HTMLDivElement | null) => { paperRefs.current[index] = el; }}
                             />
                           </Box>
                         </VStack>

@@ -6,7 +6,7 @@ interface PaperProps {
   fontFamily: string;
   fontSize?: string;
   paperType: 'lined' | 'blank' | 'grid';
-  paperRef?: React.RefObject<HTMLDivElement>;
+  paperRef?: React.RefObject<HTMLDivElement> | ((el: HTMLDivElement | null) => void);
 }
 
 const Paper: React.FC<PaperProps> = ({ 
@@ -151,9 +151,11 @@ const Paper: React.FC<PaperProps> = ({
   };
 
   return (
-    <div className="flex justify-center mb-6">
+    <div
+      ref={paperRef}
+      className="flex justify-center mb-6"
+    >
       <div
-        ref={paperRef}
         className="w-[595px] h-[842px] bg-white border border-gray-300 shadow-lg relative"
         style={{
           background: getBackgroundPattern(),
