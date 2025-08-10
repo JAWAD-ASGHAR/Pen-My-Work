@@ -39,6 +39,7 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 import { PreviewPanels } from "@/components/panels";
+import { Logo } from "@/components/Logo";
 
 export default function HandwritingAILanding() {
   const bgColor = "#FDF7EE";
@@ -1096,10 +1097,7 @@ export default function HandwritingAILanding() {
           <Grid templateColumns={{ md: "repeat(3, 1fr)" }} gap={8} mb={12}>
             <VStack align="start" spacing={4}>
               <Flex align="center" gap={2}>
-                <Icon as={FiPenTool} h={8} w={8} color={accentColor} />
-                <Text fontSize="2xl" fontWeight="bold">
-                  Pen My Work
-                </Text>
+                <Logo size="md" textColor="white"/>
               </Flex>
               <Text color="gray.400" lineHeight="relaxed">
                 Transform typed text into authentic handwritten pages with
