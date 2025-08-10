@@ -25,7 +25,6 @@ export default function Step4Content({
   onNext,
   onPrevious,
 }: Step4ContentProps) {
-  const maxLength = 2000;
 
   return (
     <>
@@ -64,14 +63,10 @@ export default function Step4Content({
                 borderColor: "#FF6A00",
                 boxShadow: "0 0 0 1px var(--chakra-colors-orange-500)",
               }}
-              maxLength={maxLength}
             />
             <Flex justify="space-between" align="center" mt={2}>
               <Text fontSize="sm" color="#666">
                 Supports basic formatting with **bold** and *italic* text
-              </Text>
-              <Text fontSize="sm" color="#666">
-                {content.length}/{maxLength} characters
               </Text>
             </Flex>
           </Box>
