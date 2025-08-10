@@ -31,7 +31,6 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
       w="full"
       mt={-10}
       position="relative"
-      bg="#FDF7EE"
       overflow="hidden"
     >
       <Box position="relative" h="500px" overflow="hidden">

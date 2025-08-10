@@ -144,17 +144,26 @@ export default function HandwritingAILanding() {
             >
               How It{" "}
               <Box position="relative" display="inline">
-                Works
                 <Box
                   position="absolute"
-                  bottom="-8px"
-                  left={0}
-                  w="full"
-                  h={3}
-                  bg={accentColor}
-                  opacity={0.3}
-                  borderRadius="full"
-                />
+                  bottom="-12px"
+                  left="-10px"
+                  right="-10px"
+                  h="45px"
+                  opacity={0.8}
+                  zIndex={0}
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  Works
+                </Box>
               </Box>
             </Heading>
             <Text fontSize="xl" color="#666" maxW="2xl">
@@ -317,17 +326,26 @@ export default function HandwritingAILanding() {
             >
               See The{" "}
               <Box position="relative" display="inline">
-                Magic
                 <Box
                   position="absolute"
-                  bottom="-4px"
-                  left={0}
-                  w="full"
-                  h={4}
-                  bg={accentColor}
-                  opacity={0.2}
-                  borderRadius="full"
-                />
+                  bottom="-12px"
+                  left="-10px"
+                  right="-10px"
+                  h="45px"
+                  opacity={0.8}
+                  zIndex={0}
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  Magic
+                </Box>
               </Box>
             </Heading>
             <Text 
@@ -595,17 +613,25 @@ export default function HandwritingAILanding() {
             >
               Perfect For{" "}
               <Box position="relative" display="inline">
-                Everyone
                 <Box
                   position="absolute"
-                  bottom="-8px"
-                  left={0}
-                  w="full"
-                  h={3}
-                  bg={accentColor}
-                  opacity={0.3}
-                  borderRadius="full"
-                />
+                  bottom="-12px"
+                  left="-10px"
+                  right="-10px"
+                  h="45px"
+                  opacity={0.8}
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  Everyone
+                </Box>
               </Box>
             </Heading>
           </VStack>
@@ -711,17 +737,25 @@ export default function HandwritingAILanding() {
             >
               Trusted{" "}
               <Box position="relative" display="inline">
-                Worldwide
                 <Box
                   position="absolute"
-                  bottom="-8px"
-                  left={0}
-                  w="full"
-                  h={3}
-                  bg={accentColor}
-                  opacity={0.3}
-                  borderRadius="full"
-                />
+                  bottom="-12px"
+                  left="-10px"
+                  right="-10px"
+                  h="45px"
+                  opacity={0.8}
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  Worldwide
+                </Box>
               </Box>
             </Heading>
           </VStack>
