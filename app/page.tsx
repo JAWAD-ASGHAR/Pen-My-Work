@@ -328,7 +328,7 @@ export default function HandwritingAILanding() {
         <Box h="150px" bg="white" />
       </Box>
       {/* See The Magic Section */}
-      <Box as="section" px={6} py={20} bg="#FF9966" position="relative">
+      <Box as="section" px={6} pt={10} pb={20} bg="#FF9966" position="relative">
         {/* Background decoration */}
         <Box
           position="absolute"
@@ -394,233 +394,129 @@ export default function HandwritingAILanding() {
               lineHeight="relaxed"
               fontWeight="medium"
             >
-              Real examples of typed text transformed into authentic handwritten
-              pages.
+              Typed text transformed into authentic handwritten pages within seconds.
             </Text>
           </VStack>
-
-          <VStack spacing={20}>
-            {/* Example 1 - Academic Essay */}
-            <Box w="full">
-              <Grid
-                templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
-                gap={{ base: 8, lg: 12 }}
-                alignItems="stretch"
-                maxW="6xl"
-                mx="auto"
+          {/* Example 1 - Academic Essay */}
+          <Box w="full">
+            <Grid
+              templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+              gap={{ base: 8, lg: 12 }}
+              alignItems="stretch"
+              maxW="6xl"
+              mx="auto"
+            >
+              {/* Typed Input */}
+              <Card
+                overflow="hidden"
+                bg="#FDF7EE"
+                border="2px solid #000000"
+                boxShadow="4px 4px 0px #000000"
+                borderRadius="xl"
+                transition="box-shadow 0.2s"
               >
-                {/* Typed Input */}
-                <Card
-                  overflow="hidden"
-                  bg="#FDF7EE"
-                  border="2px solid #000000"
-                  boxShadow="4px 4px 0px #000000"
-                  borderRadius="xl"
-                  transition="box-shadow 0.2s"
-                >
-                  <CardBody p={{ base: 6, lg: 8 }}>
-                    <HStack gap={3} mb={6} align="center">
-                      <HStack gap={1}>
-                        <Box w={3} h={3} bg="red.400" borderRadius="full" />
-                        <Box w={3} h={3} bg="yellow.400" borderRadius="full" />
-                        <Box w={3} h={3} bg="green.400" borderRadius="full" />
-                      </HStack>
-                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
-                        Typed Input
-                      </Text>
+                <CardBody p={{ base: 6, lg: 8 }}>
+                  <HStack gap={3} mb={6} align="center">
+                    <HStack gap={1}>
+                      <Box w={3} h={3} bg="red.500" borderRadius="full" />
+                      <Box w={3} h={3} bg="yellow.400" borderRadius="full" />
+                      <Box w={3} h={3} bg="green.500" borderRadius="full" />
                     </HStack>
-                    <Box
-                      bg="gray.50"
-                      borderRadius="2xl"
-                      p={{ base: 5, lg: 6 }}
-                      fontFamily="mono"
-                      fontSize={{ base: "sm", lg: "md" }}
-                      color={textColor}
-                      lineHeight="relaxed"
-                      border="1px solid"
-                      borderColor="gray.200"
-                      minH="200px"
-                      display="flex"
-                      alignItems="center"
-                    >
-                      The Industrial Revolution, which took place from the 18th
-                      to 19th centuries, was a period during which predominantly
-                      agrarian, rural societies in Europe and America became
-                      industrial and urban. This transformation included going
-                      from hand production methods to machines, new chemical
-                      manufacturing and iron production processes.
-                    </Box>
-                  </CardBody>
-                </Card>
+                    <Text fontSize="md" color="gray.800" fontWeight="bold">
+                      Typed Input
+                    </Text>
+                  </HStack>
+                  <Box
+                    bg="gray.50"
+                    borderRadius="2xl"
+                    p={{ base: 5, lg: 6 }}
+                    fontFamily="mono"
+                    fontSize={{ base: "sm", lg: "md" }}
+                    color={textColor}
+                    lineHeight="relaxed"
+                    border="2px solid black"
+                    minH="200px"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    The Role of Technology in Modern Life: Technology has become
+                    an inseparable part of our daily lives, shaping the way we
+                    communicate, work, and think. From smartphones to artificial
+                    intelligence, advancements have brought convenience and
+                    efficiency to tasks that once required significant time and
+                    effort. Communication has transformed from handwritten
+                    letters to instant messages and video calls, enabling
+                    connections across continents within seconds. In education,
+                    technology has opened doors to limitless learning
+                    opportunities. Online courses, virtual classrooms, and
+                    interactive tools have made knowledge more accessible than
+                    ever. In healthcare, modern devices and diagnostic systems
+                    have saved countless lives, while in business, automation
+                    has increased productivity and reduced costs. However,
+                    technology is not without challenges. Over-reliance on
+                    digital tools can reduce face-to-face interaction, and
+                    issues like data privacy and cybercrime pose serious
+                    threats. The key lies in using technology responsibly
+                    balancing innovation with ethical considerations.
+                  </Box>
+                </CardBody>
+              </Card>
 
-                {/* AI Handwritten Output */}
-                <Card
-                  overflow="hidden"
-                  bg="#FDF7EE"
-                  border="2px solid #000000"
-                  boxShadow="4px 4px 0px #000000"
-                  borderRadius="xl"
-                  transition="box-shadow 0.2s"
-                >
-                  <CardBody p={{ base: 6, lg: 8 }}>
-                    <HStack gap={3} mb={6} align="center">
-                      <Icon as={FiCheckCircle} w={5} h={5} color="green.500" />
-                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
-                        AI Handwritten Output
-                      </Text>
-                    </HStack>
-                    <Box
-                      position="relative"
-                      borderRadius="2xl"
-                      overflow="hidden"
-                    >
-                      <Image
-                        src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&h=400&fit=crop&crop=center"
-                        alt="Handwritten essay on lined paper"
-                        w="full"
-                        h={{ base: "240px", lg: "280px" }}
-                        objectFit="cover"
-                      />
-                      <Box
-                        position="absolute"
-                        inset={0}
-                        bgGradient="linear(to-t, blackAlpha.200, transparent)"
-                      />
-                      <Box
-                        position="absolute"
-                        top={4}
-                        right={4}
-                        bg="white"
-                        px={3}
-                        py={1}
-                        borderRadius="full"
-                        fontSize="xs"
-                        fontWeight="semibold"
-                        color="green.600"
-                        boxShadow="md"
-                      >
-                        AI Generated
-                      </Box>
-                    </Box>
-                  </CardBody>
-                </Card>
-              </Grid>
-            </Box>
-
-            {/* Example 2 - Personal Letter */}
-            <Box w="full">
-              <Grid
-                templateColumns={{ base: "1fr", lg: "1fr 1fr" }}
-                gap={{ base: 8, lg: 12 }}
-                alignItems="stretch"
-                maxW="6xl"
-                mx="auto"
+              {/* AI Handwritten Output */}
+              <Card
+                overflow="hidden"
+                bg="#FDF7EE"
+                border="2px solid #000000"
+                boxShadow="4px 4px 0px #000000"
+                borderRadius="xl"
+                transition="box-shadow 0.2s"
               >
-                {/* AI Handwritten Output */}
-                <Card
-                  overflow="hidden"
-                  order={{ base: 1, lg: 1 }}
-                  bg="#FDF7EE"
-                  border="2px solid #000000"
-                  boxShadow="4px 4px 0px #000000"
-                  borderRadius="xl"
-                  transition="box-shadow 0.2s"
-                >
-                  <CardBody p={{ base: 6, lg: 8 }}>
-                    <HStack gap={3} mb={6} align="center">
-                      <Icon as={FiCheckCircle} w={5} h={5} color="green.500" />
-                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
-                        AI Handwritten Output
-                      </Text>
-                    </HStack>
+                <CardBody p={{ base: 6, lg: 8 }}>
+                  <HStack gap={3} mb={6} align="center">
+                    <Icon as={FiCheckCircle} w={5} h={5} color="green.500" />
+                    <Text fontSize="md" color="gray.800" fontWeight="bold">
+                      AI Handwritten Output
+                    </Text>
+                  </HStack>
+                  <Box
+                    position="relative"
+                    borderRadius="2xl"
+                    overflow="hidden"
+                    border="2px solid black"
+                  >
+                    <Image
+                      src="/example.png"
+                      alt="Handwritten essay on lined paper"
+                      w="full"
+                      h={'full'}
+                      objectFit="cover"
+                    />
                     <Box
-                      position="relative"
-                      borderRadius="2xl"
-                      overflow="hidden"
-                    >
-                      <Image
-                        src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=400&fit=crop&crop=center"
-                        alt="Handwritten letter on personal stationery"
-                        w="full"
-                        h={{ base: "240px", lg: "280px" }}
-                        objectFit="cover"
-                      />
-                      <Box
-                        position="absolute"
-                        inset={0}
-                        bgGradient="linear(to-t, blackAlpha.200, transparent)"
-                      />
-                      <Box
-                        position="absolute"
-                        top={4}
-                        right={4}
-                        bg="white"
-                        px={3}
-                        py={1}
-                        borderRadius="full"
-                        fontSize="xs"
-                        fontWeight="semibold"
-                        color="green.600"
-                        boxShadow="md"
-                      >
-                        AI Generated
-                      </Box>
-                    </Box>
-                  </CardBody>
-                </Card>
-
-                {/* Typed Input */}
-                <Card
-                  overflow="hidden"
-                  order={{ base: 2, lg: 2 }}
-                  bg="#FDF7EE"
-                  border="2px solid #000000"
-                  boxShadow="4px 4px 0px #000000"
-                  borderRadius="xl"
-                  transition="box-shadow 0.2s"
-                >
-                  <CardBody p={{ base: 6, lg: 8 }}>
-                    <HStack gap={3} mb={6} align="center">
-                      <HStack gap={1}>
-                        <Box w={3} h={3} bg="red.400" borderRadius="full" />
-                        <Box w={3} h={3} bg="yellow.400" borderRadius="full" />
-                        <Box w={3} h={3} bg="green.400" borderRadius="full" />
-                      </HStack>
-                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
-                        Typed Input
-                      </Text>
-                    </HStack>
+                      position="absolute"
+                      inset={0}
+                      bgGradient="linear(to-t, blackAlpha.200, transparent)"
+                    />
                     <Box
-                      bg="gray.50"
-                      borderRadius="2xl"
-                      p={{ base: 5, lg: 6 }}
-                      fontFamily="mono"
-                      fontSize={{ base: "sm", lg: "md" }}
-                      color={textColor}
-                      lineHeight="relaxed"
-                      border="1px solid"
-                      borderColor="gray.200"
-                      minH="200px"
-                      display="flex"
-                      alignItems="center"
+                      position="absolute"
+                      top={4}
+                      right={4}
+                      bg="white"
+                      px={3}
+                      py={1}
+                      borderRadius="full"
+                      fontSize="xs"
+                      color="green.500"
+                      fontWeight={'black'}
+                      border={'2px solid black'}
+                      boxShadow="md"
                     >
-                      Dear Mom and Dad,
-                      <br />
-                      <br />I hope you&apos;re both doing well. College has been
-                      amazing so far! I&apos;ve made some great friends and my
-                      professors are really inspiring. The campus is beautiful,
-                      especially in the fall with all the colorful leaves.
-                      <br />
-                      <br />
-                      Love you both,
-                      <br />
-                      Emma
+                      AI Generated
                     </Box>
-                  </CardBody>
-                </Card>
-              </Grid>
-            </Box>
-          </VStack>
+                  </Box>
+                </CardBody>
+              </Card>
+            </Grid>
+          </Box>
         </Container>
       </Box>
       {/* Wave Bottom - Transition from bgColor to white */}
@@ -862,19 +758,32 @@ export default function HandwritingAILanding() {
                   <Heading fontSize="2xl" color={textColor}>
                     Why Students Love ScriptAI
                   </Heading>
-                  
+
                   <Grid templateColumns="repeat(2, 1fr)" gap={4} w="full">
-                    <Box p={4} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200">
+                    <Box
+                      p={4}
+                      bg="white"
+                      borderRadius="xl"
+                      border="1px solid"
+                      borderColor="gray.200"
+                    >
                       <HStack mb={3}>
                         <Icon as={FiClock} color="blue.500" />
                         <Text fontWeight="medium">Save Time</Text>
                       </HStack>
                       <Text fontSize="sm" color="gray.600">
-                        Convert typed work to handwriting in seconds instead of hours
+                        Convert typed work to handwriting in seconds instead of
+                        hours
                       </Text>
                     </Box>
 
-                    <Box p={4} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200">
+                    <Box
+                      p={4}
+                      bg="white"
+                      borderRadius="xl"
+                      border="1px solid"
+                      borderColor="gray.200"
+                    >
                       <HStack mb={3}>
                         <Icon as={FiCheck} color="green.500" />
                         <Text fontWeight="medium">Natural Look</Text>
@@ -884,7 +793,13 @@ export default function HandwritingAILanding() {
                       </Text>
                     </Box>
 
-                    <Box p={4} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200">
+                    <Box
+                      p={4}
+                      bg="white"
+                      borderRadius="xl"
+                      border="1px solid"
+                      borderColor="gray.200"
+                    >
                       <HStack mb={3}>
                         <Icon as={FiShield} color="purple.500" />
                         <Text fontWeight="medium">Safe & Private</Text>
@@ -894,7 +809,13 @@ export default function HandwritingAILanding() {
                       </Text>
                     </Box>
 
-                    <Box p={4} bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200">
+                    <Box
+                      p={4}
+                      bg="white"
+                      borderRadius="xl"
+                      border="1px solid"
+                      borderColor="gray.200"
+                    >
                       <HStack mb={3}>
                         <Icon as={FiDownload} color="orange.500" />
                         <Text fontWeight="medium">Easy Export</Text>
