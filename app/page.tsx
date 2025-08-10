@@ -428,7 +428,7 @@ export default function HandwritingAILanding() {
                   </HStack>
                   <Box
                     bg="gray.50"
-                    borderRadius="2xl"
+                    borderRadius="xl"
                     p={{ base: 5, lg: 6 }}
                     fontFamily="mono"
                     fontSize={{ base: "sm", lg: "md" }}
@@ -480,7 +480,7 @@ export default function HandwritingAILanding() {
                   </HStack>
                   <Box
                     position="relative"
-                    borderRadius="2xl"
+                    borderRadius="xl"
                     overflow="hidden"
                     border="2px solid black"
                   >
@@ -540,7 +540,7 @@ export default function HandwritingAILanding() {
         <Box h="20px" bg={bgColor} />
       </Box>
       {/* Use Cases */}
-      <Box as="section" px={6} mt={40} py={20} bg="white">
+      <Box as="section" px={6} pt={52} pb={32} bg="white">
         <Container maxW="7xl">
           <VStack spacing={4} mb={16} textAlign="center">
             <Heading
