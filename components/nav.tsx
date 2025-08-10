@@ -80,7 +80,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
         >
           <Link
             href="#how-it-works"
-            color="gray.600"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
             onClick={(e) => {
@@ -92,7 +93,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
           </Link>
           <Link
             href="#examples"
-            color="gray.600"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
             onClick={(e) => {
@@ -104,7 +106,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
           </Link>
           <Link
             href="#use-cases"
-            color="gray.600"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
             onClick={(e) => {
@@ -116,7 +119,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
           </Link>
           <Link
             href="#testimonials"
-            color="gray.600"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
             onClick={(e) => {
@@ -128,7 +132,8 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
           </Link>
           <Link
             href="#contact"
-            color="gray.600"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
             onClick={(e) => {
