@@ -372,7 +372,7 @@ export default function HandwritingAILanding() {
         <Box h="150px" bg="white" />
       </Box>
       {/* See The Magic Section */}
-      <Box as="section" px={6} pt={10} pb={20} bg="#FF9966" position="relative">
+      <Box as="section" id="examples" px={6} pt={10} pb={20} bg="#FF9966" position="relative">
         {/* Background decoration */}
         <Box
           position="absolute"
@@ -585,7 +585,7 @@ export default function HandwritingAILanding() {
         <Box h="20px" bg={bgColor} />
       </Box>
       {/* Use Cases */}
-      <Box as="section" px={6} pt={52} pb={32} bg="white">
+      <Box as="section" id="use-cases" px={6} pt={52} pb={32} bg="white">
         <Container maxW="7xl">
           <VStack spacing={4} mb={16} textAlign="center">
             <Heading
@@ -718,7 +718,7 @@ export default function HandwritingAILanding() {
         </Container>
       </Box>
       {/* Stats Section */}
-      <Box as="section" px={6} py={20} bg={bgColor}>
+      <Box as="section" id="contact" px={6} py={20} bg={bgColor}>
         <Container maxW="7xl">
           <VStack spacing={4} mb={16} textAlign="center">
             <Heading
@@ -783,7 +783,7 @@ export default function HandwritingAILanding() {
         </Container>
       </Box>
       {/* Testimonial Section */}
-      <Box as="section" px={6} py={20} bg="white">
+      <Box as="section" id="testimonials" px={6} py={20} bg="white">
         <Container maxW="7xl">
 
         <VStack spacing={4} mb={16} textAlign="center">
@@ -1093,107 +1093,81 @@ export default function HandwritingAILanding() {
       {/* Footer */}
       <Box as="footer" bg={textColor} color="white" px={6} py={16}>
         <Container maxW="7xl">
-          <Grid templateColumns={{ md: "repeat(4, 1fr)" }} gap={8} mb={12}>
+          <Grid templateColumns={{ md: "repeat(3, 1fr)" }} gap={8} mb={12}>
             <VStack align="start" spacing={4}>
               <Flex align="center" gap={2}>
                 <Icon as={FiPenTool} h={8} w={8} color={accentColor} />
                 <Text fontSize="2xl" fontWeight="bold">
-                  ScriptAI
+                  Pen My Work
                 </Text>
               </Flex>
               <Text color="gray.400" lineHeight="relaxed">
                 Transform typed text into authentic handwritten pages with
-                AI-powered technology.
+                AI-powered technology. Perfect for students, professionals, and creators.
               </Text>
             </VStack>
 
             <VStack align="start" spacing={4}>
-              <Text fontWeight="semibold">Features</Text>
+              <Text fontWeight="semibold">Quick Links</Text>
               <VStack align="start" spacing={2} color="gray.400">
                 <Text
                   as="a"
-                  href="#"
+                  href="#how-it-works"
                   _hover={{ color: "white" }}
                   transition="colors"
+                  cursor="pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
-                  AI Handwriting
+                  How It Works
                 </Text>
                 <Text
                   as="a"
-                  href="#"
+                  href="#examples"
                   _hover={{ color: "white" }}
                   transition="colors"
+                  cursor="pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
-                  Multiple Styles
+                  Examples
                 </Text>
                 <Text
                   as="a"
-                  href="#"
+                  href="#use-cases"
                   _hover={{ color: "white" }}
                   transition="colors"
+                  cursor="pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
-                  Paper Types
+                  Use Cases
                 </Text>
                 <Text
                   as="a"
-                  href="#"
+                  href="#contact"
                   _hover={{ color: "white" }}
                   transition="colors"
+                  cursor="pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
-                  Bulk Processing
+                  Contact
                 </Text>
               </VStack>
             </VStack>
 
             <VStack align="start" spacing={4}>
-              <Text fontWeight="semibold">Support</Text>
+              <Text fontWeight="semibold">Legal</Text>
               <VStack align="start" spacing={2} color="gray.400">
-                <Text
-                  as="a"
-                  href="#"
-                  _hover={{ color: "white" }}
-                  transition="colors"
-                >
-                  Help Center
-                </Text>
-                <Text
-                  as="a"
-                  href="#"
-                  _hover={{ color: "white" }}
-                  transition="colors"
-                >
-                  Tutorials
-                </Text>
-                <Text
-                  as="a"
-                  href="#"
-                  _hover={{ color: "white" }}
-                  transition="colors"
-                >
-                  FAQ
-                </Text>
-                <Text
-                  as="a"
-                  href="#"
-                  _hover={{ color: "white" }}
-                  transition="colors"
-                >
-                  Contact Us
-                </Text>
-              </VStack>
-            </VStack>
-
-            <VStack align="start" spacing={4}>
-              <Text fontWeight="semibold">Company</Text>
-              <VStack align="start" spacing={2} color="gray.400">
-                <Text
-                  as="a"
-                  href="#"
-                  _hover={{ color: "white" }}
-                  transition="colors"
-                >
-                  About Us
-                </Text>
                 <Text
                   as="a"
                   href="/privacy"
@@ -1210,14 +1184,6 @@ export default function HandwritingAILanding() {
                 >
                   Terms of Service
                 </Text>
-                <Text
-                  as="a"
-                  href="#"
-                  _hover={{ color: "white" }}
-                  transition="colors"
-                >
-                  Careers
-                </Text>
               </VStack>
             </VStack>
           </Grid>
@@ -1229,7 +1195,7 @@ export default function HandwritingAILanding() {
             textAlign="center"
             color="gray.400"
           >
-            <Text>&copy; 2024 ScriptAI. All rights reserved.</Text>
+            <Text>&copy; 2024 Pen My Work. All rights reserved.</Text>
           </Box>
         </Container>
       </Box>

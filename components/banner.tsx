@@ -14,10 +14,10 @@ export const Banner = forwardRef<HTMLDivElement>((props, ref) => {
       fontSize="sm"
     >
       <Text as="span" color="orange.500" fontWeight="medium" display={{ base: "block", md: "inline" }}>
-        Impress Your Clients
+        ✨ AI-Powered Handwriting Generator
       </Text>
       <Text as="span" color="gray.600" ml={2} display={{ base: "none", md: "inline" }}>
-        Create beautiful onboarding screens, proposals, and more — instantly, with AI.
+        Transform any text into realistic handwritten pages — perfect for assignments, notes, and letters.
       </Text>
     </Box>
   )
