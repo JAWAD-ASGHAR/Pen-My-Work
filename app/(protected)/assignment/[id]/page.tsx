@@ -235,7 +235,7 @@ export default function AssignmentDetails() {
 
   // Split text into pages for rendering
   const { pages: textPages } = charCount(assignment.text);
-
+  console.log(textPages);
   return (
     <>
       <Box h="100vh" bg="#FDF7EE" overflow="hidden">

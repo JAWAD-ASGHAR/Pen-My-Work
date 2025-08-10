@@ -1,38 +1,30 @@
 export const charCount = (text: string) => {
-  const linesWithMax50Chars = text
-    .split('\n')
-    .flatMap(line => {
-      const words = line.split(' ');
-      const chunks = [];
-      let currentLine = '';
+  const inputLines = text.split('\n');
 
-      for (const word of words) {
-        if ((currentLine.length ? currentLine.length + 1 : 0) + word.length > 50) {
-          if (currentLine) {
-            chunks.push(currentLine);
-          }
-          if (word.length > 50) {
-            for (let i = 0; i < word.length; i += 50) {
-              chunks.push(word.slice(i, i + 50));
-            }
-            currentLine = '';
-          } else {
-            currentLine = word;
-          }
-        } else {
-          currentLine = currentLine ? currentLine + ' ' + word : word;
-        }
-      }
-      if (currentLine) {
-        chunks.push(currentLine);
-      }
-      return chunks.length ? chunks : [""];
-    });
+  const wrappedLines: string[] = [];
+  for (const inputLine of inputLines) {
+    if (inputLine === "") {
+      wrappedLines.push("");
+      continue;
+    }
+    let line = inputLine;
+    while (line.length > 60) {
+      let breakAt = line.lastIndexOf(' ', 60);
+      if (breakAt === -1 || breakAt === 0) breakAt = 60;
+      wrappedLines.push(line.slice(0, breakAt).trimEnd());
+      line = line.slice(breakAt).trimStart();
+    }
+    wrappedLines.push(line);
+  }
 
-  const pages = [];
-  for (let i = 0; i < linesWithMax50Chars.length; i += 25) {
-    const pageLines = linesWithMax50Chars.slice(i, i + 25);
+  const pages: string[] = [];
+  for (let i = 0; i < wrappedLines.length; i += 25) {
+    const pageLines = wrappedLines.slice(i, i + 25);
     pages.push(pageLines.join('\n'));
   }
+
+  console.log("[charCount] Total pages:", pages.length);
+  console.log("[charCount] Pages:", pages);
+
   return { pages, pageCount: pages.length };
 };

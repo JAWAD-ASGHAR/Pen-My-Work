@@ -25,54 +25,8 @@ const Paper: React.FC<PaperProps> = ({
   const textLineSpacing = lineHeightPx * 0.00001; // Reduce spacing for more natural handwritten look
   const leftPadding = 5; // px, just past the red margin line
 
-  // Helper: Split text into paragraphs, then words, and wrap to fit the paper width
-  const paperWidthPx = 595 - 2 * 50 - leftPadding; // total width - horizontal padding - left margin
-
-  // Canvas for measuring text width - only create on client side
-  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
-
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      const measureCanvas = document.createElement('canvas');
-      const canvasCtx = measureCanvas.getContext('2d');
-      if (canvasCtx) {
-        canvasCtx.font = `${fontSize} ${fontFamily}`;
-        setCtx(canvasCtx);
-      }
-    }
-  }, [fontSize, fontFamily]);
-
-  function wrapText(text: string): string[] {
-    const paragraphs = text.split('\n');
-    const wrappedLines: string[] = [];
-    
-    for (const para of paragraphs) {
-      if (para.trim() === '') {
-        wrappedLines.push('');
-        continue;
-      }
-      
-      const words = para.split(' ');
-      let line = '';
-      
-      for (let i = 0; i < words.length; i++) {
-        const testLine = line ? line + ' ' + words[i] : words[i];
-        if (ctx) {
-          const metrics = ctx.measureText(testLine);
-          if (metrics.width > paperWidthPx && line) {
-            wrappedLines.push(line);
-            line = words[i];
-          } else {
-            line = testLine;
-          }
-        }
-      }
-      wrappedLines.push(line);
-    }
-    return wrappedLines;
-  }
-
-  const wrappedLines = wrapText(text);
+  // Split text into lines (no wrapping needed since charCount handles it)
+  const lines = text.split('\n');
 
   // Generate background pattern based on paper type
   const getBackgroundPattern = () => {
@@ -195,8 +149,8 @@ const Paper: React.FC<PaperProps> = ({
             overflow: 'hidden',
           }}
         >
-          {/* Render each wrapped line absolutely aligned to the line grid */}
-          {wrappedLines.slice(0, totalLines).map((line, idx) => (
+          {/* Render each line from charCount */}
+          {lines.slice(0, totalLines).map((line, idx) => (
             <span
               key={idx}
               style={{
