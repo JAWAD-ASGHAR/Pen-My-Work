@@ -42,8 +42,10 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           w="200px"
           h="260px"
           bg="white"
+          border="2px solid #000000"
+          boxShadow="4px 4px 0px #000000"
           borderRadius="xl"
-          boxShadow="lg"
+          transition="box-shadow 0.2s"
           transform="rotate(-6deg)"
           zIndex={2}
           style={{
@@ -86,9 +88,11 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           w="180px"
           h="250px"
           bg="white"
-          borderRadius="xl"
-          boxShadow="lg"
           transform="rotate(5deg)"
+          border="2px solid #000000"
+          boxShadow="4px 4px 0px #000000"
+          borderRadius="xl"
+          transition="box-shadow 0.2s"
           zIndex={2}
           style={{
             animation: 'float2 9s ease-in-out infinite',
@@ -130,8 +134,10 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           w="160px"
           h="220px"
           bg="white"
+          border="2px solid #000000"
+          boxShadow="4px 4px 0px #000000"
           borderRadius="xl"
-          boxShadow="lg"
+          transition="box-shadow 0.2s"
           transform="rotate(-3deg)"
           zIndex={2}
           style={{
@@ -166,7 +172,6 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
             <Text mb={1}>• Bread</Text>
             <Text mb={1}>• Eggs</Text>
             <Text mb={1}>• Butter</Text>
-            <Text>• Cheese</Text>
           </Box>
         </Box>
 
@@ -179,8 +184,10 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           w="400px"
           h="300px"
           bg="white"
+          border="2px solid #000000"
+          boxShadow="8px 8px 0px #000000"
           borderRadius="3xl"
-          boxShadow="xl"
+          transition="box-shadow 0.2s"
           p={6}
           zIndex={3}
         >
