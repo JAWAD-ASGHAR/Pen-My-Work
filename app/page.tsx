@@ -196,12 +196,12 @@ export default function HandwritingAILanding() {
             ].map((item, index) => (
               <Card
                 key={index}
-                bg="white"
-                shadow="lg"
-                borderRadius="2xl"
-                border={0}
-                _hover={{ shadow: "xl" }}
-                transition="shadow"
+                bg="#FDF7EE"
+                border="2px solid #000000"
+                boxShadow="4px 4px 0px #000000"
+                borderRadius="xl"
+                _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                transition="box-shadow 0.2s"
               >
                 <CardBody p={8}>
                   <VStack spacing={6}>
@@ -228,7 +228,6 @@ export default function HandwritingAILanding() {
                           display="flex"
                           alignItems="center"
                           justifyContent="center"
-                          shadow="lg"
                         >
                           <Icon as={item.icon} h={8} w={8} color="white" />
                         </Box>
@@ -315,7 +314,7 @@ export default function HandwritingAILanding() {
           />
         
         <Container maxW="7xl" position="relative">
-          <VStack spacing={6} mb={20} textAlign="center">
+          <VStack spacing={6} mb={10} textAlign="center">
             <Heading
               fontSize={{ base: "4xl", lg: "6xl" }}
               fontWeight="extrabold"
@@ -346,7 +345,7 @@ export default function HandwritingAILanding() {
             </Heading>
             <Text 
               fontSize={{ base: "lg", lg: "xl" }} 
-              color="gray.600" 
+              color="black" 
               maxW="3xl"
               lineHeight="relaxed"
               fontWeight="medium"
@@ -367,14 +366,13 @@ export default function HandwritingAILanding() {
               >
                 {/* Typed Input */}
                 <Card 
-                  bg="white" 
-                  shadow="2xl" 
-                  borderRadius="3xl" 
                   overflow="hidden"
-                  border="1px solid"
-                  borderColor="gray.100"
-                  transition="all 0.3s ease"
-                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
                 >
                   <CardBody p={{ base: 6, lg: 8 }}>
                     <HStack gap={3} mb={6} align="center">
@@ -411,14 +409,13 @@ export default function HandwritingAILanding() {
 
                 {/* AI Handwritten Output */}
                 <Card 
-                  bg="white" 
-                  shadow="2xl" 
-                  borderRadius="3xl" 
                   overflow="hidden"
-                  border="1px solid"
-                  borderColor="gray.100"
-                  transition="all 0.3s ease"
-                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
                 >
                   <CardBody p={{ base: 6, lg: 8 }}>
                     <HStack gap={3} mb={6} align="center">
@@ -472,15 +469,14 @@ export default function HandwritingAILanding() {
               >
                 {/* AI Handwritten Output */}
                 <Card 
-                  bg="white" 
-                  shadow="2xl" 
-                  borderRadius="3xl" 
                   overflow="hidden"
-                  border="1px solid"
-                  borderColor="gray.100"
-                  transition="all 0.3s ease"
-                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
                   order={{ base: 1, lg: 1 }}
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
                 >
                   <CardBody p={{ base: 6, lg: 8 }}>
                     <HStack gap={3} mb={6} align="center">
@@ -523,15 +519,14 @@ export default function HandwritingAILanding() {
 
                 {/* Typed Input */}
                 <Card 
-                  bg="white" 
-                  shadow="2xl" 
-                  borderRadius="3xl" 
                   overflow="hidden"
-                  border="1px solid"
-                  borderColor="gray.100"
-                  transition="all 0.3s ease"
-                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
                   order={{ base: 2, lg: 2 }}
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
                 >
                   <CardBody p={{ base: 6, lg: 8 }}>
                     <HStack gap={3} mb={6} align="center">
@@ -557,6 +552,7 @@ export default function HandwritingAILanding() {
                       minH="200px"
                       display="flex"
                       alignItems="center"
+                      
                     >
                       Dear Mom and Dad,
                       <br />
@@ -668,13 +664,13 @@ export default function HandwritingAILanding() {
             ].map((item, index) => (
               <Card
                 key={index}
-                bg="white"
-                shadow="lg"
-                borderRadius="2xl"
-                border={0}
-                _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
-                transition="all"
                 overflow="hidden"
+                bg="#FDF7EE"
+                border="2px solid #000000"
+                boxShadow="4px 4px 0px #000000"
+                borderRadius="xl"
+                _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                transition="box-shadow 0.2s"
               >
                 <Box position="relative">
                   <Image
