@@ -373,7 +373,15 @@ export default function HandwritingAILanding() {
         <Box h="150px" bg="white" />
       </Box>
       {/* See The Magic Section */}
-      <Box as="section" id="examples" px={6} pt={10} pb={20} bg="#FF9966" position="relative">
+      <Box
+        as="section"
+        id="examples"
+        px={6}
+        pt={10}
+        pb={20}
+        bg="#FF9966"
+        position="relative"
+      >
         {/* Background decoration */}
         <Box
           position="absolute"
@@ -786,14 +794,13 @@ export default function HandwritingAILanding() {
       {/* Testimonial Section */}
       <Box as="section" id="testimonials" px={6} py={20} bg="white">
         <Container maxW="7xl">
-
-        <VStack spacing={4} mb={16} textAlign="center">
+          <VStack spacing={4} mb={16} textAlign="center">
             <Heading
               fontSize={{ base: "4xl", lg: "5xl" }}
               fontWeight="bold"
               color={textColor}
             >
-             What customers say{" "}
+              What customers say{" "}
               <Box position="relative" display="inline">
                 <Box
                   position="absolute"
@@ -1023,93 +1030,114 @@ export default function HandwritingAILanding() {
         </Container>
       </Box>
       {/* Final CTA */}
-      <Box
-        as="section"
-        px={6}
-        py={20}
-        bgGradient="linear(to-br, #FF6A00, #FF8A33)"
-        position="relative"
-        overflow="hidden"
-      >
-        <Box
-          position="absolute"
-          inset={0}
-          bgImage="url('https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&h=400&fit=crop&crop=center')"
-          opacity={0.1}
-        />
-        <Container
-          maxW="4xl"
-          textAlign="center"
-          position="relative"
-          zIndex={10}
-        >
-          <VStack spacing={8}>
-            <Heading
-              fontSize={{ base: "4xl", lg: "5xl" }}
-              fontWeight="bold"
-              color="white"
-              lineHeight="tight"
-            >
-              Ready to Handwrite Anything?
-            </Heading>
-            <Text fontSize="xl" color="whiteAlpha.900" maxW="2xl">
-              Join thousands of users who trust ScriptAI for authentic
-              handwritten content. Start your free trial today.
-            </Text>
+      <Box as="section" position="relative" overflow="hidden">
+        {/* Top wave border - transition from white to orange */}
+        <Box position="relative" bg="white">
+          <Box
+            position="absolute"
+            bottom={0}
+            left={0}
+            right={0}
+            zIndex={1}
+            transform="translateY(1px) rotate(180deg)"
+            h="60px"
+            overflow="hidden"
+          >
+            <Image
+              src="/wavetop.svg"
+              alt=""
+              w="full"
+              h="full"
+              objectFit="cover"
+            />
+          </Box>
+          <Box h="120px" bg="white" />
+        </Box>
 
-        
-            <Card
-              bg="#FDF7EE"
-              border="2px solid #000000"
-              boxShadow="4px 4px 0px #000000"
-              borderRadius="xl"
-              p={8}
-              maxW="lg"
-              mx="auto"
-              _hover={{ boxShadow: "8px 8px 0px #000000" }}
-              transition="box-shadow 0.2s"
-            >
-              <VStack spacing={6}>
-                <Flex
-                  direction={{ base: "column", sm: "row" }}
-                  gap={4}
-                  w="full"
+        {/* Main CTA section with orange gradient */}
+        <Box bg="#FF9966" position="relative" py={20} px={6}>
+          <Container
+            maxW="4xl"
+            textAlign="center"
+            position="relative"
+            zIndex={10}
+          >
+            <VStack spacing={8}>
+              <Heading
+                fontSize={{ base: "4xl", lg: "5xl" }}
+                fontWeight="bold"
+                lineHeight="tight"
+              >
+                Ready to Handwrite Anything?
+              </Heading>
+
+              <Text fontSize="xl" maxW="2xl">
+                Transform your typed content into authentic handwritten pages in
+                just seconds.
+              </Text>
+
+              <Flex
+                direction={{ base: "column", sm: "row" }}
+                gap={4}
+                maxW="md"
+                mx="auto"
+                align="center"
+              >
+                <Input
+                  placeholder="Enter your email"
+                  flex={1}
+                  h={14}
+                  borderRadius="lg"
+                  border="2px solid black"
+                  bg="white"
+                  _placeholder={{ color: "gray.900", fontWeight: "semibold" }}
+                  color={textColor}
+                  _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                />
+                <Button
+                  bg={accentColor}
+                  _hover={{ bg: "orange.500" }}
+                  color="white"
+                  h={14}
+                  px={8}
+                  borderRadius="lg"
+                  fontWeight="semibold"
+                  border="2px solid black"
+                  boxShadow="4px 4px 0px #000000"
                 >
-                  <Input
-                    placeholder="Enter your email"
-                    flex={1}
-                    h={14}
-                    borderRadius="lg"
-                    border="1px solid black"
-                    bg="white"
-                    color={textColor}
-                    _focus={{ borderColor: accentColor, boxShadow: "none" }}
-                  />
-                  <Button
-                    bg={accentColor}
-                    _hover={{ bg: "orange.500" }}
-                    color="white"
-                    h={14}
-                    px={8}
-                    borderRadius="lg"
-                    fontWeight="semibold"
-                    rightIcon={<Icon as={FiArrowRight} />}
-                  >
-                    Try It Now
-                  </Button>
-                </Flex>
+                  Get Started
+                </Button>
+              </Flex>
 
-                <Text color="#666" fontSize="sm">
-                  No credit card required • 7-day free trial • Cancel anytime
-                </Text>
-              </VStack>
-            </Card>
+              <Text fontSize="sm">
+                No credit card required • 7-day free trial • Cancel anytime
+              </Text>
+            </VStack>
+          </Container>
+        </Box>
 
-            <Text color="whiteAlpha.800" fontSize="sm">
-              Leading the way in AI-powered handwriting generation
-            </Text>
-          </VStack>
-        </Container>
+        {/* Bottom wave border - transition from orange to dark */}
+        <Box position="relative" bg="#1A1A1A">
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            zIndex={1}
+            transform="translateY(-1px)"
+            h="60px"
+            overflow="hidden"
+          >
+            <Image
+              src="/wavetop.svg"
+              alt=""
+              w="full"
+              h="full"
+              objectFit="cover"
+            />
+          </Box>
+          <Box h="120px" bg="#1A1A1A" />
+        </Box>
       </Box>
       {/* Footer */}
       <Box as="footer" bg={textColor} color="white" px={6} py={16}>
@@ -1117,11 +1145,12 @@ export default function HandwritingAILanding() {
           <Grid templateColumns={{ md: "repeat(3, 1fr)" }} gap={8} mb={12}>
             <VStack align="start" spacing={4}>
               <Flex align="center" gap={2}>
-                <Logo size="md" textColor="white"/>
+                <Logo size="md" textColor="white" />
               </Flex>
               <Text color="gray.400" lineHeight="relaxed">
                 Transform typed text into authentic handwritten pages with
-                AI-powered technology. Perfect for students, professionals, and creators.
+                AI-powered technology. Perfect for students, professionals, and
+                creators.
               </Text>
             </VStack>
 
@@ -1136,7 +1165,9 @@ export default function HandwritingAILanding() {
                   cursor="pointer"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("how-it-works")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   How It Works
@@ -1149,7 +1180,9 @@ export default function HandwritingAILanding() {
                   cursor="pointer"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("examples")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   Examples
@@ -1162,7 +1195,9 @@ export default function HandwritingAILanding() {
                   cursor="pointer"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("use-cases")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   Use Cases
@@ -1175,7 +1210,9 @@ export default function HandwritingAILanding() {
                   cursor="pointer"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById("contact")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   Contact
@@ -1213,7 +1250,10 @@ export default function HandwritingAILanding() {
             textAlign="center"
             color="gray.400"
           >
-            <Text>&copy; {new Date().getFullYear()} Pen My Work. All rights reserved.</Text>
+            <Text>
+              &copy; {new Date().getFullYear()} Pen My Work. All rights
+              reserved.
+            </Text>
           </Box>
         </Container>
       </Box>
