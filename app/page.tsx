@@ -394,7 +394,8 @@ export default function HandwritingAILanding() {
               lineHeight="relaxed"
               fontWeight="medium"
             >
-              Typed text transformed into authentic handwritten pages within seconds.
+              Typed text transformed into authentic handwritten pages within
+              seconds.
             </Text>
           </VStack>
           {/* Example 1 - Academic Essay */}
@@ -488,7 +489,7 @@ export default function HandwritingAILanding() {
                       src="/example.png"
                       alt="Handwritten essay on lined paper"
                       w="full"
-                      h={'full'}
+                      h={"full"}
                       objectFit="cover"
                     />
                     <Box
@@ -506,8 +507,8 @@ export default function HandwritingAILanding() {
                       borderRadius="full"
                       fontSize="xs"
                       color="green.500"
-                      fontWeight={'black'}
-                      border={'2px solid black'}
+                      fontWeight={"black"}
+                      border={"2px solid black"}
                       boxShadow="md"
                     >
                       AI Generated
@@ -750,7 +751,6 @@ export default function HandwritingAILanding() {
               border="2px solid #000000"
               boxShadow="4px 4px 0px #000000"
               borderRadius="xl"
-              _hover={{ boxShadow: "8px 8px 0px #000000" }}
               transition="box-shadow 0.2s"
             >
               <CardBody p={8}>
@@ -759,72 +759,52 @@ export default function HandwritingAILanding() {
                     Why Students Love ScriptAI
                   </Heading>
 
-                  <Grid templateColumns="repeat(2, 1fr)" gap={4} w="full">
+                  {[
+                    {
+                      icon: FiClock,
+                      color: "blue.500",
+                      title: "Save Time",
+                      description:
+                        "Convert typed work to handwriting in seconds instead of hours",
+                    },
+                    {
+                      icon: FiCheck,
+                      color: "green.500",
+                      title: "Natural Look",
+                      description:
+                        "AI-generated writing that looks authentically human",
+                    },
+                    {
+                      icon: FiShield,
+                      color: "purple.500",
+                      title: "Safe & Private",
+                      description: "Your content is always private and secure",
+                    },
+                    {
+                      icon: FiDownload,
+                      color: "orange.500",
+                      title: "Easy Export",
+                      description: "Download as images or PDFs in one click",
+                    },
+                  ].map((feature) => (
                     <Box
+                      key={feature.title}
                       p={4}
                       bg="white"
                       borderRadius="xl"
+                      w={'full'}
                       border="1px solid"
                       borderColor="gray.200"
                     >
                       <HStack mb={3}>
-                        <Icon as={FiClock} color="blue.500" />
-                        <Text fontWeight="medium">Save Time</Text>
+                        <Icon as={feature.icon} color={feature.color} />
+                        <Text fontWeight="medium">{feature.title}</Text>
                       </HStack>
                       <Text fontSize="sm" color="gray.600">
-                        Convert typed work to handwriting in seconds instead of
-                        hours
+                        {feature.description}
                       </Text>
                     </Box>
-
-                    <Box
-                      p={4}
-                      bg="white"
-                      borderRadius="xl"
-                      border="1px solid"
-                      borderColor="gray.200"
-                    >
-                      <HStack mb={3}>
-                        <Icon as={FiCheck} color="green.500" />
-                        <Text fontWeight="medium">Natural Look</Text>
-                      </HStack>
-                      <Text fontSize="sm" color="gray.600">
-                        AI-generated writing that looks authentically human
-                      </Text>
-                    </Box>
-
-                    <Box
-                      p={4}
-                      bg="white"
-                      borderRadius="xl"
-                      border="1px solid"
-                      borderColor="gray.200"
-                    >
-                      <HStack mb={3}>
-                        <Icon as={FiShield} color="purple.500" />
-                        <Text fontWeight="medium">Safe & Private</Text>
-                      </HStack>
-                      <Text fontSize="sm" color="gray.600">
-                        Your content is always private and secure
-                      </Text>
-                    </Box>
-
-                    <Box
-                      p={4}
-                      bg="white"
-                      borderRadius="xl"
-                      border="1px solid"
-                      borderColor="gray.200"
-                    >
-                      <HStack mb={3}>
-                        <Icon as={FiDownload} color="orange.500" />
-                        <Text fontWeight="medium">Easy Export</Text>
-                      </HStack>
-                      <Text fontSize="sm" color="gray.600">
-                        Download as images or PDFs in one click
-                      </Text>
-                    </Box>
-                  </Grid>
+                  ))}
 
                   <Button
                     size="lg"
