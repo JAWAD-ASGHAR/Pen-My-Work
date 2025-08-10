@@ -326,7 +326,7 @@ export default function HandwritingAILanding() {
               <Box position="relative" display="inline">
                 <Box
                   position="absolute"
-                  bottom="-4px"
+                  bottom="-20px"
                   left="-8px"
                   right="-8px"
                 >
@@ -336,7 +336,7 @@ export default function HandwritingAILanding() {
                     w="full"
                     h="full"
                     objectFit="cover"
-                    style={{ transform: 'scale(0.6)' }}
+                    style={{ transform: 'scale(0.9)', filter: 'brightness(0) saturate(100%) invert(84%) sepia(31%) saturate(638%) hue-rotate(359deg) brightness(103%) contrast(107%)' }}
                   />
                 </Box>
                 <Box position="relative" zIndex={1} display="inline">
@@ -744,7 +744,7 @@ export default function HandwritingAILanding() {
                     w="full"
                     h="full"
                     objectFit="cover"
-                    style={{ transform: 'scale(0.9)' }}
+                    style={{ transform: 'scale(0.8)' }}
                   />
                 </Box>
                 <Box position="relative" zIndex={1} display="inline">
