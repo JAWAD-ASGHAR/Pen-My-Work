@@ -1,7 +1,6 @@
 "use server"
 
 import { AuthenticatedUser, protectedAction } from "@/lib/auth-middleware";
-// import { OpenAIAdapter } from "@/llm/openai-adapter";
 import { assignment, db } from "@/src/db";
 
 export const generateSystemMessage = async (
@@ -67,43 +66,6 @@ export const generateSystemMessage = async (
 
 export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string, ink: string, paper: string, additionalQueries: string) => {
     try {
-        // const openaiAdapter = new OpenAIAdapter();
-        // const imageURLs = [];
-        // let previousImageUrl: string | undefined = 'https://pbbppplxzyzlvqoenbpc.supabase.co/storage/v1/object/public/handwritten-assignments/generated/HvLQOeABz6MLGBoMNlyBDxa6XgbIamzN/c32a873e-7497-449d-a1c1-31da0450eab9.png';
-        
-        // for (let i = 0; i < pages.length; i++) { 
-        //     const page = pages[i];
-        //     // Generate system message with consistency instructions if reference image is available
-        //     const systemMessage = await generateSystemMessage(
-        //         page, 
-        //         ink, 
-        //         paper, 
-        //         additionalQueries, 
-        //         previousImageUrl ? true : false
-        //     );
-            
-        //     console.log(`Generating image ${i + 1}/${pages.length}`);
-        //     console.log("systemMessage", systemMessage);
-        //     console.log("paper", paper);
-            
-        //     // Pass the previous image URL as reference for consistent handwriting
-        //     const images = await openaiAdapter.generateImages(
-        //         systemMessage, 
-        //         paper as "grid" | "ruled" | "blank", 
-        //         user.id,
-        //         previousImageUrl
-        //     );
-            
-        //     if (images.success && images.url) {
-        //         imageURLs.push(images.url);
-        //         previousImageUrl = images.url;
-        //         console.log(`Image ${i + 1} generated successfully, will use as reference for next image`);
-        //     } else {
-        //         console.error(`Failed to generate image ${i + 1}:`, images.error);
-        //     }
-        // }
-        
-        // console.log("imageURLs", imageURLs);
         const assignmentData = await db.insert(assignment).values({
             userId: user.id,
             imageURLs: [],
