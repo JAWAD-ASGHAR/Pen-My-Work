@@ -25,8 +25,6 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
     return () => clearInterval(interval)
   }, [steps.length])
 
-
-
   return (
     <Box
       ref={ref}
@@ -36,20 +34,23 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
       bg="#FDF7EE"
       overflow="hidden"
     >
-      <Box position="relative" h="600px" overflow="hidden">
-        {/* Floating handwritten pages - Improved positioning */}
+      <Box position="relative" h="500px" overflow="hidden">
+        {/* Floating handwritten pages - All 3 panels restored */}
         <Box
           position="absolute"
-          top="8%"
-          left="8%"
-          w="220px"
-          h="300px"
+          top="15%"
+          left="10%"
+          w="200px"
+          h="260px"
           bg="white"
           borderRadius="xl"
-          boxShadow="2xl"
-          transform="rotate(-8deg)"
-          animation="float1 6s ease-in-out infinite"
+          boxShadow="lg"
+          transform="rotate(-6deg)"
           zIndex={2}
+          style={{
+            animation: 'float1 8s ease-in-out infinite',
+            willChange: 'transform'
+          }}
         >
           <Box
             position="absolute"
@@ -81,16 +82,19 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
 
         <Box
           position="absolute"
-          top="15%"
-          right="12%"
-          w="200px"
-          h="280px"
+          top="25%"
+          right="15%"
+          w="180px"
+          h="250px"
           bg="white"
           borderRadius="xl"
-          boxShadow="2xl"
-          transform="rotate(6deg)"
-          animation="float2 8s ease-in-out infinite"
+          boxShadow="lg"
+          transform="rotate(5deg)"
           zIndex={2}
+          style={{
+            animation: 'float2 9s ease-in-out infinite',
+            willChange: 'transform'
+          }}
         >
           <Box
             position="absolute"
@@ -122,16 +126,19 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
 
         <Box
           position="absolute"
-          bottom="12%"
-          left="18%"
-          w="180px"
-          h="240px"
+          bottom="20%"
+          left="15%"
+          w="160px"
+          h="220px"
           bg="white"
           borderRadius="xl"
-          boxShadow="2xl"
+          boxShadow="lg"
           transform="rotate(-3deg)"
-          animation="float3 7s ease-in-out infinite"
           zIndex={2}
+          style={{
+            animation: 'float3 10s ease-in-out infinite',
+            willChange: 'transform'
+          }}
         >
           <Box
             position="absolute"
@@ -164,22 +171,22 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           </Box>
         </Box>
 
-        {/* Central transformation showcase - Better positioned */}
+        {/* Central transformation showcase - Optimized */}
         <Box
           position="absolute"
           top="50%"
           left="50%"
           transform="translate(-50%, -50%)"
-          w="420px"
-          h="320px"
+          w="400px"
+          h="300px"
           bg="white"
           borderRadius="3xl"
-          boxShadow="2xl"
-          p={8}
+          boxShadow="xl"
+          p={6}
           zIndex={3}
         >
-          {/* Step indicator - Improved spacing */}
-          <Flex justify="center" mb={8} gap={3}>
+          {/* Step indicator - Simplified */}
+          <Flex justify="center" mb={6} gap={2}>
             {steps.map((step, index) => (
               <Flex
                 key={index}
@@ -202,9 +209,9 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
             ))}
           </Flex>
 
-          {/* Content area - Better proportions */}
+          {/* Content area - Optimized */}
           <Box
-            h="200px"
+            h="180px"
             bg="gray.50"
             borderRadius="2xl"
             p={6}
@@ -215,7 +222,10 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           >
             {currentStep === 0 && (
               <Box
-                animation="fadeIn 0.5s ease-in"
+                style={{
+                  animation: 'fadeIn 0.4s ease-in',
+                  willChange: 'opacity, transform'
+                }}
                 fontFamily="mono"
                 fontSize="sm"
                 color="gray.600"
@@ -231,25 +241,33 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
             )}
 
             {currentStep === 1 && (
-              <Box animation="fadeIn 0.5s ease-in">
+              <Box 
+                style={{
+                  animation: 'fadeIn 0.4s ease-in',
+                  willChange: 'opacity, transform'
+                }}
+              >
                 <Text fontWeight="bold" mb={3} color="orange.600">
                   ⚡ AI Processing:
                 </Text>
-                <Flex align="center" justify="center" h="120px">
+                <Flex align="center" justify="center" h="100px">
                   <Box textAlign="center">
                     <Box
-                      w="40px"
-                      h="40px"
-                      border="3px solid"
+                      w="32px"
+                      h="32px"
+                      border="2px solid"
                       borderColor="orange.200"
                       borderTopColor="orange.500"
                       borderRadius="full"
-                      animation="spin 1s linear infinite"
+                      style={{
+                        animation: 'spin 1s linear infinite',
+                        willChange: 'transform'
+                      }}
                       mx="auto"
                       mb={3}
                     />
                     <Text fontSize="sm" color="gray.600" fontWeight="medium">
-                      Transforming text to handwriting...
+                      Transforming text...
                     </Text>
                   </Box>
                 </Flex>
@@ -257,7 +275,12 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
             )}
 
             {currentStep === 2 && (
-              <Box animation="fadeIn 0.5s ease-in">
+              <Box 
+                style={{
+                  animation: 'fadeIn 0.4s ease-in',
+                  willChange: 'opacity, transform'
+                }}
+              >
                 <Text fontWeight="bold" mb={3} color="green.600">
                   ✨ Handwritten Result:
                 </Text>
@@ -279,39 +302,48 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           </Box>
         </Box>
 
-        {/* Floating particles - Better positioned */}
+        {/* Floating particles - Restored with optimizations */}
         <Box
           position="absolute"
-          top="25%"
+          top="30%"
           left="25%"
           w="4px"
           h="4px"
           bg="orange.400"
           borderRadius="full"
-          animation="particle1 4s ease-in-out infinite"
           opacity={0.6}
+          style={{
+            animation: 'particle1 6s ease-in-out infinite',
+            willChange: 'transform, opacity'
+          }}
         />
         <Box
           position="absolute"
-          top="65%"
-          right="30%"
-          w="6px"
-          h="6px"
+          top="60%"
+          right="25%"
+          w="5px"
+          h="5px"
           bg="blue.400"
           borderRadius="full"
-          animation="particle2 5s ease-in-out infinite"
           opacity={0.6}
+          style={{
+            animation: 'particle2 7s ease-in-out infinite',
+            willChange: 'transform, opacity'
+          }}
         />
         <Box
           position="absolute"
           bottom="35%"
-          left="35%"
+          left="30%"
           w="3px"
           h="3px"
           bg="green.400"
           borderRadius="full"
-          animation="particle3 6s ease-in-out infinite"
           opacity={0.6}
+          style={{
+            animation: 'particle3 8s ease-in-out infinite',
+            willChange: 'transform, opacity'
+          }}
         />
 
         {/* Fade-out gradient at bottom */}
@@ -321,7 +353,7 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
           left={0}
           right={0}
           bottom={0}
-          h="128px"
+          h="100px"
           zIndex={1}
           {...fadeGradient}
         />
@@ -329,36 +361,32 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
 
       <style jsx>{`
         @keyframes float1 {
-          0%, 100% { transform: rotate(-8deg) translateY(0px); }
-          50% { transform: rotate(-8deg) translateY(-15px); }
+          0%, 100% { transform: rotate(-6deg) translateY(0px); }
+          50% { transform: rotate(-6deg) translateY(-10px); }
         }
         @keyframes float2 {
-          0%, 100% { transform: rotate(6deg) translateY(0px); }
-          50% { transform: rotate(6deg) translateY(-12px); }
+          0%, 100% { transform: rotate(5deg) translateY(0px); }
+          50% { transform: rotate(5deg) translateY(-8px); }
         }
         @keyframes float3 {
           0%, 100% { transform: rotate(-3deg) translateY(0px); }
-          50% { transform: rotate(-3deg) translateY(-18px); }
+          50% { transform: rotate(-3deg) translateY(-12px); }
         }
         @keyframes particle1 {
           0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-          50% { transform: translateY(-25px) translateX(15px); opacity: 1; }
+          50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
         }
         @keyframes particle2 {
           0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-          50% { transform: translateY(-20px) translateX(-12px); opacity: 1; }
+          50% { transform: translateY(-15px) translateX(-8px); opacity: 1; }
         }
         @keyframes particle3 {
           0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-          50% { transform: translateY(-30px) translateX(8px); opacity: 1; }
+          50% { transform: translateY(-25px) translateX(6px); opacity: 1; }
         }
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
+          from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0px); }
-        }
-        @keyframes blink {
-          0%, 50% { opacity: 1; }
-          51%, 100% { opacity: 0; }
         }
         @keyframes spin {
           from { transform: rotate(0deg); }
