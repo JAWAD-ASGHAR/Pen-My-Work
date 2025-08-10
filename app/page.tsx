@@ -1057,36 +1057,56 @@ export default function HandwritingAILanding() {
               handwritten content. Start your free trial today.
             </Text>
 
-            <Flex
-              direction={{ base: "column", sm: "row" }}
-              gap={4}
-              maxW="md"
+        
+            <Card
+              bg="#FDF7EE"
+              border="2px solid #000000"
+              boxShadow="4px 4px 0px #000000"
+              borderRadius="xl"
+              p={8}
+              maxW="lg"
               mx="auto"
+              _hover={{ boxShadow: "8px 8px 0px #000000" }}
+              transition="box-shadow 0.2s"
             >
-              <Input
-                placeholder="Enter your email"
-                flex={1}
-                h={14}
-                borderRadius="full"
-                border={0}
-                bg="white"
-                color={textColor}
-              />
-              <Button
-                bg={textColor}
-                _hover={{ bg: "#333" }}
-                color="white"
-                h={14}
-                px={8}
-                borderRadius="full"
-                fontWeight="semibold"
-              >
-                Try It Now
-              </Button>
-            </Flex>
+              <VStack spacing={6}>
+                <Flex
+                  direction={{ base: "column", sm: "row" }}
+                  gap={4}
+                  w="full"
+                >
+                  <Input
+                    placeholder="Enter your email"
+                    flex={1}
+                    h={14}
+                    borderRadius="lg"
+                    border="1px solid black"
+                    bg="white"
+                    color={textColor}
+                    _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                  />
+                  <Button
+                    bg={accentColor}
+                    _hover={{ bg: "orange.500" }}
+                    color="white"
+                    h={14}
+                    px={8}
+                    borderRadius="lg"
+                    fontWeight="semibold"
+                    rightIcon={<Icon as={FiArrowRight} />}
+                  >
+                    Try It Now
+                  </Button>
+                </Flex>
+
+                <Text color="#666" fontSize="sm">
+                  No credit card required • 7-day free trial • Cancel anytime
+                </Text>
+              </VStack>
+            </Card>
 
             <Text color="whiteAlpha.800" fontSize="sm">
-              No credit card required • 7-day free trial • Cancel anytime
+              Leading the way in AI-powered handwriting generation
             </Text>
           </VStack>
         </Container>
@@ -1193,7 +1213,7 @@ export default function HandwritingAILanding() {
             textAlign="center"
             color="gray.400"
           >
-            <Text>&copy; 2024 Pen My Work. All rights reserved.</Text>
+            <Text>&copy; {new Date().getFullYear()} Pen My Work. All rights reserved.</Text>
           </Box>
         </Container>
       </Box>
