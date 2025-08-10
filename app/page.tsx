@@ -260,173 +260,332 @@ export default function HandwritingAILanding() {
         </Container>
       </Box>
 
-      {/* Output Showcase */}
-      <Box as="section" px={6} py={20} bg={bgColor}>
-        <Container maxW="7xl">
-          <VStack spacing={4} mb={16} textAlign="center">
+      {/* Wave Top - Transition from white to bgColor */}
+      <Box position="relative" bg="white">
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          zIndex={1}
+          transform="translateY(1px) rotate(180deg)"
+        >
+          <Image
+            src="/wavetop.svg"
+            alt=""
+            w="full"
+            h="auto"
+            objectFit="cover"
+          />
+        </Box>
+        <Box h="150px" bg="white" />
+      </Box>
+
+      {/* See The Magic Section */}
+      <Box as="section" px={6} py={20} bg="#FF9966" position="relative">
+          {/* Background decoration */}
+          <Box
+            position="absolute"
+            top="10%"
+            right="5%"
+            w="200px"
+            h="200px"
+            bg={accentColor}
+            opacity={0.05}
+            borderRadius="full"
+            filter="blur(40px)"
+          />
+          <Box
+            position="absolute"
+            bottom="10%"
+            left="5%"
+            w="150px"
+            h="150px"
+            bg={accentColor}
+            opacity={0.05}
+            borderRadius="full"
+            filter="blur(30px)"
+          />
+        
+        <Container maxW="7xl" position="relative">
+          <VStack spacing={6} mb={20} textAlign="center">
             <Heading
-              fontSize={{ base: "4xl", lg: "5xl" }}
-              fontWeight="bold"
+              fontSize={{ base: "4xl", lg: "6xl" }}
+              fontWeight="extrabold"
               color={textColor}
+              lineHeight="tight"
             >
               See The{" "}
               <Box position="relative" display="inline">
                 Magic
                 <Box
                   position="absolute"
-                  bottom="-8px"
+                  bottom="-4px"
                   left={0}
                   w="full"
-                  h={3}
+                  h={4}
                   bg={accentColor}
-                  opacity={0.3}
+                  opacity={0.2}
                   borderRadius="full"
                 />
               </Box>
             </Heading>
-            <Text fontSize="xl" color="#666" maxW="2xl">
+            <Text 
+              fontSize={{ base: "lg", lg: "xl" }} 
+              color="gray.600" 
+              maxW="3xl"
+              lineHeight="relaxed"
+              fontWeight="medium"
+            >
               Real examples of typed text transformed into authentic handwritten pages.
             </Text>
           </VStack>
 
-          <VStack spacing={12}>
-            {/* Example 1 */}
-            <Grid templateColumns={{ lg: "1fr 1fr" }} gap={8} alignItems="center">
-              <Card bg="white" shadow="xl" borderRadius="2xl" overflow="hidden">
-                <CardBody p={8}>
-                  <HStack gap={2} mb={4}>
-                    <Box w={3} h={3} bg="red.500" borderRadius="full" />
-                    <Box w={3} h={3} bg="yellow.500" borderRadius="full" />
-                    <Box w={3} h={3} bg="green.500" borderRadius="full" />
-                    <Text fontSize="xs" color="gray.500" ml={2}>
-                      Typed Input
-                    </Text>
-                  </HStack>
-                  <Box
-                    bg="#F5F5F5"
-                    borderRadius="2xl"
-                    p={6}
-                    fontFamily="mono"
-                    fontSize="sm"
-                    color={textColor}
-                    lineHeight="relaxed"
-                  >
-                    The Industrial Revolution, which took place from the 18th to 19th centuries, was a period during
-                    which predominantly agrarian, rural societies in Europe and America became industrial and urban.
-                    This transformation included going from hand production methods to machines, new chemical
-                    manufacturing and iron production processes.
-                  </Box>
-                </CardBody>
-              </Card>
-
-              <Card bg="white" shadow="xl" borderRadius="2xl" overflow="hidden">
-                <CardBody p={8}>
-                  <HStack gap={2} mb={4}>
-                    <Icon as={FiCheckCircle} w={4} h={4} color="green.500" />
-                    <Text fontSize="xs" color="gray.500">
-                      AI Handwritten Output
-                    </Text>
-                  </HStack>
-                  <Box position="relative">
-                    <Image
-                      src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&h=400&fit=crop&crop=center"
-                      alt="Handwritten essay on lined paper"
-                      w="full"
-                      h={80}
-                      objectFit="cover"
-                      borderRadius="2xl"
-                    />
-                    <Box
-                      position="absolute"
-                      inset={0}
-                      bgGradient="linear(to-t, blackAlpha.100, transparent)"
-                      borderRadius="2xl"
-                    />
-                  </Box>
-                </CardBody>
-              </Card>
-            </Grid>
-
-            {/* Example 2 */}
-            <Grid templateColumns={{ lg: "1fr 1fr" }} gap={8} alignItems="center">
-              <Card
-                bg="white"
-                shadow="xl"
-                borderRadius="2xl"
-                overflow="hidden"
-                order={{ lg: 2 }}
+          <VStack spacing={20}>
+            {/* Example 1 - Academic Essay */}
+            <Box w="full">
+              <Grid 
+                templateColumns={{ base: "1fr", lg: "1fr 1fr" }} 
+                gap={{ base: 8, lg: 12 }} 
+                alignItems="stretch"
+                maxW="6xl"
+                mx="auto"
               >
-                <CardBody p={8}>
-                  <HStack gap={2} mb={4}>
-                    <Box w={3} h={3} bg="red.500" borderRadius="full" />
-                    <Box w={3} h={3} bg="yellow.500" borderRadius="full" />
-                    <Box w={3} h={3} bg="green.500" borderRadius="full" />
-                    <Text fontSize="xs" color="gray.500" ml={2}>
-                      Typed Input
-                    </Text>
-                  </HStack>
-                  <Box
-                    bg="#F5F5F5"
-                    borderRadius="2xl"
-                    p={6}
-                    fontFamily="mono"
-                    fontSize="sm"
-                    color={textColor}
-                    lineHeight="relaxed"
-                  >
-                    Dear Mom and Dad,
-                    <br />
-                    <br />I hope you&apos;re both doing well. College has been amazing so far! I&apos;ve made some great friends
-                    and my professors are really inspiring. The campus is beautiful, especially in the fall with all the
-                    colorful leaves.
-                    <br />
-                    <br />
-                    Love you both,
-                    <br />
-                    Emma
-                  </Box>
-                </CardBody>
-              </Card>
-
-              <Card
-                bg="white"
-                shadow="xl"
-                borderRadius="2xl"
-                overflow="hidden"
-                order={{ lg: 1 }}
-              >
-                <CardBody p={8}>
-                  <HStack gap={2} mb={4}>
-                    <Icon as={FiCheckCircle} w={4} h={4} color="green.500" />
-                    <Text fontSize="xs" color="gray.500">
-                      AI Handwritten Output
-                    </Text>
-                  </HStack>
-                  <Box position="relative">
-                    <Image
-                      src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500&h=400&fit=crop&crop=center"
-                      alt="Handwritten letter on personal stationery"
-                      w="full"
-                      h={80}
-                      objectFit="cover"
-                      borderRadius="2xl"
-                    />
+                {/* Typed Input */}
+                <Card 
+                  bg="white" 
+                  shadow="2xl" 
+                  borderRadius="3xl" 
+                  overflow="hidden"
+                  border="1px solid"
+                  borderColor="gray.100"
+                  transition="all 0.3s ease"
+                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
+                >
+                  <CardBody p={{ base: 6, lg: 8 }}>
+                    <HStack gap={3} mb={6} align="center">
+                      <HStack gap={1}>
+                        <Box w={3} h={3} bg="red.400" borderRadius="full" />
+                        <Box w={3} h={3} bg="yellow.400" borderRadius="full" />
+                        <Box w={3} h={3} bg="green.400" borderRadius="full" />
+                      </HStack>
+                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                        Typed Input
+                      </Text>
+                    </HStack>
                     <Box
-                      position="absolute"
-                      inset={0}
-                      bgGradient="linear(to-t, blackAlpha.100, transparent)"
+                      bg="gray.50"
                       borderRadius="2xl"
-                    />
-                  </Box>
-                </CardBody>
-              </Card>
-            </Grid>
+                      p={{ base: 5, lg: 6 }}
+                      fontFamily="mono"
+                      fontSize={{ base: "sm", lg: "md" }}
+                      color={textColor}
+                      lineHeight="relaxed"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      minH="200px"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      The Industrial Revolution, which took place from the 18th to 19th centuries, was a period during
+                      which predominantly agrarian, rural societies in Europe and America became industrial and urban.
+                      This transformation included going from hand production methods to machines, new chemical
+                      manufacturing and iron production processes.
+                    </Box>
+                  </CardBody>
+                </Card>
+
+                {/* AI Handwritten Output */}
+                <Card 
+                  bg="white" 
+                  shadow="2xl" 
+                  borderRadius="3xl" 
+                  overflow="hidden"
+                  border="1px solid"
+                  borderColor="gray.100"
+                  transition="all 0.3s ease"
+                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
+                >
+                  <CardBody p={{ base: 6, lg: 8 }}>
+                    <HStack gap={3} mb={6} align="center">
+                      <Icon as={FiCheckCircle} w={5} h={5} color="green.500" />
+                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                        AI Handwritten Output
+                      </Text>
+                    </HStack>
+                    <Box position="relative" borderRadius="2xl" overflow="hidden">
+                      <Image
+                        src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&h=400&fit=crop&crop=center"
+                        alt="Handwritten essay on lined paper"
+                        w="full"
+                        h={{ base: "240px", lg: "280px" }}
+                        objectFit="cover"
+                      />
+                      <Box
+                        position="absolute"
+                        inset={0}
+                        bgGradient="linear(to-t, blackAlpha.200, transparent)"
+                      />
+                      <Box
+                        position="absolute"
+                        top={4}
+                        right={4}
+                        bg="white"
+                        px={3}
+                        py={1}
+                        borderRadius="full"
+                        fontSize="xs"
+                        fontWeight="semibold"
+                        color="green.600"
+                        boxShadow="md"
+                      >
+                        AI Generated
+                      </Box>
+                    </Box>
+                  </CardBody>
+                </Card>
+              </Grid>
+            </Box>
+
+            {/* Example 2 - Personal Letter */}
+            <Box w="full">
+              <Grid 
+                templateColumns={{ base: "1fr", lg: "1fr 1fr" }} 
+                gap={{ base: 8, lg: 12 }} 
+                alignItems="stretch"
+                maxW="6xl"
+                mx="auto"
+              >
+                {/* AI Handwritten Output */}
+                <Card 
+                  bg="white" 
+                  shadow="2xl" 
+                  borderRadius="3xl" 
+                  overflow="hidden"
+                  border="1px solid"
+                  borderColor="gray.100"
+                  transition="all 0.3s ease"
+                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
+                  order={{ base: 1, lg: 1 }}
+                >
+                  <CardBody p={{ base: 6, lg: 8 }}>
+                    <HStack gap={3} mb={6} align="center">
+                      <Icon as={FiCheckCircle} w={5} h={5} color="green.500" />
+                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                        AI Handwritten Output
+                      </Text>
+                    </HStack>
+                    <Box position="relative" borderRadius="2xl" overflow="hidden">
+                      <Image
+                        src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=400&fit=crop&crop=center"
+                        alt="Handwritten letter on personal stationery"
+                        w="full"
+                        h={{ base: "240px", lg: "280px" }}
+                        objectFit="cover"
+                      />
+                      <Box
+                        position="absolute"
+                        inset={0}
+                        bgGradient="linear(to-t, blackAlpha.200, transparent)"
+                      />
+                      <Box
+                        position="absolute"
+                        top={4}
+                        right={4}
+                        bg="white"
+                        px={3}
+                        py={1}
+                        borderRadius="full"
+                        fontSize="xs"
+                        fontWeight="semibold"
+                        color="green.600"
+                        boxShadow="md"
+                      >
+                        AI Generated
+                      </Box>
+                    </Box>
+                  </CardBody>
+                </Card>
+
+                {/* Typed Input */}
+                <Card 
+                  bg="white" 
+                  shadow="2xl" 
+                  borderRadius="3xl" 
+                  overflow="hidden"
+                  border="1px solid"
+                  borderColor="gray.100"
+                  transition="all 0.3s ease"
+                  _hover={{ transform: "translateY(-4px)", shadow: "3xl" }}
+                  order={{ base: 2, lg: 2 }}
+                >
+                  <CardBody p={{ base: 6, lg: 8 }}>
+                    <HStack gap={3} mb={6} align="center">
+                      <HStack gap={1}>
+                        <Box w={3} h={3} bg="red.400" borderRadius="full" />
+                        <Box w={3} h={3} bg="yellow.400" borderRadius="full" />
+                        <Box w={3} h={3} bg="green.400" borderRadius="full" />
+                      </HStack>
+                      <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                        Typed Input
+                      </Text>
+                    </HStack>
+                    <Box
+                      bg="gray.50"
+                      borderRadius="2xl"
+                      p={{ base: 5, lg: 6 }}
+                      fontFamily="mono"
+                      fontSize={{ base: "sm", lg: "md" }}
+                      color={textColor}
+                      lineHeight="relaxed"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      minH="200px"
+                      display="flex"
+                      alignItems="center"
+                    >
+                      Dear Mom and Dad,
+                      <br />
+                      <br />I hope you&apos;re both doing well. College has been amazing so far! I&apos;ve made some great friends
+                      and my professors are really inspiring. The campus is beautiful, especially in the fall with all the
+                      colorful leaves.
+                      <br />
+                      <br />
+                      Love you both,
+                      <br />
+                      Emma
+                    </Box>
+                  </CardBody>
+                </Card>
+              </Grid>
+            </Box>
           </VStack>
         </Container>
       </Box>
 
+      {/* Wave Bottom - Transition from bgColor to white */}
+      <Box position="relative" bg={bgColor}>
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          zIndex={1}
+          transform="translateY(-1px)"
+        >
+          <Image
+            src="/wavetop.svg"
+            alt=""
+            w="full"
+            h="auto"
+            objectFit="cover"
+          />
+        </Box>
+        <Box h="20px" bg={bgColor} />
+      </Box>
+
       {/* Use Cases */}
-      <Box as="section" px={6} py={20} bg="white">
+      <Box as="section" px={6} mt={40} py={20} bg="white">
         <Container maxW="7xl">
           <VStack spacing={4} mb={16} textAlign="center">
             <Heading
