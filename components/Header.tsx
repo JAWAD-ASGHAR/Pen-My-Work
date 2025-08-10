@@ -1,50 +1,40 @@
-"use client"
+"use client";
 
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  HStack,
-  Icon,
-} from "@chakra-ui/react"
-import { ArrowBackIcon } from "@chakra-ui/icons"
-import { FiHome } from "react-icons/fi"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Logo } from "./Logo"
-// import { useRouter } from "next/navigation"
-// import { authClient } from "@/lib/auth-client"
+import { Box, Button, Container, Flex, HStack, Icon } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { FiHome, FiLogOut } from "react-icons/fi";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Logo } from "./Logo";
+import { authClient } from "@/lib/auth-client";
 
 interface HeaderProps {
-  showBackButton?: boolean
-  backUrl?: string
-  backText?: string
-  showCreateButton?: boolean
-  createUrl?: string
-  children?: React.ReactNode
+  showBackButton?: boolean;
+  backUrl?: string;
+  backText?: string;
+  showCreateButton?: boolean;
+  createUrl?: string;
+  children?: React.ReactNode;
 }
 
-export default function Header({ 
-  showBackButton = false, 
-  backUrl = "/home", 
+export default function Header({
+  showBackButton = false,
+  backUrl = "/home",
   backText = "Back",
-  showCreateButton = false,
-  createUrl = "/create",
-  children
+  children,
 }: HeaderProps) {
-  // const router = useRouter()
-  const pathname = usePathname()
-  const isHomePage = pathname === "/home"
+  const router = useRouter();
+  const pathname = usePathname();
+  const isHomePage = pathname === "/home";
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await authClient.signOut()
-  //     router.push("/sign-in")
-  //   } catch (error) {
-  //     console.error("Logout error:", error)
-  //   }
-  // }
+  const handleLogout = async () => {
+    try {
+      await authClient.signOut();
+      router.push("/sign-in");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <Box
@@ -72,22 +62,31 @@ export default function Header({
               </>
             )}
             <Link href={isHomePage ? "/" : "/home"}>
-              <Box cursor="pointer" _hover={{ opacity: 0.8 }} transition="opacity 0.2s">
+              <Box
+                cursor="pointer"
+                _hover={{ opacity: 0.8 }}
+                transition="opacity 0.2s"
+              >
                 <Logo size="md" />
               </Box>
             </Link>
           </HStack>
-          
+
           <HStack spacing={3}>
-            {children || (
-              isHomePage ? (
-                showCreateButton && (
-                  <Link href={createUrl}>
-                    <Button bg="#FF6A00" _hover={{ bg: "#FF8A33" }} color="white">
-                      Create New
-                    </Button>
-                  </Link>
-                )
+            {children ||
+              (isHomePage ? (
+                <Button
+                  variant="primary"
+                  bg="#FF6A00"
+                  _hover={{ bg: "#FF8A33" }}
+                  color="white"
+                  leftIcon={<Icon as={FiLogOut} />}
+                  onClick={handleLogout}
+                  colorScheme="orange"
+                  size="sm"
+                >
+                  Sign Out
+                </Button>
               ) : (
                 <Link href="/home">
                   <Button
@@ -100,23 +99,10 @@ export default function Header({
                     Go to Home
                   </Button>
                 </Link>
-              )
-            )}
-            {/* {isHomePage && (
-              <Button
-                variant="ghost"
-                leftIcon={<Icon as={FiLogOut} />}
-                onClick={handleLogout}
-                color="#666"
-                _hover={{ bg: "gray.100" }}
-                size="sm"
-              >
-                Logout
-              </Button>
-            )} */}
+              ))}
           </HStack>
         </Flex>
       </Container>
     </Box>
-  )
-} 
+  );
+}
