@@ -3,7 +3,7 @@ import { Banner } from "@/components/banner"
 import { HeroSection } from "@/components/hero"
 import { Navbar } from "@/components/nav"
 import { gsap } from "gsap"
-import { PreviewPanels } from "@/components/panels"
+
 import {
   Box,
   Button,
@@ -34,6 +34,7 @@ import {
   FiBookOpen,
   FiImage,
 } from "react-icons/fi"
+import { PreviewPanels } from "@/components/panels"
 
 export default function HandwritingAILanding() {
   const bgColor = "#FDF7EE"
@@ -119,7 +120,7 @@ export default function HandwritingAILanding() {
         <VStack 
           w="full"
           bg="#FDF7EE" 
-          borderRadius="3xl"
+          borderRadius="2xl"
           shadow="sm"
           px={[6, null, 16]}
           pt={8}
@@ -190,7 +191,7 @@ export default function HandwritingAILanding() {
                 key={index}
                 bg="white"
                 shadow="lg"
-                borderRadius="3xl"
+                borderRadius="2xl"
                 border={0}
                 _hover={{ shadow: "xl" }}
                 transition="shadow"
@@ -291,7 +292,7 @@ export default function HandwritingAILanding() {
           <VStack spacing={12}>
             {/* Example 1 */}
             <Grid templateColumns={{ lg: "1fr 1fr" }} gap={8} alignItems="center">
-              <Card bg="white" shadow="xl" borderRadius="3xl" overflow="hidden">
+              <Card bg="white" shadow="xl" borderRadius="2xl" overflow="hidden">
                 <CardBody p={8}>
                   <HStack gap={2} mb={4}>
                     <Box w={3} h={3} bg="red.500" borderRadius="full" />
@@ -318,7 +319,7 @@ export default function HandwritingAILanding() {
                 </CardBody>
               </Card>
 
-              <Card bg="white" shadow="xl" borderRadius="3xl" overflow="hidden">
+              <Card bg="white" shadow="xl" borderRadius="2xl" overflow="hidden">
                 <CardBody p={8}>
                   <HStack gap={2} mb={4}>
                     <Icon as={FiCheckCircle} w={4} h={4} color="green.500" />
@@ -351,7 +352,7 @@ export default function HandwritingAILanding() {
               <Card
                 bg="white"
                 shadow="xl"
-                borderRadius="3xl"
+                borderRadius="2xl"
                 overflow="hidden"
                 order={{ lg: 2 }}
               >
@@ -390,7 +391,7 @@ export default function HandwritingAILanding() {
               <Card
                 bg="white"
                 shadow="xl"
-                borderRadius="3xl"
+                borderRadius="2xl"
                 overflow="hidden"
                 order={{ lg: 1 }}
               >
@@ -489,7 +490,7 @@ export default function HandwritingAILanding() {
                 key={index}
                 bg="white"
                 shadow="lg"
-                borderRadius="3xl"
+                borderRadius="2xl"
                 border={0}
                 _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
                 transition="all"
@@ -573,7 +574,7 @@ export default function HandwritingAILanding() {
               { number: "150K+", label: "Active users worldwide" },
               { number: "100+", label: "Countries served" },
             ].map((stat, index) => (
-              <Card key={index} bg="white" shadow="lg" borderRadius="3xl" border={0}>
+              <Card key={index} bg="white" shadow="lg" borderRadius="2xl" border={0}>
                 <CardBody p={8}>
                   <VStack spacing={2} textAlign="center">
                     <Text fontSize="4xl" fontWeight="bold" color={textColor}>
@@ -594,7 +595,7 @@ export default function HandwritingAILanding() {
           <Grid templateColumns={{ lg: "1fr 1fr" }} gap={12} alignItems="center">
             <Card
               bgGradient="linear(to-br, #FF6A00, #FF8A33)"
-              borderRadius="3xl"
+              borderRadius="2xl"
               overflow="hidden"
               shadow="2xl"
             >
@@ -604,7 +605,7 @@ export default function HandwritingAILanding() {
                   inset={0}
                   bgImage="url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face')"
                   opacity={0.1}
-                  borderRadius="3xl"
+                  borderRadius="2xl"
                 />
                 <VStack spacing={6} position="relative" zIndex={10}>
                   <Box
