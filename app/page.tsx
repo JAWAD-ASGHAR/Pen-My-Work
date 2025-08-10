@@ -146,12 +146,10 @@ export default function HandwritingAILanding() {
               <Box position="relative" display="inline">
                 <Box
                   position="absolute"
-                  bottom="-12px"
-                  left="-10px"
-                  right="-10px"
-                  h="45px"
+                  bottom="-8px"
+                  left="-8px"
+                  right="-8px"
                   opacity={0.8}
-                  zIndex={0}
                 >
                   <Image
                     src="/underline.svg"
@@ -159,6 +157,7 @@ export default function HandwritingAILanding() {
                     w="full"
                     h="full"
                     objectFit="cover"
+                    style={{ transform: 'scale(0.6)' }}
                   />
                 </Box>
                 <Box position="relative" zIndex={1} display="inline">
@@ -328,12 +327,10 @@ export default function HandwritingAILanding() {
               <Box position="relative" display="inline">
                 <Box
                   position="absolute"
-                  bottom="-12px"
-                  left="-10px"
-                  right="-10px"
-                  h="45px"
+                  bottom="-8px"
+                  left="-8px"
+                  right="-8px"
                   opacity={0.8}
-                  zIndex={0}
                 >
                   <Image
                     src="/underline.svg"
@@ -341,6 +338,7 @@ export default function HandwritingAILanding() {
                     w="full"
                     h="full"
                     objectFit="cover"
+                    style={{ transform: 'scale(0.6)' }}
                   />
                 </Box>
                 <Box position="relative" zIndex={1} display="inline">
@@ -615,10 +613,9 @@ export default function HandwritingAILanding() {
               <Box position="relative" display="inline">
                 <Box
                   position="absolute"
-                  bottom="-12px"
-                  left="-10px"
-                  right="-10px"
-                  h="45px"
+                  bottom="-8px"
+                  left="-8px"
+                  right="-8px"
                   opacity={0.8}
                 >
                   <Image
@@ -627,6 +624,7 @@ export default function HandwritingAILanding() {
                     w="full"
                     h="full"
                     objectFit="cover"
+                    style={{ transform: 'scale(0.6)' }}
                   />
                 </Box>
                 <Box position="relative" zIndex={1} display="inline">
@@ -739,10 +737,9 @@ export default function HandwritingAILanding() {
               <Box position="relative" display="inline">
                 <Box
                   position="absolute"
-                  bottom="-12px"
-                  left="-10px"
-                  right="-10px"
-                  h="45px"
+                  bottom="-8px"
+                  left="-8px"
+                  right="-8px"
                   opacity={0.8}
                 >
                   <Image
@@ -751,6 +748,7 @@ export default function HandwritingAILanding() {
                     w="full"
                     h="full"
                     objectFit="cover"
+                    style={{ transform: 'scale(0.6)' }}
                   />
                 </Box>
                 <Box position="relative" zIndex={1} display="inline">
