@@ -205,11 +205,11 @@ export default function SignInPage() {
             <Text>
               By signing in, you agree to our {" "}
               <Box as="span" display="inline">
-                <a href="#" style={{ color: "#f97316" }} onMouseOver={e => (e.currentTarget.style.color = '#ea580c')} onMouseOut={e => (e.currentTarget.style.color = '#f97316')}>Terms of Service</a>
+                <a href="/terms" style={{ color: "#f97316" }} onMouseOver={e => (e.currentTarget.style.color = '#ea580c')} onMouseOut={e => (e.currentTarget.style.color = '#f97316')}>Terms of Service</a>
               </Box>
               {" and "}
               <Box as="span" display="inline">
-                <a href="#" style={{ color: "#f97316" }} onMouseOver={e => (e.currentTarget.style.color = '#ea580c')} onMouseOut={e => (e.currentTarget.style.color = '#f97316')}>Privacy Policy</a>
+                <a href="/privacy" style={{ color: "#f97316" }} onMouseOver={e => (e.currentTarget.style.color = '#ea580c')} onMouseOut={e => (e.currentTarget.style.color = '#f97316')}>Privacy Policy</a>
               </Box>
             </Text>
           </Box>

@@ -811,10 +811,10 @@ export default function HandwritingAILanding() {
                 <Text as="a" href="#" _hover={{ color: "white" }} transition="colors">
                   About Us
                 </Text>
-                <Text as="a" href="#" _hover={{ color: "white" }} transition="colors">
+                <Text as="a" href="/privacy" _hover={{ color: "white" }} transition="colors">
                   Privacy Policy
                 </Text>
-                <Text as="a" href="#" _hover={{ color: "white" }} transition="colors">
+                <Text as="a" href="/terms" _hover={{ color: "white" }} transition="colors">
                   Terms of Service
                 </Text>
                 <Text as="a" href="#" _hover={{ color: "white" }} transition="colors">
