@@ -1,3 +1,4 @@
+"use client"
 
 import React, { forwardRef, useRef, useEffect, useState } from "react";
 import { Badge, Box, Button, Text, Flex } from "@chakra-ui/react";
@@ -32,8 +33,16 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
   const router = useRouter();
   const scrambleRef = useRef<HTMLSpanElement>(null);
   const [typeIndex, setTypeIndex] = useState(0);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure component only runs on client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
+    if (!isClient) return;
+
     let scrambleFrame: NodeJS.Timeout;
     let running = false;
     const scrambleTimeout = setInterval(() => {
@@ -72,7 +81,7 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
       clearInterval(scrambleFrame);
       clearInterval(scrambleTimeout);
     };
-  }, [typeIndex]);
+  }, [typeIndex, isClient]);
 
   const handleButtonClick = () => {
       router.push("/signin");
@@ -106,7 +115,9 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
       <Box maxW="md" mx="auto" mt={4}>
         {/* Scrambled assignment type display */}
         <Flex h={8} align="center" justify="center" fontSize="md" fontWeight="semibold" color="orange.500" mb={4}>
-          <span ref={scrambleRef}> {assignmentTypes[typeIndex]} </span>
+          <span ref={scrambleRef} suppressHydrationWarning>
+            {isClient ? assignmentTypes[typeIndex] : assignmentTypes[0]}
+          </span>
         </Flex>
         <Button
           w="full"

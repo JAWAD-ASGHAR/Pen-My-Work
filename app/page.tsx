@@ -88,7 +88,7 @@ export default function HandwritingAILanding() {
       }
 
       const handleScroll = () => {
-        if (!headerTimeline.current) return
+        if (!headerTimeline.current || typeof window === 'undefined') return
         if (window.scrollY > 30) {
           headerTimeline.current.play()
           setScrolled(true)
@@ -97,9 +97,12 @@ export default function HandwritingAILanding() {
           setScrolled(false)
         }
       }
-      window.addEventListener("scroll", handleScroll)
-      return () => {
-        window.removeEventListener("scroll", handleScroll)
+      
+      if (typeof window !== 'undefined') {
+        window.addEventListener("scroll", handleScroll)
+        return () => {
+          window.removeEventListener("scroll", handleScroll)
+        }
       }
     })
     return () => ctx.revert()

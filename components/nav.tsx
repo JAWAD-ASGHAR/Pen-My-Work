@@ -18,16 +18,18 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
 
     // Prevent body scroll when mobile menu is open
     useEffect(() => {
-      if (menuOpen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "unset";
-      }
+      if (typeof document !== 'undefined') {
+        if (menuOpen) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "unset";
+        }
 
-      // Cleanup function to restore scroll when component unmounts
-      return () => {
-        document.body.style.overflow = "unset";
-      };
+        // Cleanup function to restore scroll when component unmounts
+        return () => {
+          document.body.style.overflow = "unset";
+        };
+      }
     }, [menuOpen]);
 
     const handleAuthButtonClick = () => {

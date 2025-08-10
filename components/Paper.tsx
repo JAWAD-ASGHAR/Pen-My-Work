@@ -1,4 +1,5 @@
-import React from 'react';
+"use client"
+import React, { useState, useEffect } from 'react';
 
 interface PaperProps {
   text: string;
@@ -27,12 +28,19 @@ const Paper: React.FC<PaperProps> = ({
   // Helper: Split text into paragraphs, then words, and wrap to fit the paper width
   const paperWidthPx = 595 - 2 * 50 - leftPadding; // total width - horizontal padding - left margin
 
-  // Canvas for measuring text width
-  const measureCanvas = document.createElement('canvas');
-  const ctx = measureCanvas.getContext('2d');
-  if (ctx) {
-    ctx.font = `${fontSize} ${fontFamily}`;
-  }
+  // Canvas for measuring text width - only create on client side
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const measureCanvas = document.createElement('canvas');
+      const canvasCtx = measureCanvas.getContext('2d');
+      if (canvasCtx) {
+        canvasCtx.font = `${fontSize} ${fontFamily}`;
+        setCtx(canvasCtx);
+      }
+    }
+  }, [fontSize, fontFamily]);
 
   function wrapText(text: string): string[] {
     const paragraphs = text.split('\n');
