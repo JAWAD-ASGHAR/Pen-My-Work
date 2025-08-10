@@ -118,13 +118,12 @@ export default function Dashboard() {
 
     const matchesFilter =
       selectedFilter === "all" ||
-      (selectedFilter === "blank" && !assignment.text.trim()) ||
+      (selectedFilter === "blank" &&
+        assignment.paper?.toLowerCase().includes("blank")) ||
       (selectedFilter === "ruled" &&
         assignment.paper?.toLowerCase().includes("ruled")) ||
       (selectedFilter === "grid" &&
-        assignment.paper?.toLowerCase().includes("grid")) ||
-      (selectedFilter === "plain" &&
-        assignment.paper?.toLowerCase().includes("plain"));
+        assignment.paper?.toLowerCase().includes("grid"));
 
     return matchesSearch && matchesFilter;
   });
@@ -133,13 +132,12 @@ export default function Dashboard() {
   const getFilterCount = (filter: string) => {
     return assignments.filter((assignment) => {
       if (filter === "all") return true;
-      if (filter === "blank") return !assignment.text.trim();
+      if (filter === "blank")
+        return assignment.paper?.toLowerCase().includes("blank");
       if (filter === "ruled")
         return assignment.paper?.toLowerCase().includes("ruled");
       if (filter === "grid")
         return assignment.paper?.toLowerCase().includes("grid");
-      if (filter === "plain")
-        return assignment.paper?.toLowerCase().includes("plain");
       return false;
     }).length;
   };

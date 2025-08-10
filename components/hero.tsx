@@ -1,3 +1,4 @@
+"use client";
 
 import React, { forwardRef, useRef, useEffect, useState } from "react";
 import { Badge, Box, Button, Text, Flex } from "@chakra-ui/react";
@@ -32,8 +33,16 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
   const router = useRouter();
   const scrambleRef = useRef<HTMLSpanElement>(null);
   const [typeIndex, setTypeIndex] = useState(0);
+  const [isClient, setIsClient] = useState(false);  
+
+  // Ensure component only runs on client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
+    if (!isClient) return;
+
     let scrambleFrame: NodeJS.Timeout;
     let running = false;
     const scrambleTimeout = setInterval(() => {
@@ -72,10 +81,10 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
       clearInterval(scrambleFrame);
       clearInterval(scrambleTimeout);
     };
-  }, [typeIndex]);
+  }, [typeIndex, isClient]);
 
   const handleButtonClick = () => {
-      router.push("/signin");
+    router.push("/sign-in");
   };
 
   return (
@@ -95,31 +104,81 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
         ✨ AI-powered handwriting generator
       </Badge>
       <Box mb={4}>
-        <Text as="h1" fontSize={{ base: "4xl", md: "6xl" }} fontWeight="bold" color="#181717" lineHeight="shorter">
-          Instantly create assignments<br />as good as
-          <Text as="span" color="orange.500"> hand written</Text>
+        <Text
+          as="h1"
+          fontSize={{ base: "4xl", md: "6xl" }}
+          fontWeight="bold"
+          color="#181717"
+          lineHeight="shorter"
+        >
+          Instantly create assignments
+          <br />
+          as good as
+          <Text as="span" color="orange.500">
+            {" "}
+            hand written
+          </Text>
         </Text>
-        <Text fontSize={{ base: "md", md: "lg" }} color="gray.600" maxW="2xl" mx="auto" mt={4} mb={2}>
-          Paste your content, choose your style, and get photo-realistic handwritten pages instantly. Perfect for assignments, notes, letters, and more.
+        <Text
+          fontSize={{ base: "md", md: "lg" }}
+          color="gray.600"
+          maxW="2xl"
+          mx="auto"
+          mt={4}
+          mb={2}
+        >
+          Paste your content, choose your style, and get photo-realistic
+          handwritten pages instantly. Perfect for assignments, notes, letters,
+          and more.
         </Text>
       </Box>
-      <Box maxW="md" mx="auto" mt={4}>
-        {/* Scrambled assignment type display */}
-        <Flex h={8} align="center" justify="center" fontSize="md" fontWeight="semibold" color="orange.500" mb={4}>
-          <span ref={scrambleRef}> {assignmentTypes[typeIndex]} </span>
-        </Flex>
-        <Button
-          w="full"
-          h={12}
-          fontSize="lg"
-          borderRadius="lg"
-          bg={"#181717"}
-          color="white"
-          _hover={{ bg: "#181717CC" }}
-          onClick={handleButtonClick}
-        >
-          {BUTTON_TEXT}
-        </Button>
+      <Box maxW="md" mx="auto" mt={8}>
+          {/* Scrambled assignment type display */}
+          <Box
+            bg="white"
+            onClick={handleButtonClick}
+            cursor="pointer"
+            border="2px solid #000000"
+            boxShadow="4px 4px 0px #000000"
+            borderRadius="xl"
+            p={"6px"}
+            mb={6}
+            transition="box-shadow 0.2s"
+            _hover={{ boxShadow: "8px 8px 0px #000000" }}
+          >
+            <Flex
+              h={8}
+              align="center"
+              justify="center"
+              fontSize="lg"
+              fontWeight="bold"
+            >
+              <span ref={scrambleRef} suppressHydrationWarning>
+                {isClient ? assignmentTypes[typeIndex] : assignmentTypes[0]}
+              </span>
+            </Flex>
+          </Box>
+
+          <Button
+            w="full"
+            fontSize="xl"
+            h={12}
+            fontWeight="bold"
+            borderRadius="xl"
+            bg={"#FF9966"}
+            _hover={{
+              bg: "#FF9966",
+              opacity: 0.8,
+              boxShadow: "8px 8px 0px #000000"
+            }}
+            color="black"
+            border="2px solid #000000"
+            boxShadow="4px 4px 0px #000000"
+            transition="all 0.2s"
+            onClick={handleButtonClick}
+          >
+            {BUTTON_TEXT}
+          </Button>
       </Box>
     </Box>
   );

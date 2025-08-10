@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 
 interface PaperProps {
@@ -50,21 +51,20 @@ const Paper: React.FC<PaperProps> = ({
           #ffffff
         `;
       case 'grid':
-        const gridSize = 30;
         return `
           repeating-linear-gradient(
             0deg,
             transparent,
-            transparent ${gridSize - 1}px,
-            #e0e0e0 ${gridSize - 1}px,
-            #e0e0e0 ${gridSize}px
+            transparent ${lineHeightPx - 1}px,
+            #e0e0e0 ${lineHeightPx - 1}px,
+            #e0e0e0 ${lineHeightPx}px
           ),
           repeating-linear-gradient(
             90deg,
             transparent,
-            transparent ${gridSize - 1}px,
-            #e0e0e0 ${gridSize - 1}px,
-            #e0e0e0 ${gridSize}px
+            transparent ${lineHeightPx - 1}px,
+            #e0e0e0 ${lineHeightPx - 1}px,
+            #e0e0e0 ${lineHeightPx}px
           ),
           #ffffff
         `;
@@ -79,7 +79,7 @@ const Paper: React.FC<PaperProps> = ({
       case 'lined':
         return `100% ${lineHeightPx}px, 100% ${lineHeightPx}px, 100% 100%`;
       case 'grid':
-        return '20px 20px';
+        return `100% ${lineHeightPx}px, 100% ${lineHeightPx}px`;
       case 'blank':
       default:
         return '100% 100%';
@@ -101,13 +101,13 @@ const Paper: React.FC<PaperProps> = ({
   const getPadding = () => {
     switch (paperType) {
       case 'lined':
-        return '35px 0px 0px 50px'; // top right bottom left - only left padding for red margin
+        return '35px 0px 0px 50px';
       case 'blank':
-        return '20px 20px 20px 20px'; // top right bottom left - only left padding for red margin
+        return '20px 20px 20px 20px';
       case 'grid':
-        return '35px 30px 30px 30px'; // top right bottom left - only left padding for red margin
+        return '35px 30px 30px 30px';
       default:
-        return '35px 0px 0px 50px';// top right bottom left - only left padding for red margin
+        return '35px 0px 0px 50px';
     }
   };
 

@@ -18,16 +18,18 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
 
     // Prevent body scroll when mobile menu is open
     useEffect(() => {
-      if (menuOpen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "unset";
-      }
+      if (typeof document !== 'undefined') {
+        if (menuOpen) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "unset";
+        }
 
-      // Cleanup function to restore scroll when component unmounts
-      return () => {
-        document.body.style.overflow = "unset";
-      };
+        // Cleanup function to restore scroll when component unmounts
+        return () => {
+          document.body.style.overflow = "unset";
+        };
+      }
     }, [menuOpen]);
 
     const handleAuthButtonClick = () => {
@@ -62,7 +64,9 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
         style={{ willChange: "transform, padding, box-shadow" }}
       >
         {/* Logo Left */}
-        <Flex align="center" minW="120px">
+        <Flex align="center" onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+        }} minW="120px" cursor="pointer">
           <Logo size="md" />
         </Flex>
         {/* Nav Centered */}
@@ -75,44 +79,69 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
           transform="translateX(-50%)"
         >
           <Link
-            href="#"
-            color="gray.600"
+            href="#how-it-works"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
-            Playground
+            How It Works
           </Link>
           <Link
-            href="#"
-            color="gray.600"
+            href="#examples"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
-            Templates
+            Examples
           </Link>
           <Link
-            href="#"
-            color="gray.600"
+            href="#use-cases"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
-            Docs
+            Use Cases
           </Link>
           <Link
-            href="#"
-            color="gray.600"
+            href="#testimonials"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
-            Pricing
+            Reviews
           </Link>
           <Link
-            href="#"
-            color="gray.600"
+            href="#contact"
+            color="gray.800"
+            fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
-            Blog
+            Contact
           </Link>
         </Flex>
         {/* Auth Button Right */}
@@ -185,39 +214,59 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
               px={6}
             >
               <Link
-                href="#"
+                href="#how-it-works"
                 _hover={{ color: "gray.900" }}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
-                Playground
+                How It Works
               </Link>
               <Link
-                href="#"
+                href="#examples"
                 _hover={{ color: "gray.900" }}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
-                Templates
+                Examples
               </Link>
               <Link
-                href="#"
+                href="#use-cases"
                 _hover={{ color: "gray.900" }}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
-                Docs
+                Use Cases
               </Link>
               <Link
-                href="#"
+                href="#testimonials"
                 _hover={{ color: "gray.900" }}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
-                Pricing
+                Reviews
               </Link>
               <Link
-                href="#"
+                href="#contact"
                 _hover={{ color: "gray.900" }}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMenuOpen(false);
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
-                Blog
+                Contact
               </Link>
               <Button
                 w="full"

@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-import html2canvas from 'html2canvas';
+import React from 'react';
 import HandwrittenTextGenerator from './components/HandwrittenTextGenerator';
 
 function App() {
