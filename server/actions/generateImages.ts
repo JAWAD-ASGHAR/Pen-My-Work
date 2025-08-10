@@ -65,7 +65,7 @@ export const generateSystemMessage = async (
   ].join("\n");
 };
 
-export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string[], ink: string, paper: string, additionalQueries: string) => {
+export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string, ink: string, paper: string, additionalQueries: string) => {
     try {
         // const openaiAdapter = new OpenAIAdapter();
         // const imageURLs = [];
@@ -109,12 +109,11 @@ export const generateImages = protectedAction(async (user: AuthenticatedUser, pa
             imageURLs: [],
             paper: paper,
             ink: ink,
-            text: pages.join("\n"),
+            text: pages,
             specialQuery: additionalQueries || null,
             createdAt: new Date(),
             updatedAt: new Date(),
         }).returning();
-        console.log("assignmentData", assignmentData);
         return {
             success: true,
             message: "Image generation completed",

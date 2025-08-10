@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import { generateImages } from "@/server/actions/generateImages";
-import { charCount } from "@/utils/char-count";
+// import { charCount } from "@/utils/char-count";
 import Step1PaperType from "@/components/create/Step1PaperType";
 import Step2WritingStyle from "@/components/create/Step2WritingStyle";
 import Step3InkColor from "@/components/create/Step3InkColor";
@@ -25,7 +25,7 @@ export default function CreatePage() {
   const router = useRouter();
 
   const handleGenerate = async (
-    pages: string[],
+    pages: string,
     ink: string,
     paper: string,
     additionalQueries: string
@@ -75,8 +75,7 @@ export default function CreatePage() {
   };
 
   const handleGenerateClick = () => {
-    const { pages } = charCount(content);
-    handleGenerate(pages, selectedInk, selectedPaper, "");
+    handleGenerate(content, selectedInk, selectedPaper, "");
   };
 
   return (
