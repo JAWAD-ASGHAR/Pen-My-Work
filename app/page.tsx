@@ -19,6 +19,10 @@ import {
   Grid,
   Image,
   Icon,
+  FormControl,
+  FormLabel,
+  Textarea,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -32,10 +36,7 @@ import {
   FiCheckCircle,
   FiBookOpen,
   FiImage,
-  FiClock,
   FiArrowRight,
-  FiShield,
-  FiCheck,
 } from "react-icons/fi";
 import { PreviewPanels } from "@/components/panels";
 
@@ -51,6 +52,49 @@ export default function HandwritingAILanding() {
   const previewRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const toast = useToast();
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate form submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Message sent!",
+        description: "We'll get back to you soon.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -754,69 +798,90 @@ export default function HandwritingAILanding() {
               transition="box-shadow 0.2s"
             >
               <CardBody p={8}>
-                <VStack spacing={6} align="start">
-                  <Heading fontSize="2xl" color={textColor}>
-                    Why Students Love ScriptAI
-                  </Heading>
+                <form onSubmit={handleSubmit}>
+                  <VStack spacing={6} align="start">
+                    <Heading fontSize="2xl" color={textColor}>
+                      Get In Touch
+                    </Heading>
 
-                  {[
-                    {
-                      icon: FiClock,
-                      color: "blue.500",
-                      title: "Save Time",
-                      description:
-                        "Convert typed work to handwriting in seconds instead of hours",
-                    },
-                    {
-                      icon: FiCheck,
-                      color: "green.500",
-                      title: "Natural Look",
-                      description:
-                        "AI-generated writing that looks authentically human",
-                    },
-                    {
-                      icon: FiShield,
-                      color: "purple.500",
-                      title: "Safe & Private",
-                      description: "Your content is always private and secure",
-                    },
-                    {
-                      icon: FiDownload,
-                      color: "orange.500",
-                      title: "Easy Export",
-                      description: "Download as images or PDFs in one click",
-                    },
-                  ].map((feature) => (
-                    <Box
-                      key={feature.title}
-                      p={4}
-                      bg="white"
-                      borderRadius="xl"
-                      w={'full'}
-                      border="1px solid"
-                      borderColor="gray.200"
+                    <FormControl>
+                      <FormLabel fontWeight="medium" color={textColor}>Name</FormLabel>
+                      <Input
+                        bg="white"
+                        border="1px solid"
+                        borderColor="gray.200"
+                        borderRadius="xl"
+                        _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                        placeholder="Your full name"
+                        value={formData.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel fontWeight="medium" color={textColor}>Email</FormLabel>
+                      <Input
+                        bg="white"
+                        border="1px solid"
+                        borderColor="gray.200"
+                        borderRadius="xl"
+                        _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                        placeholder="your.email@example.com"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel fontWeight="medium" color={textColor}>Subject</FormLabel>
+                      <Input
+                        bg="white"
+                        border="1px solid"
+                        borderColor="gray.200"
+                        borderRadius="xl"
+                        _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                        placeholder="What's this about?"
+                        value={formData.subject}
+                        onChange={(e) => handleInputChange('subject', e.target.value)}
+                        required
+                      />
+                    </FormControl>
+
+                    <FormControl>
+                      <FormLabel fontWeight="medium" color={textColor}>Message</FormLabel>
+                      <Textarea
+                        bg="white"
+                        border="1px solid"
+                        borderColor="gray.200"
+                        borderRadius="xl"
+                        _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                        placeholder="Tell us more about your inquiry..."
+                        rows={4}
+                        resize="vertical"
+                        value={formData.message}
+                        onChange={(e) => handleInputChange('message', e.target.value)}
+                        required
+                      />
+                    </FormControl>
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      bg={accentColor}
+                      color="white"
+                      _hover={{ bg: "orange.500" }}
+                      rightIcon={<Icon as={FiArrowRight} />}
+                      w="full"
+                      isLoading={isSubmitting}
+                      loadingText="Sending..."
                     >
-                      <HStack mb={3}>
-                        <Icon as={feature.icon} color={feature.color} />
-                        <Text fontWeight="medium">{feature.title}</Text>
-                      </HStack>
-                      <Text fontSize="sm" color="gray.600">
-                        {feature.description}
-                      </Text>
-                    </Box>
-                  ))}
-
-                  <Button
-                    size="lg"
-                    bg={accentColor}
-                    color="white"
-                    _hover={{ bg: "orange.500" }}
-                    rightIcon={<Icon as={FiArrowRight} />}
-                    w="full"
-                  >
-                    Try It Free
-                  </Button>
-                </VStack>
+                      Send Message
+                    </Button>
+                  </VStack>
+                </form>
               </CardBody>
             </Card>
 
