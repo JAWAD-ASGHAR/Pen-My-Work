@@ -53,26 +53,26 @@ export default function HandwritingAILanding() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const toast = useToast();
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       toast({
         title: "Message sent!",
         description: "We'll get back to you soon.",
@@ -80,8 +80,8 @@ export default function HandwritingAILanding() {
         duration: 5000,
         isClosable: true,
       });
-      
-      setFormData({ name: '', email: '', subject: '', message: '' });
+
+      setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (error) {
       console.error(error);
       toast({
@@ -805,64 +805,95 @@ export default function HandwritingAILanding() {
                     </Heading>
 
                     <FormControl>
-                      <FormLabel fontWeight="medium" color={textColor}>Name</FormLabel>
+                      <FormLabel
+                        fontWeight="medium"
+                        fontSize={"sm"}
+                        color={textColor}
+                      >
+                        Name
+                      </FormLabel>
                       <Input
                         bg="white"
-                        border="1px solid"
-                        borderColor="gray.200"
-                        borderRadius="xl"
+                        border="1px solid black"
+                        borderRadius="lg"
                         _focus={{ borderColor: accentColor, boxShadow: "none" }}
                         placeholder="Your full name"
                         value={formData.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        height={"50px"}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
                         required
                       />
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel fontWeight="medium" color={textColor}>Email</FormLabel>
+                      <FormLabel
+                        fontWeight="medium"
+                        fontSize={"sm"}
+                        color={textColor}
+                      >
+                        Email
+                      </FormLabel>
                       <Input
                         bg="white"
-                        border="1px solid"
-                        borderColor="gray.200"
-                        borderRadius="xl"
+                        border="1px solid black"
+                        borderRadius="lg"
                         _focus={{ borderColor: accentColor, boxShadow: "none" }}
                         placeholder="your.email@example.com"
                         type="email"
+                        height={"50px"}
                         value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                         required
                       />
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel fontWeight="medium" color={textColor}>Subject</FormLabel>
+                      <FormLabel
+                        fontWeight="medium"
+                        fontSize={"sm"}
+                        color={textColor}
+                      >
+                        Subject
+                      </FormLabel>
                       <Input
                         bg="white"
-                        border="1px solid"
-                        borderColor="gray.200"
-                        borderRadius="xl"
+                        border="1px solid black"
+                        borderRadius="lg"
                         _focus={{ borderColor: accentColor, boxShadow: "none" }}
                         placeholder="What's this about?"
+                        height={"50px"}
                         value={formData.subject}
-                        onChange={(e) => handleInputChange('subject', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("subject", e.target.value)
+                        }
                         required
                       />
                     </FormControl>
 
                     <FormControl>
-                      <FormLabel fontWeight="medium" color={textColor}>Message</FormLabel>
+                      <FormLabel
+                        fontWeight="medium"
+                        fontSize={"sm"}
+                        color={textColor}
+                      >
+                        Message
+                      </FormLabel>
                       <Textarea
                         bg="white"
-                        border="1px solid"
-                        borderColor="gray.200"
-                        borderRadius="xl"
+                        border="1px solid black"
+                        borderRadius="lg"
                         _focus={{ borderColor: accentColor, boxShadow: "none" }}
                         placeholder="Tell us more about your inquiry..."
                         rows={4}
                         resize="vertical"
                         value={formData.message}
-                        onChange={(e) => handleInputChange('message', e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("message", e.target.value)
+                        }
                         required
                       />
                     </FormControl>
