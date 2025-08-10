@@ -785,6 +785,37 @@ export default function HandwritingAILanding() {
       {/* Testimonial Section */}
       <Box as="section" px={6} py={20} bg="white">
         <Container maxW="7xl">
+
+        <VStack spacing={4} mb={16} textAlign="center">
+            <Heading
+              fontSize={{ base: "4xl", lg: "5xl" }}
+              fontWeight="bold"
+              color={textColor}
+            >
+             What customers say{" "}
+              <Box position="relative" display="inline">
+                <Box
+                  position="absolute"
+                  bottom="-30px"
+                  left="-8px"
+                  right="-8px"
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                    style={{ transform: "scale(0.8)" }}
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  About us
+                </Box>
+              </Box>
+            </Heading>
+          </VStack>
+
           <Grid
             templateColumns={{ lg: "1fr 1fr" }}
             gap={12}
@@ -840,7 +871,7 @@ export default function HandwritingAILanding() {
                         border="1px solid black"
                         borderRadius="lg"
                         _focus={{ borderColor: accentColor, boxShadow: "none" }}
-                        placeholder="your.email@example.com"
+                        placeholder="email@example.com"
                         type="email"
                         height={"50px"}
                         value={formData.email}
