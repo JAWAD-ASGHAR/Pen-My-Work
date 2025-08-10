@@ -4,7 +4,7 @@ import { FiStar, FiBriefcase, FiBookOpen, FiImage } from 'react-icons/fi'
 
 const UseCases = ({textColor}: {textColor: string}) => {
   return (
-<Box as="section" id="use-cases" px={6} pt={52} pb={32} bg="white">
+<Box as="section" id="use-cases" px={6} pt={52} pb={40} bg="white">
         <Container maxW="7xl">
           <VStack spacing={4} mb={16} textAlign="center">
             <Heading

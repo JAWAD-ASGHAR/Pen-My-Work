@@ -3,7 +3,7 @@ import React from 'react'
 
 const StatsSection = ({bgColor, textColor}: {bgColor: string, textColor: string}) => {
   return (
-    <Box as="section" id="contact" px={6} py={20} bg={bgColor}>
+    <Box as="section" id="contact" px={6} mb={20} py={20} bg={bgColor}>
     <Container maxW="7xl">
       <VStack spacing={4} mb={16} textAlign="center">
         <Heading
