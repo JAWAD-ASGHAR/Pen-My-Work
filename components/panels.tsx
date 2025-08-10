@@ -10,10 +10,7 @@ const fadeGradient = {
 
 export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
   const [currentStep, setCurrentStep] = useState(0)
-  const [isTyping, setIsTyping] = useState(false)
-  const [typedText, setTypedText] = useState("")
 
-  const demoText = "The Industrial Revolution transformed society through technological innovation and urbanization."
   const steps = [
     { icon: FiPenTool, text: "Paste your content", color: "blue.500" },
     { icon: FiZap, text: "AI transforms text", color: "orange.500" },
@@ -28,201 +25,193 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
     return () => clearInterval(interval)
   }, [steps.length])
 
-  useEffect(() => {
-    if (currentStep === 1) {
-      setIsTyping(true)
-      setTypedText("")
-      let index = 0
-      const typeInterval = setInterval(() => {
-        if (index < demoText.length) {
-          setTypedText(demoText.slice(0, index + 1))
-          index++
-        } else {
-          setIsTyping(false)
-          clearInterval(typeInterval)
-        }
-      }, 50)
-      return () => clearInterval(typeInterval)
-    }
-  }, [currentStep])
+
 
   return (
     <Box
       ref={ref}
       w="full"
-      mt={6}
+      mt={-10}
       position="relative"
       bg="#FDF7EE"
       overflow="hidden"
     >
       <Box position="relative" h="600px" overflow="hidden">
-        {/* Floating handwritten pages */}
+        {/* Floating handwritten pages - Improved positioning */}
         <Box
           position="absolute"
-          top="10%"
-          left="5%"
-          w="200px"
-          h="280px"
+          top="8%"
+          left="8%"
+          w="220px"
+          h="300px"
           bg="white"
           borderRadius="xl"
           boxShadow="2xl"
-          transform="rotate(-12deg)"
+          transform="rotate(-8deg)"
           animation="float1 6s ease-in-out infinite"
           zIndex={2}
         >
           <Box
             position="absolute"
-            top="10px"
-            left="10px"
-            right="10px"
-            bottom="10px"
-            bg="linear-gradient(45deg, #f0f0f0 25%, transparent 25%), linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f0f0f0 75%), linear-gradient(-45deg, transparent 75%, #f0f0f0 75%)"
-            bgSize="20px 20px"
-            bgPosition="0 0, 0 10px, 10px -10px, -10px 0px"
+            top="12px"
+            left="12px"
+            right="12px"
+            bottom="12px"
+            bg="repeating-linear-gradient(0deg, transparent, transparent 24px, #e8e8e8 24px, #e8e8e8 25px)"
             borderRadius="lg"
           />
           <Box
             position="absolute"
-            top="20px"
+            top="24px"
             left="20px"
             right="20px"
-            fontFamily="cursive"
-            fontSize="sm"
-            color="#333"
-            lineHeight="1.6"
-            opacity={0.8}
+            fontFamily="'Caveat', cursive"
+            fontSize="16px"
+            color="#2d3748"
+            lineHeight="1.8"
+            opacity={0.85}
+            transform="rotate(-1deg)"
           >
-            Dear Diary,<br />
-            Today was amazing!<br />
-            I learned so much...
+            <Text mb={2} fontWeight="600">Dear Diary,</Text>
+            <Text mb={2}>Today was amazing!</Text>
+            <Text mb={2}>I learned so much about</Text>
+            <Text>AI and technology...</Text>
           </Box>
         </Box>
 
         <Box
           position="absolute"
-          top="20%"
-          right="10%"
-          w="180px"
-          h="250px"
+          top="15%"
+          right="12%"
+          w="200px"
+          h="280px"
           bg="white"
           borderRadius="xl"
           boxShadow="2xl"
-          transform="rotate(8deg)"
+          transform="rotate(6deg)"
           animation="float2 8s ease-in-out infinite"
           zIndex={2}
         >
           <Box
             position="absolute"
-            top="10px"
-            left="10px"
-            right="10px"
-            bottom="10px"
+            top="12px"
+            left="12px"
+            right="12px"
+            bottom="12px"
             bg="repeating-linear-gradient(0deg, transparent, transparent 20px, #e0e0e0 20px, #e0e0e0 21px)"
             borderRadius="lg"
           />
           <Box
             position="absolute"
-            top="20px"
+            top="24px"
             left="20px"
             right="20px"
-            fontFamily="cursive"
-            fontSize="sm"
-            color="#333"
-            lineHeight="1.8"
-            opacity={0.8}
+            fontFamily="'Caveat', cursive"
+            fontSize="16px"
+            color="#2d3748"
+            lineHeight="1.9"
+            opacity={0.85}
+            transform="rotate(0.5deg)"
           >
-            Math Notes:<br />
-            x² + 2x + 1 = 0<br />
-            Quadratic formula...
+            <Text mb={2} fontWeight="600">Math Notes:</Text>
+            <Text mb={2}>x² + 2x + 1 = 0</Text>
+            <Text mb={2}>Quadratic formula:</Text>
+            <Text>x = (-b ± √b²-4ac)/2a</Text>
           </Box>
         </Box>
 
         <Box
           position="absolute"
-          bottom="15%"
-          left="15%"
-          w="160px"
-          h="220px"
+          bottom="12%"
+          left="18%"
+          w="180px"
+          h="240px"
           bg="white"
           borderRadius="xl"
           boxShadow="2xl"
-          transform="rotate(-5deg)"
+          transform="rotate(-3deg)"
           animation="float3 7s ease-in-out infinite"
           zIndex={2}
         >
           <Box
             position="absolute"
-            top="10px"
-            left="10px"
-            right="10px"
-            bottom="10px"
+            top="12px"
+            left="12px"
+            right="12px"
+            bottom="12px"
             bg="white"
             borderRadius="lg"
-            border="2px solid #e0e0e0"
+            border="2px solid #e2e8f0"
           />
           <Box
             position="absolute"
-            top="20px"
+            top="24px"
             left="20px"
             right="20px"
-            fontFamily="cursive"
-            fontSize="sm"
-            color="#333"
-            lineHeight="1.6"
-            opacity={0.8}
+            fontFamily="'Caveat', cursive"
+            fontSize="16px"
+            color="#2d3748"
+            lineHeight="1.7"
+            opacity={0.85}
+            transform="rotate(-0.5deg)"
           >
-            Shopping List:<br />
-            - Milk<br />
-            - Bread<br />
-            - Eggs
+            <Text mb={3} fontWeight="600">Shopping List:</Text>
+            <Text mb={1}>• Milk</Text>
+            <Text mb={1}>• Bread</Text>
+            <Text mb={1}>• Eggs</Text>
+            <Text mb={1}>• Butter</Text>
+            <Text>• Cheese</Text>
           </Box>
         </Box>
 
-        {/* Central transformation showcase */}
+        {/* Central transformation showcase - Better positioned */}
         <Box
           position="absolute"
           top="50%"
           left="50%"
           transform="translate(-50%, -50%)"
-          w="400px"
-          h="300px"
+          w="420px"
+          h="320px"
           bg="white"
           borderRadius="3xl"
           boxShadow="2xl"
           p={8}
           zIndex={3}
         >
-          {/* Step indicator */}
-          <Flex justify="center" mb={6} gap={4}>
+          {/* Step indicator - Improved spacing */}
+          <Flex justify="center" mb={8} gap={3}>
             {steps.map((step, index) => (
               <Flex
                 key={index}
                 align="center"
-                gap={2}
-                px={4}
-                py={2}
+                gap={0.5}
+                px={1.5}
+                py={0.5}
                 borderRadius="full"
-                bg={currentStep === index ? `${step.color}20` : "gray.100"}
+                bg={currentStep === index ? `${step.color}15` : "gray.100"}
                 color={currentStep === index ? step.color : "gray.500"}
                 transition="all 0.3s ease"
                 transform={currentStep === index ? "scale(1.05)" : "scale(1)"}
+                fontSize="2xs"
               >
-                <Icon as={step.icon} />
-                <Text fontSize="sm" fontWeight="medium">
+                <Icon as={step.icon} boxSize={2.5} />
+                <Text fontWeight="medium" whiteSpace="nowrap" fontSize="2xs">
                   {step.text}
                 </Text>
               </Flex>
             ))}
           </Flex>
 
-          {/* Content area */}
+          {/* Content area - Better proportions */}
           <Box
-            h="180px"
+            h="200px"
             bg="gray.50"
             borderRadius="2xl"
             p={6}
             position="relative"
             overflow="hidden"
+            border="1px solid"
+            borderColor="gray.200"
           >
             {currentStep === 0 && (
               <Box
@@ -232,66 +221,69 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
                 color="gray.600"
                 lineHeight="1.6"
               >
-                <Text fontWeight="bold" mb={2}>📝 Your Content:</Text>
-                <Text opacity={0.7}>Paste your text here...</Text>
+                <Text fontWeight="bold" mb={3} color="blue.600">
+                  📝 Your Content:
+                </Text>
+                <Text opacity={0.7} fontSize="md">
+                  Paste your text here...
+                </Text>
               </Box>
             )}
 
             {currentStep === 1 && (
               <Box animation="fadeIn 0.5s ease-in">
-                <Text fontWeight="bold" mb={2} color="orange.600">
+                <Text fontWeight="bold" mb={3} color="orange.600">
                   ⚡ AI Processing:
                 </Text>
-                <Text
-                  fontFamily="mono"
-                  fontSize="sm"
-                  color="gray.700"
-                  lineHeight="1.6"
-                >
-                  {typedText}
-                  {isTyping && (
+                <Flex align="center" justify="center" h="120px">
+                  <Box textAlign="center">
                     <Box
-                      as="span"
-                      w="2px"
-                      h="4"
-                      bg="orange.500"
-                      display="inline-block"
-                      animation="blink 1s infinite"
-                      ml={1}
+                      w="40px"
+                      h="40px"
+                      border="3px solid"
+                      borderColor="orange.200"
+                      borderTopColor="orange.500"
+                      borderRadius="full"
+                      animation="spin 1s linear infinite"
+                      mx="auto"
+                      mb={3}
                     />
-                  )}
-                </Text>
+                    <Text fontSize="sm" color="gray.600" fontWeight="medium">
+                      Transforming text to handwriting...
+                    </Text>
+                  </Box>
+                </Flex>
               </Box>
             )}
 
             {currentStep === 2 && (
               <Box animation="fadeIn 0.5s ease-in">
-                <Text fontWeight="bold" mb={2} color="green.600">
+                <Text fontWeight="bold" mb={3} color="green.600">
                   ✨ Handwritten Result:
                 </Text>
                 <Box
-                  fontFamily="cursive"
-                  fontSize="sm"
-                  color="#333"
+                  fontFamily="'Caveat', cursive"
+                  fontSize="16px"
+                  color="#2d3748"
                   lineHeight="1.8"
                   opacity={0.9}
-                  transform="rotate(-1deg)"
+                  transform="rotate(-0.5deg)"
                 >
-                  The Industrial Revolution<br />
-                  transformed society through<br />
-                  technological innovation<br />
-                  and urbanization.
+                  <Text mb={2}>The Industrial Revolution</Text>
+                  <Text mb={2}>transformed society through</Text>
+                  <Text mb={2}>technological innovation</Text>
+                  <Text>and urbanization.</Text>
                 </Box>
               </Box>
             )}
           </Box>
         </Box>
 
-        {/* Floating particles */}
+        {/* Floating particles - Better positioned */}
         <Box
           position="absolute"
-          top="20%"
-          left="20%"
+          top="25%"
+          left="25%"
           w="4px"
           h="4px"
           bg="orange.400"
@@ -301,8 +293,8 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
         />
         <Box
           position="absolute"
-          top="60%"
-          right="25%"
+          top="65%"
+          right="30%"
           w="6px"
           h="6px"
           bg="blue.400"
@@ -312,8 +304,8 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
         />
         <Box
           position="absolute"
-          bottom="30%"
-          left="30%"
+          bottom="35%"
+          left="35%"
           w="3px"
           h="3px"
           bg="green.400"
@@ -337,28 +329,28 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
 
       <style jsx>{`
         @keyframes float1 {
-          0%, 100% { transform: rotate(-12deg) translateY(0px); }
-          50% { transform: rotate(-12deg) translateY(-20px); }
+          0%, 100% { transform: rotate(-8deg) translateY(0px); }
+          50% { transform: rotate(-8deg) translateY(-15px); }
         }
         @keyframes float2 {
-          0%, 100% { transform: rotate(8deg) translateY(0px); }
-          50% { transform: rotate(8deg) translateY(-15px); }
+          0%, 100% { transform: rotate(6deg) translateY(0px); }
+          50% { transform: rotate(6deg) translateY(-12px); }
         }
         @keyframes float3 {
-          0%, 100% { transform: rotate(-5deg) translateY(0px); }
-          50% { transform: rotate(-5deg) translateY(-25px); }
+          0%, 100% { transform: rotate(-3deg) translateY(0px); }
+          50% { transform: rotate(-3deg) translateY(-18px); }
         }
         @keyframes particle1 {
           0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-          50% { transform: translateY(-30px) translateX(20px); opacity: 1; }
+          50% { transform: translateY(-25px) translateX(15px); opacity: 1; }
         }
         @keyframes particle2 {
           0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-          50% { transform: translateY(-25px) translateX(-15px); opacity: 1; }
+          50% { transform: translateY(-20px) translateX(-12px); opacity: 1; }
         }
         @keyframes particle3 {
           0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-          50% { transform: translateY(-35px) translateX(10px); opacity: 1; }
+          50% { transform: translateY(-30px) translateX(8px); opacity: 1; }
         }
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
@@ -367,6 +359,10 @@ export const PreviewPanels = React.forwardRef<HTMLDivElement>((props, ref) => {
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </Box>
