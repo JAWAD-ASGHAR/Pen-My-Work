@@ -33,7 +33,7 @@ import {
 } from "@/server/actions/assignments";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Paper from "@/components/Paper";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import { useRef } from "react";
 import JSZip from "jszip";
 import jsPDF from "jspdf";
@@ -82,8 +82,12 @@ export default function AssignmentDetails() {
       setDownloading(`image-${index}`);
       const paperNode = paperRefs.current[index];
       if (!paperNode) throw new Error("Paper not found");
-      const canvas = await html2canvas(paperNode, { backgroundColor: null });
-      const dataUrl = canvas.toDataURL("image/png");
+      const dataUrl = await toPng(paperNode, { 
+        backgroundColor: '#ffffff',
+        quality: 1.0,
+        width: 595,
+        height: 842
+      });
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = `assignment-page-${index + 1}.png`;
@@ -120,8 +124,12 @@ export default function AssignmentDetails() {
       for (let i = 0; i < paperRefs.current.length; i++) {
         const paperNode = paperRefs.current[i];
         if (!paperNode) continue;
-        const canvas = await html2canvas(paperNode, { backgroundColor: null });
-        const dataUrl = canvas.toDataURL("image/png");
+        const dataUrl = await toPng(paperNode, { 
+          backgroundColor: '#ffffff',
+          quality: 1.0,
+          width: 595,
+          height: 842
+        });
         // Remove prefix for zip
         const imgData = dataUrl.split(",")[1];
         zip.file(`assignment-page-${i + 1}.png`, imgData, { base64: true });
@@ -162,8 +170,12 @@ export default function AssignmentDetails() {
       for (let i = 0; i < paperRefs.current.length; i++) {
         const paperNode = paperRefs.current[i];
         if (!paperNode) continue;
-        const canvas = await html2canvas(paperNode, { backgroundColor: null });
-        const imgData = canvas.toDataURL("image/png");
+        const imgData = await toPng(paperNode, { 
+          backgroundColor: '#ffffff',
+          quality: 1.0,
+          width: 595,
+          height: 842
+        });
         if (i > 0) pdf.addPage([595, 842], "p");
         pdf.addImage(imgData, "PNG", 0, 0, 595, 842);
       }

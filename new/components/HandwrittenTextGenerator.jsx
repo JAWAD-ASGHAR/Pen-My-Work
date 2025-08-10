@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import InputSection from './InputSection';
 import PreviewSection from './PreviewSection';
 import DownloadSection from './DownloadSection';
@@ -17,16 +17,12 @@ const HandwrittenTextGenerator = () => {
 
     setIsGenerating(true);
     try {
-      const canvas = await html2canvas(paperRef.current, {
+      const imageData = await toPng(paperRef.current, {
         backgroundColor: '#ffffff',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
+        quality: 1.0,
         width: 595,
         height: 842
       });
-
-      const imageData = canvas.toDataURL('image/png');
       setGeneratedImage(imageData);
       
       // Scroll to download section
