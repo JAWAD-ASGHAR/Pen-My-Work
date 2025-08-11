@@ -1,4 +1,5 @@
-/* src/app/api/webhook/route.ts */
+"use server"
+
 import crypto from 'node:crypto'
 import { processWebhookEvent } from '@/server/actions/webhook'
 
