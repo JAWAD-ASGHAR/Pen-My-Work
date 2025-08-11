@@ -4,7 +4,7 @@ import { Container } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIndicator from "@/components/ProgressIndicator";
-import { generateImages } from "@/server/actions/generateImages";
+import { generateImages } from "@/server/actions/generate-images";
 // import { charCount } from "@/utils/char-count";
 import Step1PaperType from "@/components/create/Step1PaperType";
 import Step2WritingStyle from "@/components/create/Step2WritingStyle";

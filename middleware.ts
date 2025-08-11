@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const publicRoutes = ["/", "/privacy", "/terms"];
+const publicRoutes = ["/", "/privacy", "/terms", "/plans"];
 
 const authRoutes = ["/sign-in"];
 

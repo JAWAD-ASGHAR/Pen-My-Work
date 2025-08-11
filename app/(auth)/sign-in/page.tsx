@@ -11,7 +11,7 @@ import {
   Flex,
   Spinner,
   Text,
-  VStack,
+  VStack, 
   HStack,
   useBreakpointValue,
 } from "@chakra-ui/react";
@@ -34,12 +34,19 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     setError("");
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/home",
-      errorCallbackURL: "/sign-in",
-      newUserCallbackURL: "/home", 
-    });
+    
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/home",
+        errorCallbackURL: "/sign-in",
+        newUserCallbackURL: "/home", 
+      });
+      
+    } catch (error) {
+      setError("Sign in failed");
+      setIsLoading(false);
+    }
   };
 
   return (
