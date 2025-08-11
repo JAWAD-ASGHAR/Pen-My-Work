@@ -27,8 +27,25 @@ import { Banner } from "@/components/banner"
 import { Navbar } from "@/components/nav"
 import { useRouter } from "next/navigation"
 import { getPlans } from "@/server/actions/user-plans"
-import { SignupButton } from "@/components/SignupButton"
 import { PlanButton } from '@/components/PlanButton'
+
+type Plan = {
+  planId: string;
+  name: string;
+  price: string;
+  description?: string | null;
+  features?: string[] | null;
+  limitations?: string[] | null;
+  variantId?: number | null;
+  productId?: number | null;
+  productName?: string | null;
+  isUsageBased?: boolean | null;
+  interval?: string | null;
+  intervalCount?: number | null;
+  trialInterval?: string | null;
+  trialIntervalCount?: number | null;
+  sort?: number | null;
+}
 
 export default function PlansPage() {
   const bgColor = "#FDF7EE"
@@ -41,7 +58,7 @@ export default function PlansPage() {
   const bannerRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [plans, setPlans] = useState<any[]>([])
+  const [plans, setPlans] = useState<Plan[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -93,7 +110,15 @@ export default function PlansPage() {
   }, [loading])
 
   // Function to get plan display data based on database plan
-  const getPlanDisplayData = (plan: any) => {
+  const getPlanDisplayData = (plan: {
+    planId: string;
+    name: string;
+    price: string;
+    description?: string | null;
+    features?: string[] | null;
+    limitations?: string[] | null;
+    variantId?: number | null;
+  }) => {
     const baseData = {
       name: plan.name,
       price: plan.price === "0" ? "$0" : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
@@ -108,7 +133,7 @@ export default function PlansPage() {
       features: Array.isArray(plan.features) ? plan.features : [],
       limitations: Array.isArray(plan.limitations) ? plan.limitations : [],
       planId: plan.planId,
-      variantId: plan.variantId,
+      variantId: plan.variantId || undefined,
     }
 
     return baseData
@@ -264,7 +289,7 @@ export default function PlansPage() {
                       {/* Features */}
                       <VStack spacing={4} align="stretch">
                         <Text fontWeight="semibold" color={textColor} fontSize="lg">
-                          What's included:
+                          What&apos;s included:
                         </Text>
                         <List spacing={3}>
                           {planData.features.map((feature: string, featureIndex: number) => (
@@ -302,7 +327,7 @@ export default function PlansPage() {
                           planId: plan.planId,
                           name: plan.name,
                           price: plan.price,
-                          variantId: plan.variantId,
+                          variantId: plan.variantId || undefined,
                         }}
                       />
                     </VStack>

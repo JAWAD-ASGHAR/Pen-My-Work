@@ -44,7 +44,7 @@ export default function SignInPage() {
       });
       
     } catch (error) {
-      setError("Sign in failed");
+      setError(error instanceof Error ? error.message : "Sign in failed");
       setIsLoading(false);
     }
   };
