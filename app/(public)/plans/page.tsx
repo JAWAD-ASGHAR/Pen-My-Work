@@ -27,6 +27,8 @@ import { Banner } from "@/components/banner"
 import { Navbar } from "@/components/nav"
 import { useRouter } from "next/navigation"
 import { getPlans } from "@/server/actions/user-plans"
+import { SignupButton } from "@/components/SignupButton"
+import { PlanButton } from '@/components/PlanButton'
 
 export default function PlansPage() {
   const bgColor = "#FDF7EE"
@@ -94,51 +96,19 @@ export default function PlansPage() {
   const getPlanDisplayData = (plan: any) => {
     const baseData = {
       name: plan.name,
-      price: plan.price === 0 ? "$0" : `$${plan.price}`,
-      period: plan.price === 0 ? "forever" : "per month",
+      price: plan.price === "0" ? "$0" : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
+      period: plan.price === "0" ? "forever" : "per month",
       description: plan.description,
-      color: plan.id === "@free" ? "gray.500" : accentColor,
-      bgColor: plan.id === "@free" ? "gray.50" : "orange.50",
-      popular: plan.id === "@pro",
-      buttonText: plan.id === "@free" ? "Get Started Free" : "Start Pro Trial",
-      buttonVariant: plan.id === "@free" ? "outline" as const : "solid" as const,
-      icon: plan.id === "@free" ? FiStar : FiZap,
-      features: [] as string[],
-      limitations: [] as string[],
-    }
-
-    // Add features based on plan
-    if (plan.id === "@free") {
-      return {
-        ...baseData,
-        features: [
-          `${plan.features.max_pages} handwritten pages per month`,
-          "Basic handwriting styles",
-          "Standard paper types",
-          "Email support",
-          "720p image quality",
-        ],
-        limitations: [
-          "Limited to 100 words per page",
-          "Watermark on downloads",
-          "No priority support",
-        ],
-      }
-    } else if (plan.id === "@pro") {
-      return {
-        ...baseData,
-        features: [
-          "Unlimited handwritten pages",
-          "All handwriting styles",
-          "All paper types",
-          "Priority email support",
-          "1080p HD image quality",
-          "Bulk processing (up to 10 pages)",
-          "Custom ink colors",
-          "No watermarks",
-        ],
-        limitations: [],
-      }
+      color: plan.planId === "free" ? "gray.500" : accentColor,
+      bgColor: plan.planId === "free" ? "gray.50" : "orange.50",
+      popular: plan.planId === "pro",
+      buttonText: plan.planId === "free" ? "Get Started Free" : "Start Pro Trial",
+      buttonVariant: plan.planId === "free" ? "outline" as const : "solid" as const,
+      icon: plan.planId === "free" ? FiStar : FiZap,
+      features: Array.isArray(plan.features) ? plan.features : [],
+      limitations: Array.isArray(plan.limitations) ? plan.limitations : [],
+      planId: plan.planId,
+      variantId: plan.variantId,
     }
 
     return baseData
@@ -327,28 +297,14 @@ export default function PlansPage() {
                       </VStack>
 
                       {/* CTA Button */}
-                      <Button
-                        bg={planData.buttonVariant === "solid" ? accentColor : "transparent"}
-                        color={planData.buttonVariant === "solid" ? "white" : accentColor}
-                        border={planData.buttonVariant === "outline" ? `2px solid ${accentColor}` : "none"}
-                        _hover={{
-                          bg: planData.buttonVariant === "solid" ? "#FF8A33" : "orange.50",
+                      <PlanButton 
+                        plan={{
+                          planId: plan.planId,
+                          name: plan.name,
+                          price: plan.price,
+                          variantId: plan.variantId,
                         }}
-                        h={14}
-                        borderRadius="full"
-                        fontWeight="semibold"
-                        fontSize="lg"
-                        onClick={() => {
-                          if (planData.name === "Free Plan") {
-                            router.push("/sign-in")
-                          } else {
-                            // Handle pro plan signup
-                            router.push("/sign-in")
-                          }
-                        }}
-                      >
-                        {planData.buttonText}
-                      </Button>
+                      />
                     </VStack>
                   </CardBody>
                 </Card>

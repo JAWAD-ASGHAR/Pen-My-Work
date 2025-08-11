@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sync-plans": "tsx scripts/sync-plans.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",

@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, integer, serial, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, integer, boolean } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 export const assignment = pgTable("assignment", {
@@ -23,9 +23,9 @@ export const paperImages = pgTable("paper_images", {
 
 export const plans = pgTable('plan', {
   planId: text("plan_id").notNull().primaryKey(),
-  productId: integer('productId').notNull(),
+  productId: integer('productId'),
   productName: text('productName'),
-  variantId: integer('variantId').notNull().unique(),
+  variantId: integer('variantId').unique(),
   name: text('name').notNull(),
   description: text('description'),
   price: text('price').notNull(),
@@ -35,6 +35,8 @@ export const plans = pgTable('plan', {
   trialInterval: text('trialInterval'),
   trialIntervalCount: integer('trialIntervalCount'),
   sort: integer('sort'),
+  features: text('features').array(),
+  limitations: text('limitations').array(),
 })
 .enableRLS(); 
 
