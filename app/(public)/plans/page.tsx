@@ -19,13 +19,14 @@ import {
   ListIcon,
   Divider,
 } from "@chakra-ui/react"
-import { useState } from "react"
-import { FiCheck, FiStar, FiZap, FiAward, FiUsers, FiDownload, FiRepeat, FiShield } from "react-icons/fi"
+import { useState, useEffect } from "react"
+import { FiCheck, FiStar, FiZap, FiUsers, FiDownload, FiRepeat, FiShield } from "react-icons/fi"
 import { gsap } from "gsap"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { Banner } from "@/components/banner"
 import { Navbar } from "@/components/nav"
 import { useRouter } from "next/navigation"
+import { getPlans } from "@/server/actions/user-plans"
 
 export default function PlansPage() {
   const bgColor = "#FDF7EE"
@@ -38,8 +39,36 @@ export default function PlansPage() {
   const bannerRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [plans, setPlans] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const plansData = await getPlans()
+        setPlans(plansData)
+      } catch (error) {
+        console.error("Error fetching plans:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPlans()
+  }, [])
+
+  useEffect(() => {
+    if (loading) return
+
     const ctx = gsap.context(() => {
       // Banner animation
       gsap.fromTo(bannerRef.current, { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" })
@@ -59,84 +88,61 @@ export default function PlansPage() {
       )
     })
     return () => ctx.revert()
-  }, [])
+  }, [loading])
 
-  const plans = [
-    {
-      name: "Free",
-      price: "$0",
-      period: "forever",
-      description: "Perfect for trying out our handwriting AI",
-      icon: FiStar,
-      color: "gray.500",
-      bgColor: "gray.50",
-      popular: false,
-      features: [
-        "5 handwritten pages per month",
-        "Basic handwriting styles",
-        "Standard paper types",
-        "Email support",
-        "720p image quality",
-      ],
-      limitations: [
-        "Limited to 100 words per page",
-        "Watermark on downloads",
-        "No priority support",
-      ],
-      buttonText: "Get Started Free",
-      buttonVariant: "outline" as const,
-    },
-    {
-      name: "Pro",
-      price: "$9.99",
-      period: "per month",
-      description: "Most popular choice for students and professionals",
-      icon: FiZap,
-      color: accentColor,
-      bgColor: "orange.50",
-      popular: true,
-      features: [
-        "100 handwritten pages per month",
-        "All handwriting styles",
-        "All paper types",
-        "Priority email support",
-        "1080p HD image quality",
-        "Bulk processing (up to 10 pages)",
-        "Custom ink colors",
-        "No watermarks",
-      ],
-      limitations: [],
-      buttonText: "Start Pro Trial",
-      buttonVariant: "solid" as const,
-    },
-    {
-      name: "Enterprise",
-      price: "$29.99",
-      period: "per month",
-      description: "For teams and high-volume users",
-      icon: FiAward,
-      color: "purple.600",
-      bgColor: "purple.50",
-      popular: false,
-      features: [
-        "Unlimited handwritten pages",
-        "All handwriting styles",
-        "All paper types",
-        "Priority phone & email support",
-        "4K ultra HD image quality",
-        "Unlimited bulk processing",
-        "Custom ink colors",
-        "API access",
-        "Team collaboration",
-        "Advanced analytics",
-        "Custom branding",
-        "Dedicated account manager",
-      ],
-      limitations: [],
-      buttonText: "Contact Sales",
-      buttonVariant: "solid" as const,
-    },
-  ]
+  // Function to get plan display data based on database plan
+  const getPlanDisplayData = (plan: any) => {
+    const baseData = {
+      name: plan.name,
+      price: plan.price === 0 ? "$0" : `$${plan.price}`,
+      period: plan.price === 0 ? "forever" : "per month",
+      description: plan.description,
+      color: plan.id === "@free" ? "gray.500" : accentColor,
+      bgColor: plan.id === "@free" ? "gray.50" : "orange.50",
+      popular: plan.id === "@pro",
+      buttonText: plan.id === "@free" ? "Get Started Free" : "Start Pro Trial",
+      buttonVariant: plan.id === "@free" ? "outline" as const : "solid" as const,
+      icon: plan.id === "@free" ? FiStar : FiZap,
+      features: [] as string[],
+      limitations: [] as string[],
+    }
+
+    // Add features based on plan
+    if (plan.id === "@free") {
+      return {
+        ...baseData,
+        features: [
+          `${plan.features.max_pages} handwritten pages per month`,
+          "Basic handwriting styles",
+          "Standard paper types",
+          "Email support",
+          "720p image quality",
+        ],
+        limitations: [
+          "Limited to 100 words per page",
+          "Watermark on downloads",
+          "No priority support",
+        ],
+      }
+    } else if (plan.id === "@pro") {
+      return {
+        ...baseData,
+        features: [
+          "Unlimited handwritten pages",
+          "All handwriting styles",
+          "All paper types",
+          "Priority email support",
+          "1080p HD image quality",
+          "Bulk processing (up to 10 pages)",
+          "Custom ink colors",
+          "No watermarks",
+        ],
+        limitations: [],
+      }
+    }
+
+    return baseData
+  }
 
   const features = [
     {
@@ -160,6 +166,14 @@ export default function PlansPage() {
       description: "Share and collaborate with team members seamlessly",
     },
   ]
+
+  if (loading) {
+    return (
+      <Box minH="100vh" bg="white" display="flex" alignItems="center" justifyContent="center">
+        <Text>Loading plans...</Text>
+      </Box>
+    )
+  }
 
   return (
     <Box minH="100vh" bg="white">
@@ -200,135 +214,146 @@ export default function PlansPage() {
           {/* Plans Grid */}
           <Grid 
             ref={plansRef}
-            templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }} 
+            templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} 
             gap={8} 
             mb={16}
           >
-            {plans.map((plan, index) => (
-              <Card
-                key={index}
-                bg="white"
-                shadow="xl"
-                borderRadius="3xl"
-                border={plan.popular ? `3px solid ${accentColor}` : "1px solid"}
-                borderColor={plan.popular ? accentColor : "gray.200"}
-                position="relative"
-                _hover={{ shadow: "2xl", transform: "translateY(-8px)" }}
-                transition="all 0.3s ease"
-              >
-                {plan.popular && (
-                  <Badge
-                    position="absolute"
-                    top={-3}
-                    left="50%"
-                    transform="translateX(-50%)"
-                    bg={accentColor}
-                    color="white"
-                    px={4}
-                    py={2}
-                    borderRadius="full"
-                    fontSize="sm"
-                    fontWeight="bold"
-                    zIndex={10}
-                  >
-                    Most Popular
-                  </Badge>
-                )}
-                
-                <CardBody p={8}>
-                  <VStack spacing={6} align="stretch">
-                    {/* Plan Header */}
-                    <VStack spacing={4} textAlign="center">
-                      <Box
-                        w={16}
-                        h={16}
-                        bg={plan.bgColor}
-                        color={plan.color}
-                        borderRadius="2xl"
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                      >
-                        <Icon as={plan.icon} h={8} w={8} />
-                      </Box>
-                      <VStack spacing={2}>
-                        <Heading fontSize="2xl" fontWeight="bold" color={textColor}>
-                          {plan.name}
-                        </Heading>
-                        <Text color="#666" fontSize="lg">
-                          {plan.description}
-                        </Text>
-                      </VStack>
-                    </VStack>
-
-                    {/* Pricing */}
-                    <VStack spacing={1} textAlign="center">
-                      <HStack spacing={1} justify="center">
-                        <Text fontSize="4xl" fontWeight="bold" color={textColor}>
-                          {plan.price}
-                        </Text>
-                        <Text fontSize="lg" color="#666">
-                          /{plan.period}
-                        </Text>
-                      </HStack>
-                    </VStack>
-
-                    <Divider />
-
-                    {/* Features */}
-                    <VStack spacing={4} align="stretch">
-                      <Text fontWeight="semibold" color={textColor} fontSize="lg">
-                        What's included:
-                      </Text>
-                      <List spacing={3}>
-                        {plan.features.map((feature, featureIndex) => (
-                          <ListItem key={featureIndex} display="flex" alignItems="center">
-                            <ListIcon as={FiCheck} color="green.500" />
-                            <Text color="#666" fontSize="sm">
-                              {feature}
-                            </Text>
-                          </ListItem>
-                        ))}
-                      </List>
-                      
-                      {plan.limitations.length > 0 && (
-                        <>
-                          <Text fontWeight="semibold" color="red.500" fontSize="lg" mt={4}>
-                            Limitations:
-                          </Text>
-                          <List spacing={3}>
-                            {plan.limitations.map((limitation, limitationIndex) => (
-                              <ListItem key={limitationIndex} display="flex" alignItems="center">
-                                <Box w={2} h={2} bg="red.500" borderRadius="full" mr={3} />
-                                <Text color="#666" fontSize="sm">
-                                  {limitation}
-                                </Text>
-                              </ListItem>
-                            ))}
-                          </List>
-                        </>
-                      )}
-                    </VStack>
-
-                    {/* CTA Button */}
-                    <Button
-                      bg={plan.buttonVariant === "solid" ? accentColor : "transparent"}
-                      color={plan.buttonVariant === "solid" ? "white" : accentColor}
-                      border={plan.buttonVariant === "outline" ? `2px solid ${accentColor}` : "none"}
-                      _hover={{
-                        bg: plan.buttonVariant === "solid" ? "#FF8A33" : "orange.50",
-                      }}
-                      h={14}
+            {plans.map((plan, index) => {
+              const planData = getPlanDisplayData(plan)
+              return (
+                <Card
+                  key={index}
+                  bg="white"
+                  shadow="xl"
+                  borderRadius="3xl"
+                  border={planData.popular ? `3px solid ${accentColor}` : "1px solid"}
+                  borderColor={planData.popular ? accentColor : "gray.200"}
+                  position="relative"
+                  _hover={{ shadow: "2xl", transform: "translateY(-8px)" }}
+                  transition="all 0.3s ease"
+                >
+                  {planData.popular && (
+                    <Badge
+                      position="absolute"
+                      top={-3}
+                      left="50%"
+                      transform="translateX(-50%)"
+                      bg={accentColor}
+                      color="white"
+                      px={4}
+                      py={2}
                       borderRadius="full"
-                      fontWeight="semibold"
-                      fontSize="lg"
+                      fontSize="sm"
+                      fontWeight="bold"
+                      zIndex={10}
                     >
-                      {plan.buttonText}
-                    </Button>
-                  </VStack>
-                </CardBody>
-              </Card>
-            ))}
+                      Most Popular
+                    </Badge>
+                  )}
+                  
+                  <CardBody p={8}>
+                    <VStack spacing={6} align="stretch">
+                      {/* Plan Header */}
+                      <VStack spacing={4} textAlign="center">
+                        <Box
+                          w={16}
+                          h={16}
+                          bg={planData.bgColor}
+                          color={planData.color}
+                          borderRadius="2xl"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Icon as={planData.icon} h={8} w={8} />
+                        </Box>
+                        <VStack spacing={2}>
+                          <Heading fontSize="2xl" fontWeight="bold" color={textColor}>
+                            {planData.name}
+                          </Heading>
+                          <Text color="#666" fontSize="lg">
+                            {planData.description}
+                          </Text>
+                        </VStack>
+                      </VStack>
+
+                      {/* Pricing */}
+                      <VStack spacing={1} textAlign="center">
+                        <HStack spacing={1} justify="center">
+                          <Text fontSize="4xl" fontWeight="bold" color={textColor}>
+                            {planData.price}
+                          </Text>
+                          <Text fontSize="lg" color="#666">
+                            /{planData.period}
+                          </Text>
+                        </HStack>
+                      </VStack>
+
+                      <Divider />
+
+                      {/* Features */}
+                      <VStack spacing={4} align="stretch">
+                        <Text fontWeight="semibold" color={textColor} fontSize="lg">
+                          What's included:
+                        </Text>
+                        <List spacing={3}>
+                          {planData.features.map((feature: string, featureIndex: number) => (
+                            <ListItem key={featureIndex} display="flex" alignItems="center">
+                              <ListIcon as={FiCheck} color="green.500" />
+                              <Text color="#666" fontSize="sm">
+                                {feature}
+                              </Text>
+                            </ListItem>
+                          ))}
+                        </List>
+                        
+                        {planData.limitations && planData.limitations.length > 0 && (
+                          <>
+                            <Text fontWeight="semibold" color="red.500" fontSize="lg" mt={4}>
+                              Limitations:
+                            </Text>
+                            <List spacing={3}>
+                              {planData.limitations.map((limitation: string, limitationIndex: number) => (
+                                <ListItem key={limitationIndex} display="flex" alignItems="center">
+                                  <Box w={2} h={2} bg="red.500" borderRadius="full" mr={3} />
+                                  <Text color="#666" fontSize="sm">
+                                    {limitation}
+                                  </Text>
+                                </ListItem>
+                              ))}
+                            </List>
+                          </>
+                        )}
+                      </VStack>
+
+                      {/* CTA Button */}
+                      <Button
+                        bg={planData.buttonVariant === "solid" ? accentColor : "transparent"}
+                        color={planData.buttonVariant === "solid" ? "white" : accentColor}
+                        border={planData.buttonVariant === "outline" ? `2px solid ${accentColor}` : "none"}
+                        _hover={{
+                          bg: planData.buttonVariant === "solid" ? "#FF8A33" : "orange.50",
+                        }}
+                        h={14}
+                        borderRadius="full"
+                        fontWeight="semibold"
+                        fontSize="lg"
+                        onClick={() => {
+                          if (planData.name === "Free Plan") {
+                            router.push("/sign-in")
+                          } else {
+                            // Handle pro plan signup
+                            router.push("/sign-in")
+                          }
+                        }}
+                      >
+                        {planData.buttonText}
+                      </Button>
+                    </VStack>
+                  </CardBody>
+                </Card>
+              )
+            })}
           </Grid>
 
           {/* Features Section */}
@@ -466,6 +491,7 @@ export default function PlansPage() {
                 borderRadius="full"
                 fontWeight="semibold"
                 fontSize="lg"
+                onClick={() => router.push("/sign-in")}
               >
                 Start Free Trial
               </Button>
@@ -479,6 +505,7 @@ export default function PlansPage() {
                 fontWeight="semibold"
                 fontSize="lg"
                 border="2px solid white"
+                onClick={() => router.push("/plans")}
               >
                 View All Plans
               </Button>

@@ -48,6 +48,7 @@ import {
 } from "@/server/actions/assignments";
 import { RxHamburgerMenu } from "react-icons/rx";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { ensureUserPlan } from "@/server/actions/user-plans";
 
 export default function Dashboard() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -77,6 +78,24 @@ export default function Dashboard() {
     };
 
     fetchAssignments();
+  }, []);
+
+  useEffect(() => {
+    // Ensure user plan exists when user visits home page
+    const checkUserPlan = async () => {
+      try {
+        const result = await ensureUserPlan();
+        if (result.error) {
+          console.error("User plan check failed:", result.error);
+        } else {
+          console.log("User plan check result:", result.message);
+        }
+      } catch (error) {
+        console.error("Error checking user plan:", error);
+      }
+    };
+
+    checkUserPlan();
   }, []);
 
   const hasAssignments = assignments.length > 0;
