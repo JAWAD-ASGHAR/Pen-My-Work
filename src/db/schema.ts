@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, integer, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, integer, boolean, serial } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 export const assignment = pgTable("assignment", {
@@ -40,10 +40,25 @@ export const plans = pgTable('plan', {
 })
 .enableRLS(); 
 
-export const userPlans = pgTable("user_plans",{
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
-  planId: text("plan_id").notNull().references(() => plans.planId, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-}).enableRLS();
+export const subscriptions = pgTable('subscription', {
+  id: serial('id').primaryKey(),
+  lemonSqueezyId: text('lemonSqueezyId').unique().notNull(),
+  orderId: integer('orderId').notNull(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  status: text('status').notNull(),
+  statusFormatted: text('statusFormatted').notNull(),
+  renewsAt: text('renewsAt'),
+  endsAt: text('endsAt'),
+  trialEndsAt: text('trialEndsAt'),
+  price: text('price').notNull(),
+  isUsageBased: boolean('isUsageBased').default(false),
+  isPaused: boolean('isPaused').default(false),
+  subscriptionItemId: serial('subscriptionItemId'),
+  userId: text('userId')
+    .notNull()
+    .references(() => user.id),
+  planId: text('planId')
+    .notNull()
+    .references(() => plans.planId),
+})

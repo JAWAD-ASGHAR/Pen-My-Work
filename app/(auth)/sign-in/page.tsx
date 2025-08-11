@@ -11,11 +11,10 @@ import {
   Flex,
   Spinner,
   Text,
-  VStack,
+  VStack, 
   HStack,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { ensureUserPlan } from "@/server/actions/user-plans";
 
 export default function SignInPage() {
   const [error, setError] = useState("");
@@ -43,20 +42,6 @@ export default function SignInPage() {
         errorCallbackURL: "/sign-in",
         newUserCallbackURL: "/home", 
       });
-      
-      // After successful sign-in, ensure user plan exists
-      setTimeout(async () => {
-        try {
-          const result = await ensureUserPlan();
-          if (result.error) {
-            console.error("Failed to create user plan:", result.error);
-          } else {
-            console.log("User plan ensured:", result.message);
-          }
-        } catch (error) {
-          console.error("Error ensuring user plan:", error);
-        }
-      }, 1000); // Small delay to ensure session is established
       
     } catch (error) {
       setError("Sign in failed");

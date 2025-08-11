@@ -4,18 +4,12 @@ import { configureLemonSqueezy } from "@/src/config/lemonsqueezy"
 import { createCheckout } from "@lemonsqueezy/lemonsqueezy.js"
 import { headers } from "next/headers"
 
-
-
 export async function getCheckoutURL(variantId: number, embed = false) {
     configureLemonSqueezy()
-
-    
     const session = await auth.api.getSession({ headers: await headers() })
-    console.log(session,variantId,embed)
     if (!session?.user) {
       throw new Error('User is not authenticated.')
     }
-    // import { createCheckout } from '@lemonsqueezy/lemonsqueezy.js'
     const checkout = await createCheckout(
       process.env.LEMONSQUEEZY_STORE_ID!,
       variantId,

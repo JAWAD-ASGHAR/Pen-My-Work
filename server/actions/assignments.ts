@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth"
 import { db } from "@/src/db"
-import { assignment, userPlans } from "@/src/db/schema"
+import { assignment } from "@/src/db/schema"
 import { eq, desc } from "drizzle-orm"
 import { headers } from "next/headers"
 

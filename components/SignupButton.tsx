@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@chakra-ui/react'
 import { getCheckoutURL } from '@/server/actions/checkout'
-import { ensureUserPlan } from '@/server/actions/user-plans'
 
 interface Plan {
   planId: string
@@ -40,15 +39,7 @@ export function SignupButton({ plan, currentPlan, embed = true }: SignupButtonPr
 
     try {
       if (plan.price === "0") {
-        // Handle free plan - ensure user plan and redirect to dashboard
-        const result = await ensureUserPlan()
-        if (result.success) {
-          router.push('/home')
-        } else {
-          console.error('Error ensuring user plan:', result.error)
-          // Handle error - maybe redirect to sign-in
-          router.push('/sign-in')
-        }
+        router.push('/home')
       } else {
         // Handle pro plan - create checkout
         if (!plan.variantId) {

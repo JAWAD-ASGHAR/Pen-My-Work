@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@chakra-ui/react'
 import { getCheckoutURL } from '@/server/actions/checkout'
-import { ensureUserPlan } from '@/server/actions/user-plans'
 
 interface PlanButtonProps {
   plan: {
@@ -24,14 +23,7 @@ export function PlanButton({ plan }: PlanButtonProps) {
 
     try {
       if (plan.price === "0") {
-        // Free plan - ensure user plan and redirect to dashboard
-        const result = await ensureUserPlan()
-        if (result.success) {
-          router.push('/home')
-        } else {
-          // If not authenticated, redirect to sign-in
-          router.push('/sign-in')
-        }
+        router.push('/home')
       } else {
         // Paid plan - try to create checkout
         if (!plan.variantId) {
