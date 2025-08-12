@@ -1,13 +1,89 @@
 "use server"
 import { db } from "@/src/db"
-import { plans } from "@/src/db/schema"
-import { eq } from "drizzle-orm"
+import { plans, subscriptions } from "@/src/db/schema"
+import { eq, and } from "drizzle-orm"
 import { auth } from "@/auth"
 import { headers } from "next/headers"
 import { billingData } from "@/src/config/billing-data"
+import { cancelSub, pauseUserSubscription, unpauseUserSubscription, getSubscriptionURLs } from "./subscription"
 
 export const getPlans = async () => {
     return await db.select().from(plans)
+}
+
+// Get current user's subscription
+export async function getCurrentUserSubscription() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session?.user?.id) {
+    throw new Error('User not authenticated')
+  }
+
+  const userSubscription = await db
+    .select()
+    .from(subscriptions)
+    .where(eq(subscriptions.userId, session.user.id))
+    .limit(1)
+
+  return userSubscription[0] || null
+}
+
+// Get current user's plan details
+export async function getCurrentUserPlan() {
+  const subscription = await getCurrentUserSubscription()
+  
+  if (!subscription) {
+    // Return free plan if no subscription
+    return billingData.plans.find(plan => plan.planId === "free")
+  }
+
+  // Get plan details from database
+  const plan = await db
+    .select()
+    .from(plans)
+    .where(eq(plans.planId, subscription.planId))
+    .limit(1)
+
+  return plan[0] || billingData.plans.find(plan => plan.planId === "free")
+}
+
+// Cancel user subscription
+export async function cancelUserSubscription() {
+  const subscription = await getCurrentUserSubscription()
+  if (!subscription) {
+    throw new Error('No active subscription found')
+  }
+
+  return await cancelSub(subscription.lemonSqueezyId)
+}
+
+// Pause user subscription
+export async function pauseSubscription() {
+  const subscription = await getCurrentUserSubscription()
+  if (!subscription) {
+    throw new Error('No active subscription found')
+  }
+
+  return await pauseUserSubscription(subscription.lemonSqueezyId)
+}
+
+// Unpause user subscription
+export async function unpauseSubscription() {
+  const subscription = await getCurrentUserSubscription()
+  if (!subscription) {
+    throw new Error('No active subscription found')
+  }
+
+  return await unpauseUserSubscription(subscription.lemonSqueezyId)
+}
+
+// Get subscription management URLs
+export async function getSubscriptionManagementURLs() {
+  const subscription = await getCurrentUserSubscription()
+  if (!subscription) {
+    throw new Error('No active subscription found')
+  }
+
+  return await getSubscriptionURLs(subscription.lemonSqueezyId)
 }
 
 
