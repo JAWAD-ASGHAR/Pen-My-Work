@@ -6,7 +6,6 @@ import {
   Card,
   CardBody,
   Container,
-  Flex,
   Heading,
   HStack,
   Icon,
@@ -26,7 +25,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 import { useState, useEffect, useRef } from "react"
-import { FiCheck, FiStar, FiZap, FiCreditCard, FiPause, FiPlay, FiX, FiExternalLink } from "react-icons/fi"
+import { FiCheck, FiStar, FiZap, FiCreditCard, FiPause, FiPlay, FiX } from "react-icons/fi"
 import { 
   getCurrentUserPlan, 
   getCurrentUserSubscription,
@@ -106,6 +105,7 @@ export default function UserPlanDashboard() {
       setCurrentPlan(plan || null)
       setSubscription(sub)
     } catch (error) {
+      console.error("Cancel subscription error:", error)
       toast({
         title: "Error",
         description: "Failed to cancel subscription",
@@ -130,6 +130,7 @@ export default function UserPlanDashboard() {
       const sub = await getCurrentUserSubscription()
       setSubscription(sub)
     } catch (error) {
+      console.error("Pause subscription error:", error)
       toast({
         title: "Error",
         description: "Failed to pause subscription",
@@ -153,6 +154,7 @@ export default function UserPlanDashboard() {
       const sub = await getCurrentUserSubscription()
       setSubscription(sub)
     } catch (error) {
+      console.error("Unpause subscription error:", error)
       toast({
         title: "Error",
         description: "Failed to resume subscription",
@@ -171,6 +173,7 @@ export default function UserPlanDashboard() {
         window.open(urls.update_payment_method, '_blank')
       }
     } catch (error) {
+      console.error("Update billing error:", error)
       toast({
         title: "Error",
         description: "Failed to open billing portal",
@@ -361,7 +364,7 @@ export default function UserPlanDashboard() {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure you want to cancel your subscription? You'll continue to have access until the end of your current billing period.
+              Are you sure you want to cancel your subscription? You&apos;ll continue to have access until the end of your current billing period.
             </AlertDialogBody>
 
             <AlertDialogFooter>
