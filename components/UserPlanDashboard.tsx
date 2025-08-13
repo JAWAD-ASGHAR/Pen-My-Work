@@ -34,8 +34,6 @@ import {
   getSubscriptionManagementURLs,
   getCurrentUserPlanAndSubscription
 } from "@/server/actions/user-plans"
-import { auth } from "@/auth"
-import { headers } from "next/headers"
 
 type Plan = {
   planId: string;
@@ -69,10 +67,6 @@ export default function UserPlanDashboard() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const session = await auth.api.getSession({ headers: await headers() })
-        if (!session?.user?.id) {
-          throw new Error('User not authenticated')
-        }
         const { plan, subscription } = await getCurrentUserPlanAndSubscription()
         setCurrentPlan(plan || null)
         setSubscription(subscription || null)

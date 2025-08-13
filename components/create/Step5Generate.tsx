@@ -52,7 +52,6 @@ export default function Step5Generate({
   onGenerate,
   onPrevious,
   userCredits,
-  requiredPages = 0,
   userPlan,
 }: Step5GenerateProps) {
   const { pageCount } = charCount(content);

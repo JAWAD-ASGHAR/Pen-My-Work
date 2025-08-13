@@ -32,7 +32,6 @@ export default function Step4Content({
   onNext,
   onPrevious,
   userCredits,
-  requiredPages = 0,
   userPlan,
 }: Step4ContentProps) {
   const { pageCount } = charCount(content);

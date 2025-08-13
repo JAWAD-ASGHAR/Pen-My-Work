@@ -12,7 +12,6 @@ import {
   Button,
   VStack,
   Text,
-  Heading,
   Box,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
@@ -50,7 +49,7 @@ export default function CreatePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { plan, subscription } = await getCurrentUserPlanAndSubscription();
+        const { plan } = await getCurrentUserPlanAndSubscription();
         setUserPlan(plan || null);
 
         // Only fetch credits if user is on free plan
