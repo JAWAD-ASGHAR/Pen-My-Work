@@ -27,13 +27,15 @@ import {
 import { useState, useEffect, useRef } from "react"
 import { FiCheck, FiStar, FiZap, FiCreditCard, FiPause, FiPlay, FiX } from "react-icons/fi"
 import { 
-  getCurrentUserPlan, 
   getCurrentUserSubscription,
   cancelUserSubscription,
   pauseSubscription,
   unpauseSubscription,
-  getSubscriptionManagementURLs
+  getSubscriptionManagementURLs,
+  getCurrentUserPlanAndSubscription
 } from "@/server/actions/user-plans"
+import { auth } from "@/auth"
+import { headers } from "next/headers"
 
 type Plan = {
   planId: string;
@@ -67,12 +69,13 @@ export default function UserPlanDashboard() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const [plan, sub] = await Promise.all([
-          getCurrentUserPlan(),
-          getCurrentUserSubscription()
-        ])
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user?.id) {
+          throw new Error('User not authenticated')
+        }
+        const { plan, subscription } = await getCurrentUserPlanAndSubscription()
         setCurrentPlan(plan || null)
-        setSubscription(sub)
+        setSubscription(subscription || null)
       } catch (error) {
         console.error("Error fetching user data:", error)
         toast({
@@ -98,12 +101,9 @@ export default function UserPlanDashboard() {
         status: "success",
       })
       // Refresh data
-      const [plan, sub] = await Promise.all([
-        getCurrentUserPlan(),
-        getCurrentUserSubscription()
-      ])
+      const { plan, subscription } = await getCurrentUserPlanAndSubscription()
       setCurrentPlan(plan || null)
-      setSubscription(sub)
+      setSubscription(subscription || null)
     } catch (error) {
       console.error("Cancel subscription error:", error)
       toast({

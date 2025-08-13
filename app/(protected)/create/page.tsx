@@ -1,28 +1,80 @@
 "use client";
 
-import { Container } from "@chakra-ui/react";
-import { useState } from "react";
+import {
+  Container,
+  useToast,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button,
+  VStack,
+  Text,
+  Heading,
+  Box,
+} from "@chakra-ui/react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIndicator from "@/components/ProgressIndicator";
 import { generateImages } from "@/server/actions/generate-images";
-// import { charCount } from "@/utils/char-count";
+import { getUserCredits } from "@/server/actions/user-credits";
+import { getCurrentUserPlanAndSubscription } from "@/server/actions/user-plans";
 import Step1PaperType from "@/components/create/Step1PaperType";
 import Step2WritingStyle from "@/components/create/Step2WritingStyle";
 import Step3InkColor from "@/components/create/Step3InkColor";
 import Step4Content from "@/components/create/Step4Content";
 import Step5Generate from "@/components/create/Step5Generate";
+import { charCount } from "@/utils/char-count";
 
 export default function CreatePage() {
   // State for all steps
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPaper, setSelectedPaper] = useState("ruled");
   const [selectedWritingStyle, setSelectedWritingStyle] = useState("caveat");
-  const [selectedInk, setSelectedInk] = useState("#0052A3"); // Initialize with blue hex code
+  const [selectedInk, setSelectedInk] = useState("#0052A3");
   const [customColor, setCustomColor] = useState("#FF6A00");
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [content, setContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [userCredits, setUserCredits] = useState<{ totalCredits: number; usedCredits: number } | null>(null);
+  const [userPlan, setUserPlan] = useState<{ planId: string; name: string } | null>(null);
+  const [showCreditError, setShowCreditError] = useState(false);
+  const [requiredPages, setRequiredPages] = useState(0);
   const router = useRouter();
+  const toast = useToast();
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const { plan, subscription } = await getCurrentUserPlanAndSubscription();
+        setUserPlan(plan || null);
+
+        // Only fetch credits if user is on free plan
+        if (plan?.planId === "free") {
+          const credits = await getUserCredits();
+          setUserCredits(credits);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Calculate required pages when content changes
+  useEffect(() => {
+    if (content.trim()) {
+      const { pageCount } = charCount(content);
+      setRequiredPages(pageCount);
+    } else {
+      setRequiredPages(0);
+    }
+  }, [content]);
 
   const handleGenerate = async (
     pages: string,
@@ -32,33 +84,57 @@ export default function CreatePage() {
   ) => {
     try {
       setIsGenerating(true);
-      
+
+      // Only check credits for free plan users
+      if (userPlan?.planId === "free" && userCredits) {
+        const availableCredits = userCredits.totalCredits - userCredits.usedCredits;
+        if (availableCredits < requiredPages) {
+          setShowCreditError(true);
+          setIsGenerating(false);
+          return;
+        }
+      }
+
       // Direct assignment creation without image generation
       const result = await generateImages(
         pages,
         ink,
         paper,
-        additionalQueries
+        additionalQueries,
+        requiredPages
       );
-      
+
       if ("error" in result) {
         console.error("Error creating assignment:", result.error);
+        toast({
+          title: "Error",
+          description: result.error,
+          status: "error",
+        });
         setIsGenerating(false);
         return;
       }
-      
+
       if (result.success && result.assignmentData && result.assignmentData.length > 0) {
         const assignmentId = result.assignmentData[0].id;
         router.push(`/assignment/${assignmentId}`);
-        // Don't set isGenerating to false - let the redirect happen while loading
       } else {
         console.error("Error creating assignment:", result);
+        toast({
+          title: "Error",
+          description: "Failed to create assignment",
+          status: "error",
+        });
         setIsGenerating(false);
       }
     } catch (error) {
       console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        status: "error",
+      });
       setIsGenerating(false);
-      return;
     }
   };
 
@@ -78,10 +154,18 @@ export default function CreatePage() {
     handleGenerate(content, selectedInk, selectedPaper, "");
   };
 
+  const handleUpgradeToPro = () => {
+    setShowCreditError(false);
+    router.push("/plans");
+  };
+
+  // Check if user needs credit validation
+  const needsCreditCheck = userPlan?.planId === "free";
+
   return (
     <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
       <ProgressIndicator currentStep={currentStep} totalSteps={5} />
-      
+
       {currentStep === 1 && (
         <Step1PaperType
           selectedPaper={selectedPaper}
@@ -89,7 +173,7 @@ export default function CreatePage() {
           onNext={nextStep}
         />
       )}
-      
+
       {currentStep === 2 && (
         <Step2WritingStyle
           selectedWritingStyle={selectedWritingStyle}
@@ -98,7 +182,7 @@ export default function CreatePage() {
           onPrevious={prevStep}
         />
       )}
-      
+
       {currentStep === 3 && (
         <Step3InkColor
           selectedInk={selectedInk}
@@ -112,16 +196,19 @@ export default function CreatePage() {
           onPrevious={prevStep}
         />
       )}
-      
+
       {currentStep === 4 && (
         <Step4Content
           content={content}
           setContent={setContent}
           onNext={nextStep}
           onPrevious={prevStep}
+          userCredits={needsCreditCheck ? userCredits : null}
+          requiredPages={requiredPages}
+          userPlan={userPlan}
         />
       )}
-      
+
       {currentStep === 5 && (
         <Step5Generate
           content={content}
@@ -129,8 +216,55 @@ export default function CreatePage() {
           isGenerating={isGenerating}
           onGenerate={handleGenerateClick}
           onPrevious={prevStep}
+          userCredits={needsCreditCheck ? userCredits : null}
+          requiredPages={requiredPages}
+          userPlan={userPlan}
         />
       )}
+
+      {/* Credit Error Dialog - Only show for free plan users */}
+      <AlertDialog
+        isOpen={showCreditError && needsCreditCheck}
+        leastDestructiveRef={cancelRef}
+        onClose={() => setShowCreditError(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Insufficient Credits
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              <VStack spacing={4} align="stretch">
+                <Text>
+                  You need {requiredPages} pages but only have {userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0} credits remaining.
+                </Text>
+                <Box bg="orange.50" p={4} borderRadius="md">
+                  <Text fontWeight="semibold" color="orange.800">
+                    Free Plan: 10 pages per month
+                  </Text>
+                  <Text color="orange.700" fontSize="sm">
+                    Upgrade to Pro for unlimited pages!
+                  </Text>
+                </Box>
+              </VStack>
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={() => setShowCreditError(false)}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="orange"
+                onClick={handleUpgradeToPro}
+                ml={3}
+              >
+                Upgrade to Pro
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Container>
   );
 }

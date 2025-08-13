@@ -1,7 +1,7 @@
 "use server"
 import { db } from "@/src/db"
 import { plans, subscriptions } from "@/src/db/schema"
-import { eq, and } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { auth } from "@/auth"
 import { headers } from "next/headers"
 import { billingData } from "@/src/config/billing-data"
@@ -28,22 +28,31 @@ export async function getCurrentUserSubscription() {
 }
 
 // Get current user's plan details
-export async function getCurrentUserPlan() {
+export async function getCurrentUserPlanAndSubscription() {
   const subscription = await getCurrentUserSubscription()
   
   if (!subscription) {
     // Return free plan if no subscription
-    return billingData.plans.find(plan => plan.planId === "free")
+    return { plan: billingData.plans.find(plan => plan.planId === "free"), subscription: null }
   }
 
-  // Get plan details from database
+  // Check if subscription is active
+  const isActive = subscription.status === "active" && 
+                   (!subscription.endsAt || new Date(subscription.endsAt) > new Date())
+
+  if (!isActive) {
+    // Treat cancelled/expired subscriptions as free plan
+    return { plan: billingData.plans.find(plan => plan.planId === "free"), subscription: subscription }
+  }
+
+  // Get plan details from database for active subscription
   const plan = await db
     .select()
     .from(plans)
     .where(eq(plans.planId, subscription.planId))
     .limit(1)
 
-  return plan[0] || billingData.plans.find(plan => plan.planId === "free")
+  return { plan: plan[0] || billingData.plans.find(plan => plan.planId === "free"), subscription: subscription }
 }
 
 // Cancel user subscription

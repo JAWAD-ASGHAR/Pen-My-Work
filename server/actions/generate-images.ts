@@ -1,7 +1,8 @@
 "use server"
 
 import { AuthenticatedUser, protectedAction } from "@/lib/auth-middleware";
-import { assignment, db } from "@/src/db";
+import { assignment, db, userCredits } from "@/src/db";
+import { eq } from "drizzle-orm";
 
 export const generateSystemMessage = async (
   pageText: string,
@@ -64,28 +65,43 @@ export const generateSystemMessage = async (
   ].join("\n");
 };
 
-export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string, ink: string, paper: string, additionalQueries: string) => {
-    try {
-        const assignmentData = await db.insert(assignment).values({
-            userId: user.id,
-            imageURLs: [],
-            paper: paper,
-            ink: ink,
-            text: pages,
-            specialQuery: additionalQueries || null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        }).returning();
-        return {
-            success: true,
-            message: "Image generation completed",
-            assignmentData
-        };
-    } catch (error) {
-        console.error("Error generating images:", error);
-        return {
-            success: false,
-            error: error instanceof Error ? error.message : "Unknown error occurred"
-        };
-    }
-}); 
+export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string, ink: string, paper: string, additionalQueries: string, requiredPages: number) => {
+  try {
+      const result = await db.transaction(async (tx) => {
+          // First get current user credits
+          const currentCredits = await tx.select().from(userCredits).where(eq(userCredits.userId, user.id)).limit(1);
+          const currentUsedCredits = currentCredits[0]?.usedCredits || 0;
+          
+          // Create assignment
+          const assignmentData = await tx.insert(assignment).values({
+              userId: user.id,
+              imageURLs: [],
+              paper: paper,
+              ink: ink,
+              text: pages,
+              specialQuery: additionalQueries || null,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+          }).returning();
+          
+          // Update user credits
+          const updatedUserCredits = await tx.update(userCredits).set({
+              usedCredits: currentUsedCredits + requiredPages
+          }).where(eq(userCredits.userId, user.id)).returning();
+          
+          return { assignmentData, updatedUserCredits };
+      });
+      
+      return {
+          success: true,
+          message: "Image generation completed",
+          assignmentData: result.assignmentData
+      };
+  } catch (error) {
+      console.error("Error generating images:", error);
+      return {
+          success: false,
+          error: error instanceof Error ? error.message : "Unknown error occurred"
+      };
+  }
+});

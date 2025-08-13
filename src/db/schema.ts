@@ -62,3 +62,14 @@ export const subscriptions = pgTable('subscription', {
     .notNull()
     .references(() => plans.planId),
 })
+
+export const userCredits = pgTable('user_credits', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => user.id),
+  totalCredits: integer('total_credits').notNull().default(0),
+  usedCredits: integer('used_credits').notNull().default(0),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}).enableRLS();

@@ -33,12 +33,16 @@ const paperTypes = [
   },
 ];
 
+// Update the interface
 interface Step5GenerateProps {
   content: string;
   selectedPaper: string;
   isGenerating: boolean;
   onGenerate: () => void;
   onPrevious: () => void;
+  userCredits?: { totalCredits: number; usedCredits: number } | null;
+  requiredPages?: number;
+  userPlan?: { planId: string; name: string } | null;
 }
 
 export default function Step5Generate({
@@ -47,8 +51,14 @@ export default function Step5Generate({
   isGenerating,
   onGenerate,
   onPrevious,
+  userCredits,
+  requiredPages = 0,
+  userPlan,
 }: Step5GenerateProps) {
   const { pageCount } = charCount(content);
+  const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
+  const hasEnoughCredits = availableCredits >= pageCount;
+  const isFreePlan = userPlan?.planId === "free";
 
   return (
     <>
@@ -103,6 +113,44 @@ export default function Step5Generate({
                       ~{content.length} characters
                     </Badge>
                   </HStack>
+                  
+                  {/* Credit Information - Only show for free plan users */}
+                  {isFreePlan && userCredits && (
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg={hasEnoughCredits ? "green.50" : "red.50"}
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor={hasEnoughCredits ? "green.200" : "red.200"}
+                    >
+                      <Text fontWeight="medium">Credits Available:</Text>
+                      <Badge 
+                        colorScheme={hasEnoughCredits ? "green" : "red"}
+                        variant="subtle"
+                      >
+                        {availableCredits} / {pageCount} needed
+                      </Badge>
+                    </HStack>
+                  )}
+                  
+                  {/* Pro Plan Message */}
+                  {!isFreePlan && (
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="green.50"
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor="green.200"
+                    >
+                      <Text fontWeight="medium">Plan Status:</Text>
+                      <Badge colorScheme="green" variant="subtle">
+                        Unlimited with {userPlan?.name}
+                      </Badge>
+                    </HStack>
+                  )}
+                  
                   <HStack
                     justify="space-between"
                     p={4}
@@ -123,14 +171,28 @@ export default function Step5Generate({
                 size="lg"
                 w="full"
                 leftIcon={<Icon as={FiPlay} />}
+                isDisabled={!content.trim() || (isFreePlan && userCredits ? !hasEnoughCredits : false)}
               >
-                Generate Assignment
+                {isFreePlan && userCredits && !hasEnoughCredits 
+                  ? "Insufficient Credits - Upgrade Required" 
+                  : "Generate Assignment"
+                }
               </Button>
+              
+              {isFreePlan && userCredits && !hasEnoughCredits && (
+                <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
+                  <Text color="red.700" fontSize="sm" textAlign="center">
+                    You need {pageCount} credits but only have {availableCredits} available. 
+                    Please upgrade to Pro for unlimited pages.
+                  </Text>
+                </Box>
+              )}
             </VStack>
           </CardBody>
         </Card>
       )}
 
+      {/* Rest of the component remains the same */}
       {isGenerating && (
         <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
           <CardBody p={8} textAlign="center">
@@ -192,4 +254,4 @@ export default function Step5Generate({
       )}
     </>
   );
-} 
+}
