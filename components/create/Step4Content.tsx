@@ -22,8 +22,8 @@ interface Step4ContentProps {
   onNext: () => void;
   onPrevious: () => void;
   userCredits?: { totalCredits: number; usedCredits: number } | null;
-  requiredPages?: number;
   userPlan?: { planId: string; name: string } | null;
+  subscription?: { status: string; statusFormatted: string } | null;
 }
 
 export default function Step4Content({
@@ -33,11 +33,13 @@ export default function Step4Content({
   onPrevious,
   userCredits,
   userPlan,
+  subscription,
 }: Step4ContentProps) {
   const { pageCount } = charCount(content);
   const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
   const hasEnoughCredits = availableCredits >= pageCount;
   const isFreePlan = userPlan?.planId === "free";
+  const isCancelled = subscription?.status === "cancelled" || subscription?.status === "expired";
 
   return (
     <>
@@ -86,8 +88,37 @@ export default function Step4Content({
         </CardBody>
       </Card>
 
+      {/* Cancelled Subscription Message */}
+      {isCancelled && content.trim() && (
+        <Card bg="white" border="1px" borderColor="red.200" mb={8}>
+          <CardBody p={6}>
+            <VStack spacing={4} align="stretch">
+              <Heading size="md" color="#1A1A1A">
+                Subscription Status
+              </Heading>
+              <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
+                <Text color="red.700" fontSize="sm" textAlign="center" fontWeight="medium">
+                  Your subscription has been cancelled. You now have access to the free plan features.
+                </Text>
+              </Box>
+              <HStack justify="space-between" p={3} bg="gray.50" borderRadius="md">
+                <Text fontWeight="medium">Pages Required:</Text>
+                <Badge colorScheme="blue" variant="subtle">
+                  {pageCount} pages
+                </Badge>
+              </HStack>
+              <Box bg="orange.50" p={4} borderRadius="md" border="1px solid" borderColor="orange.200">
+                <Text color="orange.700" fontSize="sm" textAlign="center">
+                  Upgrade to Pro for unlimited pages and premium features!
+                </Text>
+              </Box>
+            </VStack>
+          </CardBody>
+        </Card>
+      )}
+
       {/* Credit Information - Only show for free plan users */}
-      {isFreePlan && userCredits && content.trim() && (
+      {isFreePlan && !isCancelled && userCredits && content.trim() && (
         <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
           <CardBody p={6}>
             <VStack spacing={4} align="stretch">
@@ -139,7 +170,7 @@ export default function Step4Content({
       )}
 
       {/* Pro Plan Message */}
-      {!isFreePlan && content.trim() && (
+      {!isFreePlan && !isCancelled && content.trim() && (
         <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
           <CardBody p={6}>
             <VStack spacing={4} align="stretch">
@@ -179,10 +210,10 @@ export default function Step4Content({
           color="white"
           px={8}
           rightIcon={<FiArrowRight />}
-          isDisabled={!content.trim() || (isFreePlan && userCredits ? !hasEnoughCredits : false)}
+          isDisabled={!content.trim() || (isFreePlan && !isCancelled && userCredits ? !hasEnoughCredits : false)}
           onClick={onNext}
         >
-          {isFreePlan && userCredits && !hasEnoughCredits 
+          {isFreePlan && !isCancelled && userCredits && !hasEnoughCredits 
             ? "Insufficient Credits" 
             : "Continue to Generate"
           }

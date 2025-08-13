@@ -189,6 +189,7 @@ export default function UserPlanDashboard() {
   const isFreePlan = currentPlan?.planId === "free"
   const isActive = subscription?.status === "active"
   const isPaused = subscription?.isPaused ?? false
+  const isCancelled = subscription?.status === "cancelled" || subscription?.status === "expired"
 
   return (
     <Box minH="100vh" bg="gray.50" py={8}>
@@ -279,7 +280,7 @@ export default function UserPlanDashboard() {
                 )}
 
                 {/* Action Buttons */}
-                {!isFreePlan && subscription && (
+                {!isFreePlan && subscription && isActive && (
                   <HStack spacing={4} wrap="wrap">
                     <Button
                       leftIcon={<Icon as={FiCreditCard} />}
@@ -326,6 +327,25 @@ export default function UserPlanDashboard() {
                       Cancel Subscription
                     </Button>
                   </HStack>
+                )}
+
+                {/* Buy Plan Button for Cancelled/Expired Subscriptions */}
+                {!isFreePlan && subscription && isCancelled && (
+                  <VStack spacing={4}>
+                    <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200" w="full">
+                      <Text color="red.700" fontSize="sm" textAlign="center" fontWeight="medium">
+                        Your subscription has been cancelled. You now have access to the free plan features.
+                      </Text>
+                    </Box>
+                    <Button
+                      leftIcon={<Icon as={FiZap} />}
+                      colorScheme="orange"
+                      size="lg"
+                      onClick={() => window.location.href = "/plans"}
+                    >
+                      Buy a New Plan
+                    </Button>
+                  </VStack>
                 )}
 
                 {/* Upgrade Button for Free Plan */}

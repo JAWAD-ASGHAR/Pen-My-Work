@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 import { auth } from "@/auth"
 import { headers } from "next/headers"
 
-// Add the missing getUserSubscriptions function
+// Get user subscription (users can only have one subscription)
 async function getUserSubscriptions() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user?.id) {

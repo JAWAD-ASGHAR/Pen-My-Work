@@ -10,6 +10,7 @@ async function getPrice(priceId: string) {
   try {
     // You'll need to implement this based on your Lemon Squeezy setup
     // This is just a placeholder structure
+    console.log('getPrice', priceId)
     return { error: null, data: { data: { attributes: { unit_price: '0', unit_price_decimal: '0' } } } }
   } catch (error) {
     console.error(`❌ Failed to fetch price data for ${priceId}:`, error)
@@ -84,8 +85,9 @@ export async function processWebhookEvent(webhookEvent: {
 
       // Create/update subscription in the database.
       try {
+        // Since userId is unique, we can use onConflictDoUpdate to handle existing subscriptions
         await db.insert(subscriptions).values(updateData).onConflictDoUpdate({
-          target: subscriptions.lemonSqueezyId,
+          target: subscriptions.userId,
           set: updateData,
         })
       } catch (error) {

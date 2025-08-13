@@ -2,7 +2,7 @@
 
 import { Box, Button, Container, Flex, HStack, Icon } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { FiHome, FiLogOut } from "react-icons/fi";
+import { FiHome, FiLogOut, FiCreditCard } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Logo } from "./Logo";
@@ -75,30 +75,56 @@ export default function Header({
           <HStack spacing={3}>
             {children ||
               (isHomePage ? (
-                <Button
-                  variant="primary"
-                  bg="#FF6A00"
-                  _hover={{ bg: "#FF8A33" }}
-                  color="white"
-                  leftIcon={<Icon as={FiLogOut} />}
-                  onClick={handleLogout}
-                  colorScheme="orange"
-                  size="sm"
-                >
-                  Sign Out
-                </Button>
-              ) : (
-                <Link href="/home">
+                <>
+                  <Link href="/subscription">
+                    <Button
+                      variant="ghost"
+                      leftIcon={<Icon as={FiCreditCard} />}
+                      color="#666"
+                      _hover={{ bg: "gray.100" }}
+                      size="sm"
+                    >
+                      Subscription
+                    </Button>
+                  </Link>
                   <Button
-                    variant="ghost"
-                    leftIcon={<Icon as={FiHome} />}
-                    color="#666"
-                    _hover={{ bg: "gray.100" }}
+                    variant="primary"
+                    bg="#FF6A00"
+                    _hover={{ bg: "#FF8A33" }}
+                    color="white"
+                    leftIcon={<Icon as={FiLogOut} />}
+                    onClick={handleLogout}
+                    colorScheme="orange"
                     size="sm"
                   >
-                    Go to Home
+                    Sign Out
                   </Button>
-                </Link>
+                </>
+              ) : (
+                <>
+                  <Link href="/subscription">
+                    <Button
+                      variant="ghost"
+                      leftIcon={<Icon as={FiCreditCard} />}
+                      color="#666"
+                      _hover={{ bg: "gray.100" }}
+                      size="sm"
+                    >
+                      Subscription
+                    </Button>
+                  </Link>
+                  <Link href="/home">
+                    <Button
+                      variant="ghost"
+                      leftIcon={<Icon as={FiHome} />}
+                      color="#666"
+                      _hover={{ bg: "gray.100" }}
+                      size="sm"
+                    >
+                      Go to Home
+                    </Button>
+                  </Link>
+                </>
               ))}
           </HStack>
         </Flex>

@@ -176,8 +176,23 @@ export const HeroSection = forwardRef<HTMLDivElement>((props, ref) => {
             boxShadow="4px 4px 0px #000000"
             transition="all 0.2s"
             onClick={handleButtonClick}
+            mb={4}
           >
             {BUTTON_TEXT}
+          </Button>
+          
+          <Button
+            variant="ghost"
+            fontSize="md"
+            fontWeight="medium"
+            color="gray.600"
+            _hover={{
+              color: "orange.500",
+              bg: "orange.50"
+            }}
+            onClick={() => router.push("/plans")}
+          >
+            View Plans & Pricing →
           </Button>
       </Box>
     </Box>

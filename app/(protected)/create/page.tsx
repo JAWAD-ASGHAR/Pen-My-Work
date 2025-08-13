@@ -85,8 +85,8 @@ export default function CreatePage() {
       setIsGenerating(true);
 
       // Only check credits for free plan users
-      if (userPlan?.planId === "free" && userCredits) {
-        const availableCredits = userCredits.totalCredits - userCredits.usedCredits;
+      if (userPlan?.planId === "free") {
+        const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
         if (availableCredits < requiredPages) {
           setShowCreditError(true);
           setIsGenerating(false);
@@ -161,6 +161,22 @@ export default function CreatePage() {
   // Check if user needs credit validation
   const needsCreditCheck = userPlan?.planId === "free";
 
+  // Get subscription info for components
+  const [subscription, setSubscription] = useState<{ status: string; statusFormatted: string } | null>(null);
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        const { subscription: sub } = await getCurrentUserPlanAndSubscription();
+        setSubscription(sub);
+      } catch (error) {
+        console.error("Error fetching subscription:", error);
+      }
+    };
+
+    fetchSubscription();
+  }, []);
+
   return (
     <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
       <ProgressIndicator currentStep={currentStep} totalSteps={5} />
@@ -203,8 +219,8 @@ export default function CreatePage() {
           onNext={nextStep}
           onPrevious={prevStep}
           userCredits={needsCreditCheck ? userCredits : null}
-          requiredPages={requiredPages}
           userPlan={userPlan}
+          subscription={subscription}
         />
       )}
 
@@ -216,8 +232,8 @@ export default function CreatePage() {
           onGenerate={handleGenerateClick}
           onPrevious={prevStep}
           userCredits={needsCreditCheck ? userCredits : null}
-          requiredPages={requiredPages}
           userPlan={userPlan}
+          subscription={subscription}
         />
       )}
 

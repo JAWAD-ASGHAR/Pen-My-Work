@@ -12,7 +12,7 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { FiPlay, FiFileText } from "react-icons/fi";
+import { FiPlay, FiFileText, FiZap } from "react-icons/fi";
 import { charCount } from "@/utils/char-count";
 
 const paperTypes = [
@@ -41,8 +41,8 @@ interface Step5GenerateProps {
   onGenerate: () => void;
   onPrevious: () => void;
   userCredits?: { totalCredits: number; usedCredits: number } | null;
-  requiredPages?: number;
   userPlan?: { planId: string; name: string } | null;
+  subscription?: { status: string; statusFormatted: string } | null;
 }
 
 export default function Step5Generate({
@@ -53,11 +53,13 @@ export default function Step5Generate({
   onPrevious,
   userCredits,
   userPlan,
+  subscription,
 }: Step5GenerateProps) {
   const { pageCount } = charCount(content);
   const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
   const hasEnoughCredits = availableCredits >= pageCount;
   const isFreePlan = userPlan?.planId === "free";
+  const isCancelled = subscription?.status === "cancelled" || subscription?.status === "expired";
 
   return (
     <>
@@ -113,8 +115,25 @@ export default function Step5Generate({
                     </Badge>
                   </HStack>
                   
+                  {/* Cancelled Subscription Status */}
+                  {isCancelled && (
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="red.50"
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor="red.200"
+                    >
+                      <Text fontWeight="medium">Subscription Status:</Text>
+                      <Badge colorScheme="red" variant="subtle">
+                        Cancelled
+                      </Badge>
+                    </HStack>
+                  )}
+                  
                   {/* Credit Information - Only show for free plan users */}
-                  {isFreePlan && userCredits && (
+                  {isFreePlan && !isCancelled && userCredits && (
                     <HStack
                       justify="space-between"
                       p={4}
@@ -134,7 +153,7 @@ export default function Step5Generate({
                   )}
                   
                   {/* Pro Plan Message */}
-                  {!isFreePlan && (
+                  {!isFreePlan && !isCancelled && (
                     <HStack
                       justify="space-between"
                       p={4}
@@ -170,15 +189,33 @@ export default function Step5Generate({
                 size="lg"
                 w="full"
                 leftIcon={<Icon as={FiPlay} />}
-                isDisabled={!content.trim() || (isFreePlan && userCredits ? !hasEnoughCredits : false)}
+                isDisabled={!content.trim() || (isFreePlan && !isCancelled && userCredits ? !hasEnoughCredits : false)}
               >
-                {isFreePlan && userCredits && !hasEnoughCredits 
+                {isFreePlan && !isCancelled && userCredits && !hasEnoughCredits 
                   ? "Insufficient Credits - Upgrade Required" 
                   : "Generate Assignment"
                 }
               </Button>
               
-              {isFreePlan && userCredits && !hasEnoughCredits && (
+              {/* Cancelled Subscription Message */}
+              {isCancelled && (
+                <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
+                  <Text color="red.700" fontSize="sm" textAlign="center" mb={3}>
+                    Your subscription has been cancelled. You now have access to the free plan features.
+                  </Text>
+                  <Button
+                    leftIcon={<Icon as={FiZap} />}
+                    colorScheme="orange"
+                    size="sm"
+                    w="full"
+                    onClick={() => window.location.href = "/plans"}
+                  >
+                    Upgrade to Pro for Unlimited Pages
+                  </Button>
+                </Box>
+              )}
+              
+              {isFreePlan && !isCancelled && userCredits && !hasEnoughCredits && (
                 <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
                   <Text color="red.700" fontSize="sm" textAlign="center">
                     You need {pageCount} credits but only have {availableCredits} available. 

@@ -218,12 +218,37 @@ export default function Dashboard() {
           <Box>
             {/* Header Section */}
             <VStack spacing={2} align="start" mb={8}>
-              <Heading size="xl" color="#1A1A1A">
-                Assignments Catalog
-              </Heading>
-              <Text color="#666">
-                Choose from your handwritten assignments or create a new one
-              </Text>
+              <Flex justify="space-between" align="center" w="full">
+                <VStack spacing={2} align="start">
+                  <Heading size="xl" color="#1A1A1A">
+                    Assignments Catalog
+                  </Heading>
+                  <Text color="#666">
+                    Choose from your handwritten assignments or create a new one
+                  </Text>
+                </VStack>
+                <Link href="/plans">
+                  <Button
+                    variant="outline"
+                    borderColor="gray.300"
+                    color="#666"
+                    _hover={{
+                      borderColor: "#FF6A00",
+                      color: "#FF6A00",
+                      bg: "orange.50",
+                    }}
+                    size="sm"
+                    px={4}
+                    py={2}
+                    fontSize="sm"
+                    fontWeight="medium"
+                    borderRadius="lg"
+                    transition="all 0.2s"
+                  >
+                    View Plans
+                  </Button>
+                </Link>
+              </Flex>
             </VStack>
 
             {/* Search and Upload Section */}
@@ -643,31 +668,54 @@ export default function Dashboard() {
                   <Text color="#666" fontSize="lg" mb={4}>
                     Start your journey with your first assignment
                   </Text>
-                  <Link href="/create">
-                    <Button
-                      size="lg"
-                      bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
-                      _hover={{
-                        bg: "linear-gradient(135deg, #FF8A33 0%, #FF6A00 100%)",
-                        transform: "translateY(-2px)",
-                        boxShadow: "0 10px 25px rgba(255, 106, 0, 0.4)",
-                      }}
-                      _active={{
-                        transform: "translateY(0px)",
-                      }}
-                      color="white"
-                      leftIcon={<Icon as={FiPlusCircle} />}
-                      px={8}
-                      py={6}
-                      fontSize="lg"
-                      fontWeight="semibold"
-                      borderRadius="xl"
-                      boxShadow="0 8px 20px rgba(255, 106, 0, 0.3)"
-                      transition="all 0.2s"
-                    >
-                      Create Your First Assignment
-                    </Button>
-                  </Link>
+                  <VStack spacing={4}>
+                    <Link href="/create">
+                      <Button
+                        size="lg"
+                        bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
+                        _hover={{
+                          bg: "linear-gradient(135deg, #FF8A33 0%, #FF6A00 100%)",
+                          transform: "translateY(-2px)",
+                          boxShadow: "0 10px 25px rgba(255, 106, 0, 0.4)",
+                        }}
+                        _active={{
+                          transform: "translateY(0px)",
+                        }}
+                        color="white"
+                        leftIcon={<Icon as={FiPlusCircle} />}
+                        px={8}
+                        py={6}
+                        fontSize="lg"
+                        fontWeight="semibold"
+                        borderRadius="xl"
+                        boxShadow="0 8px 20px rgba(255, 106, 0, 0.3)"
+                        transition="all 0.2s"
+                      >
+                        Create Your First Assignment
+                      </Button>
+                    </Link>
+                    <Link href="/plans">
+                      <Button
+                        variant="outline"
+                        borderColor="gray.300"
+                        color="#666"
+                        _hover={{
+                          borderColor: "#FF6A00",
+                          color: "#FF6A00",
+                          bg: "orange.50",
+                        }}
+                        size="md"
+                        px={6}
+                        py={4}
+                        fontSize="md"
+                        fontWeight="medium"
+                        borderRadius="lg"
+                        transition="all 0.2s"
+                      >
+                        View Plans & Pricing
+                      </Button>
+                    </Link>
+                  </VStack>
                 </Box>
               </VStack>
             </Container>

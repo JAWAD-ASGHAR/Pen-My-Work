@@ -9,6 +9,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const CTASection = ({
   accentColor,
@@ -17,6 +18,8 @@ const CTASection = ({
   accentColor: string;
   textColor: string;
 }) => {
+  const router = useRouter();
+
   return (
  
         <Box bg="#FF9966" position="relative" py={20} px={6}>
@@ -40,38 +43,54 @@ const CTASection = ({
                 just seconds.
               </Text>
 
-              <Flex
-                direction={{ base: "column", sm: "row" }}
-                gap={4}
-                maxW="md"
-                mx="auto"
-                align="center"
-              >
-                <Input
-                  placeholder="Enter your email"
-                  flex={1}
-                  h={14}
-                  borderRadius="lg"
-                  border="2px solid black"
-                  bg="white"
-                  _placeholder={{ color: "gray.900", fontWeight: "semibold" }}
-                  color={textColor}
-                  _focus={{ borderColor: accentColor, boxShadow: "none" }}
-                />
-                <Button
-                  bg={accentColor}
-                  _hover={{ bg: "orange.500" }}
-                  color="white"
-                  h={14}
-                  px={8}
-                  borderRadius="lg"
-                  fontWeight="semibold"
-                  border="2px solid black"
-                  boxShadow="4px 4px 0px #000000"
+              <VStack spacing={4}>
+                <Flex
+                  direction={{ base: "column", sm: "row" }}
+                  gap={4}
+                  maxW="md"
+                  mx="auto"
+                  align="center"
                 >
-                  Get Started
+                  <Input
+                    placeholder="Enter your email"
+                    flex={1}
+                    h={14}
+                    borderRadius="lg"
+                    border="2px solid black"
+                    bg="white"
+                    _placeholder={{ color: "gray.900", fontWeight: "semibold" }}
+                    color={textColor}
+                    _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                  />
+                  <Button
+                    bg={accentColor}
+                    _hover={{ bg: "orange.500" }}
+                    color="white"
+                    h={14}
+                    px={8}
+                    borderRadius="lg"
+                    fontWeight="semibold"
+                    border="2px solid black"
+                    boxShadow="4px 4px 0px #000000"
+                  >
+                    Get Started
+                  </Button>
+                </Flex>
+                
+                <Button
+                  variant="ghost"
+                  fontSize="md"
+                  fontWeight="medium"
+                  color="white"
+                  _hover={{
+                    color: "white",
+                    bg: "whiteAlpha.200"
+                  }}
+                  onClick={() => router.push("/plans")}
+                >
+                  View Plans & Pricing →
                 </Button>
-              </Flex>
+              </VStack>
 
               <Text fontSize="sm">
                 No credit card required • 7-day free trial • Cancel anytime
