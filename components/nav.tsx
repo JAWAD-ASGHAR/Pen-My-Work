@@ -134,17 +134,17 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             Use Cases
           </Link>
           <Link
-            href="#testimonials"
+            href="/plans"
             color="gray.800"
             fontWeight={"semibold"}
             _hover={{ color: "gray.900" }}
             transition="colors"
             onClick={(e) => {
               e.preventDefault();
-              handleSectionNavigation('testimonials');
+              router.push('/plans');
             }}
           >
-            Reviews
+            Pricing
           </Link>
           <Link
             href="#contact"
@@ -263,15 +263,15 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
                 Use Cases
               </Link>
               <Link
-                href="#testimonials"
+                href="/plans"
                 _hover={{ color: "gray.900" }}
                 onClick={(e) => {
                   e.preventDefault();
                   setMenuOpen(false);
-                  handleSectionNavigation('testimonials');
+                  router.push('/plans');
                 }}
               >
-                Reviews
+                Pricing
               </Link>
               <Link
                 href="#contact"

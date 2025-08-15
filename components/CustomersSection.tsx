@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 const CustomersSection = ({accentColor, textColor}: {accentColor: string, textColor: string}) => {
   return (
-    <Box as="section" id="testimonials" px={6} py={20} bg="white">
+    <Box as="section" id="contact" px={6} py={20} bg="white">
     <Container maxW="7xl">
       <VStack spacing={4} mb={16} textAlign="center">
         <Heading
