@@ -262,17 +262,24 @@ export default function PlansPage() {
             >
               Choose Your{" "}
               <Box position="relative" display="inline">
-                Plan
                 <Box
                   position="absolute"
-                  bottom="-8px"
-                  left={0}
-                  w="full"
-                  h={3}
-                  bg={accentColor}
-                  opacity={0.3}
-                  borderRadius="full"
-                />
+                  bottom="-16px"
+                  left="-8px"
+                  right="-8px"
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                    style={{ transform: "scale(0.9)" }}
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  Plan
+                </Box>
               </Box>
             </Heading>
             <Text fontSize="xl" color="#666" maxW="3xl">
@@ -625,7 +632,27 @@ export default function PlansPage() {
                 fontWeight="bold"
                 color={textColor}
               >
-                Frequently Asked Questions
+                Frequently Asked{" "}
+                <Box position="relative" display="inline">
+                  <Box
+                    position="absolute"
+                    bottom="-25px"
+                    left="-6px"
+                    right="-6px"
+                  >
+                    <Image
+                      src="/underline.svg"
+                      alt=""
+                      w="full"
+                      h="full"
+                      objectFit="cover"
+                      style={{ transform: "scale(0.9)" }}
+                    />
+                  </Box>
+                  <Box position="relative" zIndex={1} display="inline">
+                    Questions
+                  </Box>
+                </Box>
               </Heading>
             </VStack>
 
