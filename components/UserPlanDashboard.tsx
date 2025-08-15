@@ -57,6 +57,10 @@ type Subscription = {
 }
 
 export default function UserPlanDashboard() {
+  const bgColor = "#FDF7EE";
+  const textColor = "#1A1A1A";
+  const accentColor = "#FF6A00";
+  
   const [currentPlan, setCurrentPlan] = useState<Plan | null>(null)
   const [subscription, setSubscription] = useState<Subscription | null>(null)
   const [loading, setLoading] = useState(true)
@@ -191,11 +195,35 @@ export default function UserPlanDashboard() {
   const isCancelled = subscription?.status === "cancelled" || subscription?.status === "expired"
 
   return (
-    <Box minH="100vh" bg="gray.50" py={8}>
+    <Box minH="100vh" bg={bgColor} py={8}>
       <Container maxW="4xl">
         <VStack spacing={8}>
+          {/* Header Section */}
+          <VStack spacing={4} textAlign="center" mb={8}>
+            <Heading
+              fontSize={{ base: "4xl", lg: "5xl" }}
+              fontWeight="bold"
+              color={textColor}
+              lineHeight="tight"
+            >
+              Your Subscription
+            </Heading>
+            <Text fontSize="xl" color="#666" maxW="2xl">
+              Manage your plan and subscription settings
+            </Text>
+          </VStack>
+
           {/* Current Plan Card */}
-          <Card w="full" shadow="lg" borderRadius="2xl">
+          <Card 
+            w="full" 
+            shadow="lg" 
+            borderRadius="2xl"
+            bg="white"
+            border="2px solid #000000"
+            boxShadow="4px 4px 0px #000000"
+            _hover={{ boxShadow: "8px 8px 0px #000000" }}
+            transition="box-shadow 0.2s"
+          >
             <CardBody p={8}>
               <VStack spacing={6} align="stretch">
                 <HStack justify="space-between" align="start">
@@ -203,17 +231,20 @@ export default function UserPlanDashboard() {
                     <HStack>
                       <Icon 
                         as={isFreePlan ? FiStar : FiZap} 
-                        color={isFreePlan ? "gray.500" : "#FF6A00"} 
+                        color={isFreePlan ? "gray.500" : accentColor} 
                         h={6} 
                         w={6} 
                       />
-                      <Heading fontSize="2xl" fontWeight="bold">
+                      <Heading fontSize="2xl" fontWeight="bold" color={textColor}>
                         {currentPlan?.name}
                       </Heading>
                       {!isFreePlan && (
                         <Badge 
                           colorScheme={isActive ? "green" : isPaused ? "yellow" : "red"}
                           variant="subtle"
+                          borderRadius="full"
+                          px={3}
+                          py={1}
                         >
                           {subscription?.statusFormatted}
                         </Badge>
@@ -225,7 +256,7 @@ export default function UserPlanDashboard() {
                   </VStack>
                   
                   <VStack align="end" spacing={2}>
-                    <Text fontSize="3xl" fontWeight="bold" color="#FF6A00">
+                    <Text fontSize="3xl" fontWeight="bold" color={accentColor}>
                       {isFreePlan ? "Free" : `$${(parseInt(currentPlan?.price || "0") / 100).toFixed(2)}`}
                     </Text>
                     <Text color="gray.600">
@@ -236,21 +267,21 @@ export default function UserPlanDashboard() {
 
                 {/* Subscription Details */}
                 {!isFreePlan && subscription && (
-                  <Box bg="gray.50" p={4} borderRadius="xl">
-                    <VStack spacing={3} align="stretch">
-                      <Text fontWeight="semibold" color="gray.700">
+                  <Box bg={bgColor} p={6} borderRadius="xl" border="2px solid #000000">
+                    <VStack spacing={4} align="stretch">
+                      <Text fontWeight="semibold" color={textColor} fontSize="lg">
                         Subscription Details
                       </Text>
                       <HStack justify="space-between">
                         <Text color="gray.600">Next billing:</Text>
-                        <Text fontWeight="medium">
+                        <Text fontWeight="medium" color={textColor}>
                           {subscription.renewsAt ? new Date(subscription.renewsAt).toLocaleDateString() : "N/A"}
                         </Text>
                       </HStack>
                       {subscription.endsAt && (
                         <HStack justify="space-between">
                           <Text color="gray.600">Ends on:</Text>
-                          <Text fontWeight="medium">
+                          <Text fontWeight="medium" color={textColor}>
                             {new Date(subscription.endsAt).toLocaleDateString()}
                           </Text>
                         </HStack>
@@ -262,14 +293,14 @@ export default function UserPlanDashboard() {
                 {/* Features */}
                 {currentPlan?.features && (
                   <Box>
-                    <Text fontWeight="semibold" color="gray.700" mb={3}>
+                    <Text fontWeight="semibold" color={textColor} mb={4} fontSize="lg">
                       Your plan includes:
                     </Text>
-                    <List spacing={2}>
+                    <List spacing={3}>
                       {currentPlan.features.map((feature, index) => (
                         <ListItem key={index} display="flex" alignItems="center">
-                          <ListIcon as={FiCheck} color="green.500" />
-                          <Text color="gray.600" fontSize="sm">
+                          <ListIcon as={FiCheck} color="green.500" boxSize={5} />
+                          <Text color="gray.600" fontSize="md">
                             {feature}
                           </Text>
                         </ListItem>
@@ -280,66 +311,103 @@ export default function UserPlanDashboard() {
 
                 {/* Action Buttons */}
                 {!isFreePlan && subscription && isActive && (
-                  <HStack spacing={4} wrap="wrap">
-                    <Button
-                      leftIcon={<Icon as={FiCreditCard} />}
-                      onClick={handleUpdateBilling}
-                      isLoading={actionLoading === "billing"}
-                      loadingText="Opening..."
-                      colorScheme="blue"
-                      variant="outline"
-                    >
-                      Update Billing
-                    </Button>
-                    
-                    {isPaused ? (
+                  <VStack spacing={4} align="stretch">
+                    <Text fontWeight="semibold" color={textColor} fontSize="lg">
+                      Manage Subscription
+                    </Text>
+                    <HStack spacing={4} wrap="wrap">
                       <Button
-                        leftIcon={<Icon as={FiPlay} />}
-                        onClick={handleUnpauseSubscription}
-                        isLoading={actionLoading === "unpause"}
-                        loadingText="Resuming..."
-                        colorScheme="green"
+                        leftIcon={<Icon as={FiCreditCard} />}
+                        onClick={handleUpdateBilling}
+                        isLoading={actionLoading === "billing"}
+                        loadingText="Opening..."
+                        bg="white"
+                        color={textColor}
+                        border="2px solid #000000"
+                        boxShadow="4px 4px 0px #000000"
+                        _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                        transition="box-shadow 0.2s"
+                        borderRadius="xl"
+                        fontWeight="semibold"
                       >
-                        Resume Subscription
+                        Update Billing
                       </Button>
-                    ) : (
+                      
+                      {isPaused ? (
+                        <Button
+                          leftIcon={<Icon as={FiPlay} />}
+                          onClick={handleUnpauseSubscription}
+                          isLoading={actionLoading === "unpause"}
+                          loadingText="Resuming..."
+                          bg="green.500"
+                          color="white"
+                          border="2px solid #000000"
+                          boxShadow="4px 4px 0px #000000"
+                          _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                          transition="box-shadow 0.2s"
+                          borderRadius="xl"
+                          fontWeight="semibold"
+                        >
+                          Resume Subscription
+                        </Button>
+                      ) : (
+                        <Button
+                          leftIcon={<Icon as={FiPause} />}
+                          onClick={handlePauseSubscription}
+                          isLoading={actionLoading === "pause"}
+                          loadingText="Pausing..."
+                          bg="yellow.400"
+                          color="white"
+                          border="2px solid #000000"
+                          boxShadow="4px 4px 0px #000000"
+                          _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                          transition="box-shadow 0.2s"
+                          borderRadius="xl"
+                          fontWeight="semibold"
+                        >
+                          Pause Subscription
+                        </Button>
+                      )}
+                      
                       <Button
-                        leftIcon={<Icon as={FiPause} />}
-                        onClick={handlePauseSubscription}
-                        isLoading={actionLoading === "pause"}
-                        loadingText="Pausing..."
-                        colorScheme="yellow"
-                        variant="outline"
+                        leftIcon={<Icon as={FiX} />}
+                        onClick={onOpen}
+                        isLoading={actionLoading === "cancel"}
+                        loadingText="Cancelling..."
+                        bg="red.500"
+                        color="white"
+                        border="2px solid #000000"
+                        boxShadow="4px 4px 0px #000000"
+                        _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                        transition="box-shadow 0.2s"
+                        borderRadius="xl"
+                        fontWeight="semibold"
                       >
-                        Pause Subscription
+                        Cancel Subscription
                       </Button>
-                    )}
-                    
-                    <Button
-                      leftIcon={<Icon as={FiX} />}
-                      onClick={onOpen}
-                      isLoading={actionLoading === "cancel"}
-                      loadingText="Cancelling..."
-                      colorScheme="red"
-                      variant="outline"
-                    >
-                      Cancel Subscription
-                    </Button>
-                  </HStack>
+                    </HStack>
+                  </VStack>
                 )}
 
                 {/* Buy Plan Button for Cancelled/Expired Subscriptions */}
                 {!isFreePlan && subscription && isCancelled && (
                   <VStack spacing={4}>
-                    <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200" w="full">
-                      <Text color="red.700" fontSize="sm" textAlign="center" fontWeight="medium">
+                    <Box bg="red.50" p={6} borderRadius="xl" border="2px solid" borderColor="red.200" w="full">
+                      <Text color="red.700" fontSize="md" textAlign="center" fontWeight="medium">
                         Your subscription has been cancelled. You now have access to the free plan features.
                       </Text>
                     </Box>
                     <Button
                       leftIcon={<Icon as={FiZap} />}
-                      colorScheme="orange"
+                      bg={accentColor}
+                      color="white"
                       size="lg"
+                      border="2px solid #000000"
+                      boxShadow="4px 4px 0px #000000"
+                      _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                      transition="box-shadow 0.2s"
+                      borderRadius="xl"
+                      fontWeight="semibold"
                       onClick={() => window.location.href = "/plans"}
                     >
                       Buy a New Plan
@@ -351,8 +419,15 @@ export default function UserPlanDashboard() {
                 {isFreePlan && (
                   <Button
                     leftIcon={<Icon as={FiZap} />}
-                    colorScheme="orange"
+                    bg={accentColor}
+                    color="white"
                     size="lg"
+                    border="2px solid #000000"
+                    boxShadow="4px 4px 0px #000000"
+                    _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                    transition="box-shadow 0.2s"
+                    borderRadius="xl"
+                    fontWeight="semibold"
                     onClick={() => window.location.href = "/plans"}
                   >
                     Upgrade to Pro
@@ -371,24 +446,47 @@ export default function UserPlanDashboard() {
         onClose={onClose}
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogContent
+            bg="white"
+            border="2px solid #000000"
+            boxShadow="4px 4px 0px #000000"
+            borderRadius="xl"
+          >
+            <AlertDialogHeader fontSize="lg" fontWeight="bold" color={textColor}>
               Cancel Subscription
             </AlertDialogHeader>
 
-            <AlertDialogBody>
+            <AlertDialogBody color="gray.600">
               Are you sure you want to cancel your subscription? You&apos;ll continue to have access until the end of your current billing period.
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button 
+                ref={cancelRef} 
+                onClick={onClose}
+                bg="white"
+                color={textColor}
+                border="2px solid #000000"
+                boxShadow="4px 4px 0px #000000"
+                _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                transition="box-shadow 0.2s"
+                borderRadius="xl"
+                fontWeight="semibold"
+              >
                 Keep Subscription
               </Button>
               <Button 
-                colorScheme="red" 
+                bg="red.500"
+                color="white"
                 onClick={handleCancelSubscription} 
                 ml={3}
                 isLoading={actionLoading === "cancel"}
+                border="2px solid #000000"
+                boxShadow="4px 4px 0px #000000"
+                _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                transition="box-shadow 0.2s"
+                borderRadius="xl"
+                fontWeight="semibold"
               >
                 Cancel Subscription
               </Button>
