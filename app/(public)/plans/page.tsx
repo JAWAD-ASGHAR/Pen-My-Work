@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -19,16 +19,24 @@ import {
   ListIcon,
   Divider,
   Image,
-} from "@chakra-ui/react"
-import { useState, useEffect } from "react"
-import { FiCheck, FiStar, FiZap, FiUsers, FiDownload, FiRepeat, FiShield } from "react-icons/fi"
-import { gsap } from "gsap"
-import { useRef } from "react"
-import { Banner } from "@/components/banner"
-import { Navbar } from "@/components/nav"
-import { useRouter } from "next/navigation"
-import { getPlans } from "@/server/actions/user-plans"
-import { PlanButton } from '@/components/PlanButton'
+} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import {
+  FiCheck,
+  FiStar,
+  FiZap,
+  FiUsers,
+  FiDownload,
+  FiRepeat,
+  FiShield,
+} from "react-icons/fi";
+import { gsap } from "gsap";
+import { useRef } from "react";
+import { Banner } from "@/components/banner";
+import { Navbar } from "@/components/nav";
+import { useRouter } from "next/navigation";
+import { getPlans } from "@/server/actions/user-plans";
+import { PlanButton } from "@/components/PlanButton";
 
 type Plan = {
   planId: string;
@@ -46,50 +54,50 @@ type Plan = {
   trialInterval?: string | null;
   trialIntervalCount?: number | null;
   sort?: number | null;
-}
+};
 
 export default function PlansPage() {
-  const bgColor = "#F7F7D2"
-  const textColor = "#1A1A1A"
-  const accentColor = "#FF6A00"
-  const router = useRouter()
-  
-  const plansRef = useRef<HTMLDivElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
-  const bannerRef = useRef<HTMLDivElement>(null)
-  const heroRef = useRef<HTMLDivElement>(null)
-  const featuresRef = useRef<HTMLDivElement>(null)
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [plans, setPlans] = useState<Plan[]>([])
-  const [loading, setLoading] = useState(true)
+  const bgColor = "#F7F7D2";
+  const textColor = "#1A1A1A";
+  const accentColor = "#FF6A00";
+  const router = useRouter();
+
+  const plansRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
+      setScrolled(window.scrollY > 50);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const plansData = await getPlans()
-        setPlans(plansData)
+        const plansData = await getPlans();
+        setPlans(plansData);
       } catch (error) {
-        console.error("Error fetching plans:", error)
+        console.error("Error fetching plans:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchPlans()
-  }, [])
+    fetchPlans();
+  }, []);
 
   useEffect(() => {
-    if (loading) return
+    if (loading) return;
 
     const ctx = gsap.context(() => {
       // Banner animation
@@ -97,38 +105,66 @@ export default function PlansPage() {
         bannerRef.current,
         { y: -50, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
-      )
+      );
 
       // Header animation
       gsap.fromTo(
         headerRef.current?.children || [],
         { y: -30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: "power2.out" }
-      )
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          delay: 0.2,
+          ease: "power2.out",
+        }
+      );
 
       // Hero content animation
       gsap.fromTo(
         heroRef.current?.children || [],
         { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.4, ease: "power2.out" }
-      )
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          delay: 0.4,
+          ease: "power2.out",
+        }
+      );
 
       // Plans animation - smoother and less aggressive
       gsap.fromTo(
         plansRef.current?.children || [],
         { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.6, ease: "power2.out" }
-      )
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          delay: 0.6,
+          ease: "power2.out",
+        }
+      );
 
       // Features animation
       gsap.fromTo(
         featuresRef.current?.children || [],
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 1.0, ease: "power2.out" }
-      )
-    })
-    return () => ctx.revert()
-  }, [loading])
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          delay: 1.0,
+          ease: "power2.out",
+        }
+      );
+    });
+    return () => ctx.revert();
+  }, [loading]);
 
   // Function to get plan display data based on database plan
   const getPlanDisplayData = (plan: {
@@ -142,29 +178,35 @@ export default function PlansPage() {
   }) => {
     const baseData = {
       name: plan.name,
-      price: plan.price === "0" ? "$0" : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
+      price:
+        plan.price === "0"
+          ? "$0"
+          : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
       period: plan.price === "0" ? "forever" : "per month",
       description: plan.description,
       color: plan.planId === "free" ? "gray.500" : accentColor,
       bgColor: plan.planId === "free" ? "gray.50" : "orange.50",
       popular: plan.planId === "pro",
-      buttonText: plan.planId === "free" ? "Get Started Free" : "Start Pro Trial",
-      buttonVariant: plan.planId === "free" ? "outline" as const : "solid" as const,
+      buttonText:
+        plan.planId === "free" ? "Get Started Free" : "Start Pro Trial",
+      buttonVariant:
+        plan.planId === "free" ? ("outline" as const) : ("solid" as const),
       icon: plan.planId === "free" ? FiStar : FiZap,
       features: Array.isArray(plan.features) ? plan.features : [],
       limitations: Array.isArray(plan.limitations) ? plan.limitations : [],
       planId: plan.planId,
       variantId: plan.variantId || undefined,
-    }
+    };
 
-    return baseData
-  }
+    return baseData;
+  };
 
   const features = [
     {
       icon: FiDownload,
       title: "High-Quality Downloads",
-      description: "Get your handwritten pages in multiple formats and resolutions",
+      description:
+        "Get your handwritten pages in multiple formats and resolutions",
     },
     {
       icon: FiRepeat,
@@ -181,22 +223,34 @@ export default function PlansPage() {
       title: "Team Collaboration",
       description: "Share and collaborate with team members seamlessly",
     },
-  ]
+  ];
 
   if (loading) {
     return (
-      <Box minH="100vh" bg="white" display="flex" alignItems="center" justifyContent="center">
+      <Box
+        minH="100vh"
+        bg="white"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
         <Text>Loading plans...</Text>
       </Box>
-    )
+    );
   }
 
   return (
     <Box minH="100vh" bg="white">
       <Banner ref={bannerRef} />
       <Box h="16px" />
-      <Navbar ref={headerRef} scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} router={router} />
-      
+      <Navbar
+        ref={headerRef}
+        scrolled={scrolled}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        router={router}
+      />
+
       {/* Hero Section - Matching landing page design */}
       <Box as="section" px={6} py={20} bg={"white"}>
         <Container maxW="7xl">
@@ -223,32 +277,35 @@ export default function PlansPage() {
               </Box>
             </Heading>
             <Text fontSize="xl" color="#666" maxW="3xl">
-              Transform your digital text into authentic handwritten pages. Start free and upgrade as you grow.
+              Transform your digital text into authentic handwritten pages.
+              Start free and upgrade as you grow.
             </Text>
           </VStack>
 
           {/* Plans Grid - Improved design */}
-          <Grid 
+          <Grid
             ref={plansRef}
-            templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }} 
-            gap={8} 
+            templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }}
+            gap={8}
             mb={16}
           >
             {plans.map((plan, index) => {
-              const planData = getPlanDisplayData(plan)
+              const planData = getPlanDisplayData(plan);
               return (
                 <Card
                   key={index}
                   bg="white"
                   shadow="lg"
                   borderRadius="2xl"
-                  border={planData.popular ? `2px solid ${accentColor}` : "1px solid"}
+                  border={
+                    planData.popular ? `2px solid ${accentColor}` : "1px solid"
+                  }
                   borderColor={planData.popular ? accentColor : "gray.200"}
                   position="relative"
-                  _hover={{ 
-                    shadow: "xl", 
+                  _hover={{
+                    shadow: "xl",
                     transform: "translateY(-4px)",
-                    borderColor: planData.popular ? accentColor : "gray.300"
+                    borderColor: planData.popular ? accentColor : "gray.300",
                   }}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                   overflow="hidden"
@@ -270,7 +327,7 @@ export default function PlansPage() {
                       Most Popular
                     </Badge>
                   )}
-                  
+
                   <CardBody p={8}>
                     <VStack spacing={6} align="stretch">
                       {/* Plan Header */}
@@ -289,7 +346,11 @@ export default function PlansPage() {
                           <Icon as={planData.icon} h={8} w={8} />
                         </Box>
                         <VStack spacing={2}>
-                          <Heading fontSize="2xl" fontWeight="bold" color={textColor}>
+                          <Heading
+                            fontSize="2xl"
+                            fontWeight="bold"
+                            color={textColor}
+                          >
                             {planData.name}
                           </Heading>
                           <Text color="#666" fontSize="md">
@@ -301,7 +362,11 @@ export default function PlansPage() {
                       {/* Pricing */}
                       <VStack spacing={1} textAlign="center">
                         <HStack spacing={1} justify="center">
-                          <Text fontSize="5xl" fontWeight="bold" color={textColor}>
+                          <Text
+                            fontSize="5xl"
+                            fontWeight="bold"
+                            color={textColor}
+                          >
                             {planData.price}
                           </Text>
                           <Text fontSize="lg" color="#666">
@@ -314,41 +379,72 @@ export default function PlansPage() {
 
                       {/* Features */}
                       <VStack spacing={4} align="stretch">
-                        <Text fontWeight="semibold" color={textColor} fontSize="lg">
+                        <Text
+                          fontWeight="semibold"
+                          color={textColor}
+                          fontSize="lg"
+                        >
                           What&apos;s included:
                         </Text>
                         <List spacing={3}>
-                          {planData.features.map((feature: string, featureIndex: number) => (
-                            <ListItem key={featureIndex} display="flex" alignItems="center">
-                              <ListIcon as={FiCheck} color="green.500" />
-                              <Text color="#666" fontSize="sm">
-                                {feature}
-                              </Text>
-                            </ListItem>
-                          ))}
+                          {planData.features.map(
+                            (feature: string, featureIndex: number) => (
+                              <ListItem
+                                key={featureIndex}
+                                display="flex"
+                                alignItems="center"
+                              >
+                                <ListIcon as={FiCheck} color="green.500" />
+                                <Text color="#666" fontSize="sm">
+                                  {feature}
+                                </Text>
+                              </ListItem>
+                            )
+                          )}
                         </List>
-                        
-                        {planData.limitations && planData.limitations.length > 0 && (
-                          <>
-                            <Text fontWeight="semibold" color="red.500" fontSize="lg" mt={4}>
-                              Limitations:
-                            </Text>
-                            <List spacing={3}>
-                              {planData.limitations.map((limitation: string, limitationIndex: number) => (
-                                <ListItem key={limitationIndex} display="flex" alignItems="center">
-                                  <Box w={2} h={2} bg="red.500" borderRadius="full" mr={3} />
-                                  <Text color="#666" fontSize="sm">
-                                    {limitation}
-                                  </Text>
-                                </ListItem>
-                              ))}
-                            </List>
-                          </>
-                        )}
+
+                        {planData.limitations &&
+                          planData.limitations.length > 0 && (
+                            <>
+                              <Text
+                                fontWeight="semibold"
+                                color="red.500"
+                                fontSize="lg"
+                                mt={4}
+                              >
+                                Limitations:
+                              </Text>
+                              <List spacing={3}>
+                                {planData.limitations.map(
+                                  (
+                                    limitation: string,
+                                    limitationIndex: number
+                                  ) => (
+                                    <ListItem
+                                      key={limitationIndex}
+                                      display="flex"
+                                      alignItems="center"
+                                    >
+                                      <Box
+                                        w={2}
+                                        h={2}
+                                        bg="red.500"
+                                        borderRadius="full"
+                                        mr={3}
+                                      />
+                                      <Text color="#666" fontSize="sm">
+                                        {limitation}
+                                      </Text>
+                                    </ListItem>
+                                  )
+                                )}
+                              </List>
+                            </>
+                          )}
                       </VStack>
 
                       {/* CTA Button */}
-                      <PlanButton 
+                      <PlanButton
                         plan={{
                           planId: plan.planId,
                           name: plan.name,
@@ -359,7 +455,7 @@ export default function PlansPage() {
                     </VStack>
                   </CardBody>
                 </Card>
-              )
+              );
             })}
 
             {/* Manual Handwriting Comparison Card */}
@@ -370,10 +466,10 @@ export default function PlansPage() {
               border="1px solid"
               borderColor="gray.300"
               position="relative"
-              _hover={{ 
-                shadow: "xl", 
+              _hover={{
+                shadow: "xl",
                 transform: "translateY(-4px)",
-                borderColor: "gray.400"
+                borderColor: "gray.400",
               }}
               transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
               overflow="hidden"
@@ -397,7 +493,11 @@ export default function PlansPage() {
                       <Icon as={FiUsers} h={8} w={8} />
                     </Box>
                     <VStack spacing={2}>
-                      <Heading fontSize="2xl" fontWeight="bold" color="gray.500">
+                      <Heading
+                        fontSize="2xl"
+                        fontWeight="bold"
+                        color="gray.500"
+                      >
                         Manual Handwriting
                       </Heading>
                       <Text color="gray.400" fontSize="md">
@@ -409,7 +509,12 @@ export default function PlansPage() {
                   {/* Pricing with strikethrough */}
                   <VStack spacing={1} textAlign="center">
                     <HStack spacing={1} justify="center">
-                      <Text fontSize="5xl" fontWeight="bold" color="gray.400" textDecoration="line-through">
+                      <Text
+                        fontSize="5xl"
+                        fontWeight="bold"
+                        color="gray.400"
+                        textDecoration="line-through"
+                      >
                         $50
                       </Text>
                       <Text fontSize="lg" color="gray.400">
@@ -430,25 +535,49 @@ export default function PlansPage() {
                     </Text>
                     <List spacing={3}>
                       <ListItem display="flex" alignItems="center">
-                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
                         <Text color="gray.400" fontSize="sm">
                           One-time handwriting service
                         </Text>
                       </ListItem>
                       <ListItem display="flex" alignItems="center">
-                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
                         <Text color="gray.400" fontSize="sm">
                           No digital copies
                         </Text>
                       </ListItem>
                       <ListItem display="flex" alignItems="center">
-                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
                         <Text color="gray.400" fontSize="sm">
                           Limited revisions
                         </Text>
                       </ListItem>
                       <ListItem display="flex" alignItems="center">
-                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
                         <Text color="gray.400" fontSize="sm">
                           Shipping costs extra
                         </Text>
@@ -470,10 +599,10 @@ export default function PlansPage() {
                     cursor="not-allowed"
                     _hover={{
                       bg: "gray.100",
-                      transform: "none"
+                      transform: "none",
                     }}
                     _active={{
-                      transform: "none"
+                      transform: "none",
                     }}
                   >
                     Not Available
@@ -486,24 +615,44 @@ export default function PlansPage() {
           {/* Features Section - Improved design */}
           <VStack ref={featuresRef} spacing={12}>
             <VStack spacing={4} textAlign="center">
-              <Heading fontSize={{ base: "3xl", lg: "4xl" }} fontWeight="bold" color={textColor}>
+              <Heading
+                fontSize={{ base: "3xl", lg: "4xl" }}
+                fontWeight="bold"
+                color={textColor}
+              >
                 All Plans Include
               </Heading>
               <Text fontSize="lg" color="#666" maxW="2xl">
-                Powerful features to help you create authentic handwritten content
+                Powerful features to help you create authentic handwritten
+                content
               </Text>
             </VStack>
 
-            <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }} gap={6}>
+            <Grid
+              templateColumns={{
+                base: "1fr",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(4, 1fr)",
+              }}
+              gap={6}
+            >
               {features.map((feature, index) => (
-                <Card key={index} bg="white" shadow="md" borderRadius="xl" border="1px solid" borderColor="gray.200" _hover={{ shadow: "lg", transform: "translateY(-2px)" }} transition="all 0.3s ease">
+                <Card
+                  key={index}
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
+                >
                   <CardBody p={6} textAlign="center">
                     <VStack spacing={4}>
                       <Box
                         w={12}
                         h={12}
-                        bg={"white"}
-                        color={accentColor}
+                        bg={accentColor}
+                        color={"white"}
                         borderRadius="lg"
                         display="flex"
                         alignItems="center"
@@ -555,7 +704,11 @@ export default function PlansPage() {
         <Container maxW="4xl">
           <VStack spacing={12}>
             <VStack spacing={4} textAlign="center">
-              <Heading fontSize={{ base: "3xl", lg: "4xl" }} fontWeight="bold" color={textColor}>
+              <Heading
+                fontSize={{ base: "3xl", lg: "4xl" }}
+                fontWeight="bold"
+                color={textColor}
+              >
                 Frequently Asked Questions
               </Heading>
             </VStack>
@@ -564,29 +717,47 @@ export default function PlansPage() {
               {[
                 {
                   question: "Can I cancel my subscription anytime?",
-                  answer: "Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.",
+                  answer:
+                    "Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.",
                 },
                 {
                   question: "What payment methods do you accept?",
-                  answer: "We accept all major credit cards, PayPal, and Apple Pay. All payments are processed securely through Stripe.",
+                  answer:
+                    "We accept all major credit cards, PayPal, and Apple Pay. All payments are processed securely through Stripe.",
                 },
                 {
                   question: "Is there a free trial?",
-                  answer: "Yes! All paid plans come with a 7-day free trial. No credit card required to start your trial.",
+                  answer:
+                    "Yes! All paid plans come with a 7-day free trial. No credit card required to start your trial.",
                 },
                 {
                   question: "Can I upgrade or downgrade my plan?",
-                  answer: "Absolutely! You can change your plan at any time. Upgrades take effect immediately, while downgrades take effect at the next billing cycle.",
+                  answer:
+                    "Absolutely! You can change your plan at any time. Upgrades take effect immediately, while downgrades take effect at the next billing cycle.",
                 },
                 {
                   question: "What happens if I exceed my monthly limit?",
-                  answer: "You'll receive a notification when you're close to your limit. You can either upgrade your plan or wait until the next billing cycle.",
+                  answer:
+                    "You'll receive a notification when you're close to your limit. You can either upgrade your plan or wait until the next billing cycle.",
                 },
               ].map((faq, index) => (
-                <Card key={index} bg="white" shadow="sm" borderRadius="xl" border="1px solid" borderColor="gray.200" w="full" _hover={{ shadow: "md" }} transition="all 0.3s ease">
+                <Card
+                  key={index}
+                  w="full"
+                  bg="white"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
+                >
                   <CardBody p={6}>
                     <VStack spacing={3} align="stretch">
-                      <Text fontWeight="semibold" color={textColor} fontSize="lg">
+                      <Text
+                        fontWeight="semibold"
+                        color={textColor}
+                        fontSize="lg"
+                      >
                         {faq.question}
                       </Text>
                       <Text color="#666" lineHeight="relaxed">
@@ -631,13 +802,24 @@ export default function PlansPage() {
         position="relative"
         overflow="hidden"
       >
-        <Container maxW="4xl" textAlign="center" position="relative" zIndex={10}>
+        <Container
+          maxW="4xl"
+          textAlign="center"
+          position="relative"
+          zIndex={10}
+        >
           <VStack spacing={8}>
-            <Heading fontSize={{ base: "4xl", lg: "5xl" }} fontWeight="bold" color="gray.800" lineHeight="tight">
+            <Heading
+              fontSize={{ base: "4xl", lg: "5xl" }}
+              fontWeight="bold"
+              color="gray.800"
+              lineHeight="tight"
+            >
               Ready to Get Started?
             </Heading>
             <Text fontSize="xl" color="gray.800" maxW="2xl">
-              Join thousands of users who trust Pen My Work for authentic handwritten content. Start your free trial today.
+              Join thousands of users who trust Pen My Work for authentic
+              handwritten content. Start your free trial today.
             </Text>
 
             <Flex
@@ -656,9 +838,9 @@ export default function PlansPage() {
                 fontSize="lg"
                 border="2px solid black"
                 boxShadow="4px 4px 0px #000000"
-                _hover={{ 
+                _hover={{
                   bg: "gray.100",
-                  boxShadow: "8px 8px 0px #000000" 
+                  boxShadow: "8px 8px 0px #000000",
                 }}
                 transition="all 0.2s"
                 onClick={() => router.push("/sign-in")}
@@ -675,9 +857,9 @@ export default function PlansPage() {
                 color="gray.800"
                 fontSize="lg"
                 border="2px solid black"
-                onClick={() => router.push("/plans")}
+                onClick={() => router.push("/sign-in")}
               >
-                View All Plans
+                Sign In
               </Button>
             </Flex>
 
@@ -688,5 +870,5 @@ export default function PlansPage() {
         </Container>
       </Box>
     </Box>
-  )
+  );
 }
