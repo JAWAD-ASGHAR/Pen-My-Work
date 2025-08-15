@@ -13,16 +13,14 @@ import {
   Icon,
   Text,
   VStack,
-  Badge,
   List,
   ListItem,
   ListIcon,
-  Divider,
   Image,
+  Divider,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import {
-  FiCheck,
   FiStar,
   FiZap,
   FiUsers,
@@ -30,6 +28,7 @@ import {
   FiRepeat,
   FiShield,
 } from "react-icons/fi";
+import { FaCircleCheck } from "react-icons/fa6";
 import { gsap } from "gsap";
 import { useRef } from "react";
 import { Banner } from "@/components/banner";
@@ -303,58 +302,22 @@ export default function PlansPage() {
                   _hover={{ boxShadow: "8px 8px 0px #000000" }}
                   transition="box-shadow 0.2s"
                 >
-                  {planData.popular && (
-                    <Badge
-                      position="absolute"
-                      top={4}
-                      right={4}
-                      bg={accentColor}
-                      color="white"
-                      px={3}
-                      py={1}
-                      borderRadius="full"
-                      fontSize="xs"
-                      fontWeight="bold"
-                      zIndex={10}
-                    >
-                      Most Popular
-                    </Badge>
-                  )}
-
                   <CardBody p={8}>
-                    <VStack spacing={6} align="stretch">
-                      {/* Plan Header */}
-                      <VStack spacing={4} textAlign="center">
-                        <Box
-                          w={16}
-                          h={16}
-                          bg={planData.bgColor}
-                          color={planData.color}
-                          borderRadius="xl"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          shadow="sm"
+                    <VStack  align="start">
+                      {/* Plan Title */}
+                      <VStack spacing={2} align="start">
+                        <Heading
+                          fontSize="xl"
+                          fontWeight="semibold"
+                          color={textColor}
                         >
-                          <Icon as={planData.icon} h={8} w={8} />
-                        </Box>
-                        <VStack spacing={2}>
-                          <Heading
-                            fontSize="2xl"
-                            fontWeight="bold"
-                            color={textColor}
-                          >
-                            {planData.name}
-                          </Heading>
-                          <Text color="#666" fontSize="md">
-                            {planData.description}
-                          </Text>
-                        </VStack>
+                          {planData.name}
+                        </Heading>
                       </VStack>
 
                       {/* Pricing */}
-                      <VStack spacing={1} textAlign="center">
-                        <HStack spacing={1} justify="center">
+                      <VStack align="start">
+                        <HStack spacing={1}>
                           <Text
                             fontSize="5xl"
                             fontWeight="bold"
@@ -366,74 +329,9 @@ export default function PlansPage() {
                             /{planData.period}
                           </Text>
                         </HStack>
-                      </VStack>
-
-                      <Divider borderColor="gray.200" />
-
-                      {/* Features */}
-                      <VStack spacing={4} align="stretch">
-                        <Text
-                          fontWeight="semibold"
-                          color={textColor}
-                          fontSize="lg"
-                        >
-                          What&apos;s included:
+                        <Text color="#666" fontSize="sm">
+                          {planData.description}
                         </Text>
-                        <List spacing={3}>
-                          {planData.features.map(
-                            (feature: string, featureIndex: number) => (
-                              <ListItem
-                                key={featureIndex}
-                                display="flex"
-                                alignItems="center"
-                              >
-                                <ListIcon as={FiCheck} color="green.500" />
-                                <Text color="#666" fontSize="sm">
-                                  {feature}
-                                </Text>
-                              </ListItem>
-                            )
-                          )}
-                        </List>
-
-                        {planData.limitations &&
-                          planData.limitations.length > 0 && (
-                            <>
-                              <Text
-                                fontWeight="semibold"
-                                color="red.500"
-                                fontSize="lg"
-                                mt={4}
-                              >
-                                Limitations:
-                              </Text>
-                              <List spacing={3}>
-                                {planData.limitations.map(
-                                  (
-                                    limitation: string,
-                                    limitationIndex: number
-                                  ) => (
-                                    <ListItem
-                                      key={limitationIndex}
-                                      display="flex"
-                                      alignItems="center"
-                                    >
-                                      <Box
-                                        w={2}
-                                        h={2}
-                                        bg="red.500"
-                                        borderRadius="full"
-                                        mr={3}
-                                      />
-                                      <Text color="#666" fontSize="sm">
-                                        {limitation}
-                                      </Text>
-                                    </ListItem>
-                                  )
-                                )}
-                              </List>
-                            </>
-                          )}
                       </VStack>
 
                       {/* CTA Button */}
@@ -445,6 +343,47 @@ export default function PlansPage() {
                           variantId: plan.variantId || undefined,
                         }}
                       />
+
+                      <Divider borderColor="gray.400" my={4} />
+
+                      {/* Features Section */}
+                      <VStack spacing={2} align="start">
+                        <Text
+                          fontWeight="bold"
+                          color={textColor}
+                          fontSize="sm"
+                          textTransform="uppercase"
+                        >
+                          Features
+                        </Text>
+                        <Text color="#gray.700" fontSize="sm" mb={4}>
+                          {planData.planId === "free"
+                            ? "Everything you need to get started"
+                            : planData.planId === "pro"
+                            ? "Everything in our free plan plus...."
+                            : "Everything in Pro plus...."}
+                        </Text>
+                        <List spacing={2}>
+                          {planData.features
+                            .slice(0, 4)
+                            .map((feature: string, featureIndex: number) => (
+                              <ListItem
+                                key={featureIndex}
+                                display="flex"
+                                alignItems="center"
+                              >
+                                <ListIcon
+                                  as={FaCircleCheck}
+                                  color="green.500"
+                                  boxSize={4}
+                                />
+                                <Text color="#gray.700" fontSize="sm">
+                                  {feature}
+                                </Text>
+                              </ListItem>
+                            ))}
+                        </List>
+                      </VStack>
                     </VStack>
                   </CardBody>
                 </Card>
@@ -464,33 +403,11 @@ export default function PlansPage() {
             >
               <CardBody p={8}>
                 <VStack spacing={6} align="stretch">
-                  {/* Plan Header */}
-                  <VStack spacing={4} textAlign="center">
-                    <Box
-                      w={16}
-                      h={16}
-                      bg="gray.100"
-                      color="gray.500"
-                      borderRadius="xl"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      shadow="sm"
-                    >
-                      <Icon as={FiUsers} h={8} w={8} />
-                    </Box>
-                    <VStack spacing={2}>
-                      <Heading
-                        fontSize="2xl"
-                        fontWeight="bold"
-                        color="gray.500"
-                      >
-                        Manual Handwriting
-                      </Heading>
-                      <Text color="gray.400" fontSize="md">
-                        Hire someone to write by hand
-                      </Text>
-                    </VStack>
+                  {/* Plan Title */}
+                  <VStack spacing={2} textAlign="center">
+                    <Heading fontSize="2xl" fontWeight="bold" color="gray.500">
+                      Manual Handwriting
+                    </Heading>
                   </VStack>
 
                   {/* Pricing with strikethrough */}
@@ -508,68 +425,9 @@ export default function PlansPage() {
                         /page
                       </Text>
                     </HStack>
-                    <Text fontSize="sm" color="gray.500" fontWeight="medium">
-                      + 2-3 days wait time
+                    <Text color="gray.400" fontSize="md">
+                      Hire someone to write by hand
                     </Text>
-                  </VStack>
-
-                  <Divider borderColor="gray.200" />
-
-                  {/* Features */}
-                  <VStack spacing={4} align="stretch">
-                    <Text fontWeight="semibold" color="gray.500" fontSize="lg">
-                      What you get:
-                    </Text>
-                    <List spacing={3}>
-                      <ListItem display="flex" alignItems="center">
-                        <Box
-                          w={2}
-                          h={2}
-                          bg="gray.400"
-                          borderRadius="full"
-                          mr={3}
-                        />
-                        <Text color="gray.400" fontSize="sm">
-                          One-time handwriting service
-                        </Text>
-                      </ListItem>
-                      <ListItem display="flex" alignItems="center">
-                        <Box
-                          w={2}
-                          h={2}
-                          bg="gray.400"
-                          borderRadius="full"
-                          mr={3}
-                        />
-                        <Text color="gray.400" fontSize="sm">
-                          No digital copies
-                        </Text>
-                      </ListItem>
-                      <ListItem display="flex" alignItems="center">
-                        <Box
-                          w={2}
-                          h={2}
-                          bg="gray.400"
-                          borderRadius="full"
-                          mr={3}
-                        />
-                        <Text color="gray.400" fontSize="sm">
-                          Limited revisions
-                        </Text>
-                      </ListItem>
-                      <ListItem display="flex" alignItems="center">
-                        <Box
-                          w={2}
-                          h={2}
-                          bg="gray.400"
-                          borderRadius="full"
-                          mr={3}
-                        />
-                        <Text color="gray.400" fontSize="sm">
-                          Shipping costs extra
-                        </Text>
-                      </ListItem>
-                    </List>
                   </VStack>
 
                   {/* Disabled CTA Button */}
@@ -594,6 +452,71 @@ export default function PlansPage() {
                   >
                     Not Available
                   </Button>
+
+                  {/* Features Section */}
+                  <VStack spacing={2} align="stretch">
+                    <Text
+                      fontWeight="bold"
+                      color="gray.500"
+                      fontSize="sm"
+                      textTransform="uppercase"
+                    >
+                      Features
+                    </Text>
+                    <Text color="gray.400" fontSize="xs" mb={2}>
+                      What you get with manual service
+                    </Text>
+                    <List spacing={1}>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.400" fontSize="xs">
+                          One-time handwriting service
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.400" fontSize="xs">
+                          No digital copies
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.400" fontSize="xs">
+                          Limited revisions
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.400" fontSize="xs">
+                          Shipping costs extra
+                        </Text>
+                      </ListItem>
+                    </List>
+                  </VStack>
                 </VStack>
               </CardBody>
             </Card>

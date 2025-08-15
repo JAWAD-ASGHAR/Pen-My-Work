@@ -64,17 +64,17 @@ export function PlanButton({ plan }: PlanButtonProps) {
 
   return (
     <Button
+      mt={3}
       isLoading={loading}
       loadingText="Processing..."
       onClick={handleClick}
-      bg={plan.price === "0" ? "transparent" : "#FF6A00"}
-      color={plan.price === "0" ? "#FF6A00" : "white"}
-      border={plan.price === "0" ? "2px solid #FF6A00" : "none"}
+      bg={plan.price === "0" ? "black" : "#FF6A00"}
+      color={"white"}
       _hover={{
-        bg: plan.price === "0" ? "orange.50" : "#FF8A33",
+        opacity: 0.8,
       }}
-      h={14}
-      borderRadius="full"
+      h={12}
+      borderRadius="xl"
       fontWeight="semibold"
       fontSize="lg"
       w="full"
