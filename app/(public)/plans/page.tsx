@@ -36,6 +36,7 @@ import { Navbar } from "@/components/nav";
 import { useRouter } from "next/navigation";
 import { getPlans } from "@/server/actions/user-plans";
 import { PlanButton } from "@/components/PlanButton";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type Plan = {
   planId: string;
@@ -259,15 +260,7 @@ export default function PlansPage() {
 
   if (loading) {
     return (
-      <Box
-        minH="100vh"
-        bg="white"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Text>Loading plans...</Text>
-      </Box>
+      <LoadingSpinner />
     );
   }
 

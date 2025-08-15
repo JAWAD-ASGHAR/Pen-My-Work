@@ -202,7 +202,7 @@ export default function AssignmentDetails() {
   };
 
   if (loading) {
-    return <LoadingSpinner message="Loading assignment details..." />;
+    return <LoadingSpinner />;
   }
 
   if (error || !assignment) {
