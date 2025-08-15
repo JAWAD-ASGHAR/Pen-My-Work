@@ -295,11 +295,11 @@ export default function PlansPage() {
                   key={index}
                   position="relative"
                   overflow="hidden"
-                  bg="#FDF7EE"
-                  border="2px solid #000000"
-                  boxShadow="4px 4px 0px #000000"
+                  bg={planData.popular ? "gray.900" : "#FDF7EE"}
+                  border={planData.popular ? `2px solid ${accentColor}` : "2px solid #000000"}
+                  boxShadow={planData.popular ? `4px 4px 0px ${accentColor}` : "4px 4px 0px #000000"}
                   borderRadius="xl"
-                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  _hover={{ boxShadow: planData.popular ? `8px 8px 0px ${accentColor}` : "8px 8px 0px #000000" }}
                   transition="box-shadow 0.2s"
                 >
                   <CardBody p={8}>
@@ -309,7 +309,7 @@ export default function PlansPage() {
                         <Heading
                           fontSize="xl"
                           fontWeight="semibold"
-                          color={textColor}
+                          color={planData.popular ? "white" : textColor}
                         >
                           {planData.name}
                         </Heading>
@@ -321,7 +321,7 @@ export default function PlansPage() {
                           <Text
                             fontSize="5xl"
                             fontWeight="bold"
-                            color={textColor}
+                            color={planData.popular ? "white" : textColor}
                           >
                             {planData.price}
                           </Text>
@@ -329,7 +329,7 @@ export default function PlansPage() {
                             /{planData.period}
                           </Text>
                         </HStack>
-                        <Text color="#666" fontSize="sm">
+                        <Text color={planData.popular ? "white" : "#666"} fontSize="sm">
                           {planData.description}
                         </Text>
                       </VStack>
@@ -350,13 +350,13 @@ export default function PlansPage() {
                       <VStack spacing={2} align="start">
                         <Text
                           fontWeight="bold"
-                          color={textColor}
+                          color={planData.popular ? "white" : textColor}
                           fontSize="sm"
                           textTransform="uppercase"
                         >
                           Features
                         </Text>
-                        <Text color="#gray.700" fontSize="sm" mb={4}>
+                        <Text color={planData.popular ? "white" : "#gray.700"} fontSize="sm" mb={4}>
                           {planData.planId === "free"
                             ? "Everything you need to get started"
                             : planData.planId === "pro"
@@ -377,7 +377,7 @@ export default function PlansPage() {
                                   color="green.500"
                                   boxSize={4}
                                 />
-                                <Text color="#gray.700" fontSize="sm">
+                                <Text color={planData.popular ? "white" : "#gray.700"} fontSize="sm">
                                   {feature}
                                 </Text>
                               </ListItem>
