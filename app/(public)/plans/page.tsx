@@ -394,7 +394,7 @@ export default function PlansPage() {
             <Card
               position="relative"
               overflow="hidden"
-              bg="#FDF7EE"
+              bg="gray.100"
               border="2px solid #000000"
               boxShadow="4px 4px 0px #000000"
               borderRadius="xl"
@@ -402,17 +402,21 @@ export default function PlansPage() {
               transition="box-shadow 0.2s"
             >
               <CardBody p={8}>
-                <VStack spacing={6} align="stretch">
+                <VStack align="start">
                   {/* Plan Title */}
-                  <VStack spacing={2} textAlign="center">
-                    <Heading fontSize="2xl" fontWeight="bold" color="gray.500">
+                  <VStack spacing={2} align="start">
+                    <Heading
+                      fontSize="xl"
+                      fontWeight="semibold"
+                      color="gray.600"
+                    >
                       Manual Handwriting
                     </Heading>
                   </VStack>
 
                   {/* Pricing with strikethrough */}
-                  <VStack spacing={1} textAlign="center">
-                    <HStack spacing={1} justify="center">
+                  <VStack align="start">
+                    <HStack spacing={1}>
                       <Text
                         fontSize="5xl"
                         fontWeight="bold"
@@ -425,25 +429,25 @@ export default function PlansPage() {
                         /page
                       </Text>
                     </HStack>
-                    <Text color="gray.400" fontSize="md">
-                      Hire someone to write by hand
+                    <Text color="gray.500" fontSize="sm" mb={2}>
+                      Hire someone to write by hand... Too social for introverts like us.
                     </Text>
                   </VStack>
 
                   {/* Disabled CTA Button */}
                   <Button
-                    bg="gray.100"
-                    color="gray.400"
+                    bg="gray.200"
+                    color="gray.500"
                     border="2px solid"
-                    borderColor="gray.200"
-                    h={14}
-                    borderRadius="full"
+                    borderColor="gray.300"
+                    h={12}
+                    borderRadius="xl"
                     fontWeight="semibold"
                     fontSize="lg"
                     w="full"
                     cursor="not-allowed"
                     _hover={{
-                      bg: "gray.100",
+                      bg: "gray.200",
                       transform: "none",
                     }}
                     _active={{
@@ -453,20 +457,22 @@ export default function PlansPage() {
                     Not Available
                   </Button>
 
+                  <Divider borderColor="gray.400" my={4} />
+
                   {/* Features Section */}
-                  <VStack spacing={2} align="stretch">
+                  <VStack spacing={2} align="start">
                     <Text
                       fontWeight="bold"
-                      color="gray.500"
+                      color="gray.600"
                       fontSize="sm"
                       textTransform="uppercase"
                     >
                       Features
                     </Text>
-                    <Text color="gray.400" fontSize="xs" mb={2}>
+                    <Text color="gray.500" fontSize="sm" mb={4}>
                       What you get with manual service
                     </Text>
-                    <List spacing={1}>
+                    <List spacing={2}>
                       <ListItem display="flex" alignItems="center">
                         <Box
                           w={2}
@@ -475,7 +481,7 @@ export default function PlansPage() {
                           borderRadius="full"
                           mr={3}
                         />
-                        <Text color="gray.400" fontSize="xs">
+                        <Text color="gray.500" fontSize="sm">
                           One-time handwriting service
                         </Text>
                       </ListItem>
@@ -487,7 +493,7 @@ export default function PlansPage() {
                           borderRadius="full"
                           mr={3}
                         />
-                        <Text color="gray.400" fontSize="xs">
+                        <Text color="gray.500" fontSize="sm">
                           No digital copies
                         </Text>
                       </ListItem>
@@ -499,7 +505,7 @@ export default function PlansPage() {
                           borderRadius="full"
                           mr={3}
                         />
-                        <Text color="gray.400" fontSize="xs">
+                        <Text color="gray.500" fontSize="sm">
                           Limited revisions
                         </Text>
                       </ListItem>
@@ -511,7 +517,7 @@ export default function PlansPage() {
                           borderRadius="full"
                           mr={3}
                         />
-                        <Text color="gray.400" fontSize="xs">
+                        <Text color="gray.500" fontSize="sm">
                           Shipping costs extra
                         </Text>
                       </ListItem>
