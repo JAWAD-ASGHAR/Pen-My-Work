@@ -26,6 +26,7 @@
     "html-to-image": "^1.11.13",
     "jspdf": "^3.0.1",
     "jszip": "^3.10.1",
+    "lemonsqueezy": "^0.0.1-claimed",
     "next": "15.3.5",
     "openai": "^5.10.1",
     "postgres": "^3.4.7",

@@ -18,6 +18,7 @@ import {
   ListItem,
   ListIcon,
   Divider,
+  Image,
 } from "@chakra-ui/react"
 import { useState, useEffect } from "react"
 import { FiCheck, FiStar, FiZap, FiUsers, FiDownload, FiRepeat, FiShield } from "react-icons/fi"
@@ -48,7 +49,7 @@ type Plan = {
 }
 
 export default function PlansPage() {
-  const bgColor = "#FDF7EE"
+  const bgColor = "#F7F7D2"
   const textColor = "#1A1A1A"
   const accentColor = "#FF6A00"
   const router = useRouter()
@@ -56,6 +57,8 @@ export default function PlansPage() {
   const plansRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const bannerRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const featuresRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [plans, setPlans] = useState<Plan[]>([])
@@ -90,20 +93,38 @@ export default function PlansPage() {
 
     const ctx = gsap.context(() => {
       // Banner animation
-      gsap.fromTo(bannerRef.current, { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" })
+      gsap.fromTo(
+        bannerRef.current,
+        { y: -50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
+      )
 
       // Header animation
       gsap.fromTo(
         headerRef.current?.children || [],
         { y: -30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: "power2.out" },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: "power2.out" }
       )
 
-      // Plans animation
+      // Hero content animation
+      gsap.fromTo(
+        heroRef.current?.children || [],
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.4, ease: "power2.out" }
+      )
+
+      // Plans animation - smoother and less aggressive
       gsap.fromTo(
         plansRef.current?.children || [],
-        { y: 100, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 1, stagger: 0.2, delay: 0.4, ease: "power2.out" },
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, delay: 0.6, ease: "power2.out" }
+      )
+
+      // Features animation
+      gsap.fromTo(
+        featuresRef.current?.children || [],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 1.0, ease: "power2.out" }
       )
     })
     return () => ctx.revert()
@@ -176,10 +197,10 @@ export default function PlansPage() {
       <Box h="16px" />
       <Navbar ref={headerRef} scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} router={router} />
       
-      {/* Hero Section */}
-      <Box as="section" px={6} py={20} bg={bgColor}>
+      {/* Hero Section - Matching landing page design */}
+      <Box as="section" px={6} py={20} bg={"white"}>
         <Container maxW="7xl">
-          <VStack spacing={6} textAlign="center" mb={16}>
+          <VStack ref={heroRef} spacing={6} textAlign="center" mb={16}>
             <Heading
               fontSize={{ base: "4xl", lg: "6xl" }}
               fontWeight="bold"
@@ -206,7 +227,7 @@ export default function PlansPage() {
             </Text>
           </VStack>
 
-          {/* Plans Grid */}
+          {/* Plans Grid - Improved design */}
           <Grid 
             ref={plansRef}
             templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} 
@@ -219,26 +240,30 @@ export default function PlansPage() {
                 <Card
                   key={index}
                   bg="white"
-                  shadow="xl"
-                  borderRadius="3xl"
-                  border={planData.popular ? `3px solid ${accentColor}` : "1px solid"}
+                  shadow="lg"
+                  borderRadius="2xl"
+                  border={planData.popular ? `2px solid ${accentColor}` : "1px solid"}
                   borderColor={planData.popular ? accentColor : "gray.200"}
                   position="relative"
-                  _hover={{ shadow: "2xl", transform: "translateY(-8px)" }}
-                  transition="all 0.3s ease"
+                  _hover={{ 
+                    shadow: "xl", 
+                    transform: "translateY(-4px)",
+                    borderColor: planData.popular ? accentColor : "gray.300"
+                  }}
+                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                  overflow="hidden"
                 >
                   {planData.popular && (
                     <Badge
                       position="absolute"
-                      top={-3}
-                      left="50%"
-                      transform="translateX(-50%)"
+                      top={4}
+                      right={4}
                       bg={accentColor}
                       color="white"
-                      px={4}
-                      py={2}
+                      px={3}
+                      py={1}
                       borderRadius="full"
-                      fontSize="sm"
+                      fontSize="xs"
                       fontWeight="bold"
                       zIndex={10}
                     >
@@ -255,10 +280,11 @@ export default function PlansPage() {
                           h={16}
                           bg={planData.bgColor}
                           color={planData.color}
-                          borderRadius="2xl"
+                          borderRadius="xl"
                           display="flex"
                           alignItems="center"
                           justifyContent="center"
+                          shadow="sm"
                         >
                           <Icon as={planData.icon} h={8} w={8} />
                         </Box>
@@ -266,7 +292,7 @@ export default function PlansPage() {
                           <Heading fontSize="2xl" fontWeight="bold" color={textColor}>
                             {planData.name}
                           </Heading>
-                          <Text color="#666" fontSize="lg">
+                          <Text color="#666" fontSize="md">
                             {planData.description}
                           </Text>
                         </VStack>
@@ -275,7 +301,7 @@ export default function PlansPage() {
                       {/* Pricing */}
                       <VStack spacing={1} textAlign="center">
                         <HStack spacing={1} justify="center">
-                          <Text fontSize="4xl" fontWeight="bold" color={textColor}>
+                          <Text fontSize="5xl" fontWeight="bold" color={textColor}>
                             {planData.price}
                           </Text>
                           <Text fontSize="lg" color="#666">
@@ -284,7 +310,7 @@ export default function PlansPage() {
                         </HStack>
                       </VStack>
 
-                      <Divider />
+                      <Divider borderColor="gray.200" />
 
                       {/* Features */}
                       <VStack spacing={4} align="stretch">
@@ -337,8 +363,8 @@ export default function PlansPage() {
             })}
           </Grid>
 
-          {/* Features Section */}
-          <VStack spacing={12}>
+          {/* Features Section - Improved design */}
+          <VStack ref={featuresRef} spacing={12}>
             <VStack spacing={4} textAlign="center">
               <Heading fontSize={{ base: "3xl", lg: "4xl" }} fontWeight="bold" color={textColor}>
                 All Plans Include
@@ -350,15 +376,15 @@ export default function PlansPage() {
 
             <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }} gap={6}>
               {features.map((feature, index) => (
-                <Card key={index} bg="white" shadow="lg" borderRadius="2xl" border={0}>
+                <Card key={index} bg="white" shadow="md" borderRadius="xl" border="1px solid" borderColor="gray.200" _hover={{ shadow: "lg", transform: "translateY(-2px)" }} transition="all 0.3s ease">
                   <CardBody p={6} textAlign="center">
                     <VStack spacing={4}>
                       <Box
                         w={12}
                         h={12}
-                        bg={bgColor}
+                        bg={"white"}
                         color={accentColor}
-                        borderRadius="xl"
+                        borderRadius="lg"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
@@ -382,8 +408,30 @@ export default function PlansPage() {
         </Container>
       </Box>
 
-      {/* FAQ Section */}
-      <Box as="section" px={6} py={20} bg="white">
+      {/* Wave Top - Transition from bgColor to white */}
+      <Box position="relative" bg={"white"}>
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          zIndex={1}
+          transform="translateY(1px) rotate(180deg)"
+        >
+          <Image
+            src="/wavetop.svg"
+            alt=""
+            w="full"
+            h="auto"
+            objectFit="cover"
+            filter="brightness(0) saturate(100%) invert(97%) sepia(5%) saturate(1200%) hue-rotate(355deg) brightness(105%) contrast(94%)"
+          />
+        </Box>
+        <Box h="150px" bg={"white"} />
+      </Box>
+
+      {/* FAQ Section - Improved design */}
+      <Box as="section" px={6} py={20} bg={bgColor}>
         <Container maxW="4xl">
           <VStack spacing={12}>
             <VStack spacing={4} textAlign="center">
@@ -415,7 +463,7 @@ export default function PlansPage() {
                   answer: "You'll receive a notification when you're close to your limit. You can either upgrade your plan or wait until the next billing cycle.",
                 },
               ].map((faq, index) => (
-                <Card key={index} bg="white" shadow="sm" borderRadius="2xl" border="1px solid" borderColor="gray.200" w="full">
+                <Card key={index} bg="white" shadow="sm" borderRadius="xl" border="1px solid" borderColor="gray.200" w="full" _hover={{ shadow: "md" }} transition="all 0.3s ease">
                   <CardBody p={6}>
                     <VStack spacing={3} align="stretch">
                       <Text fontWeight="semibold" color={textColor} fontSize="lg">
@@ -433,27 +481,42 @@ export default function PlansPage() {
         </Container>
       </Box>
 
-      {/* Final CTA */}
+      {/* Wave Bottom - Transition from white to dark */}
+      <Box position="relative" bg="white">
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          zIndex={1}
+          transform="translateY(1px) rotate(180deg)"
+        >
+          <Image
+            src="/wavetop.svg"
+            alt=""
+            w="full"
+            h="auto"
+            objectFit="cover"
+          />
+        </Box>
+        <Box h="150px" bg={bgColor} />
+      </Box>
+
+      {/* Final CTA - Matching landing page design */}
       <Box
         as="section"
         px={6}
         py={20}
-        bgGradient="linear(to-br, #FF6A00, #FF8A33)"
+        bg="#FF9966"
         position="relative"
         overflow="hidden"
       >
-        <Box
-          position="absolute"
-          inset={0}
-          bgImage="url('https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&h=400&fit=crop&crop=center')"
-          opacity={0.1}
-        />
         <Container maxW="4xl" textAlign="center" position="relative" zIndex={10}>
           <VStack spacing={8}>
-            <Heading fontSize={{ base: "4xl", lg: "5xl" }} fontWeight="bold" color="white" lineHeight="tight">
+            <Heading fontSize={{ base: "4xl", lg: "5xl" }} fontWeight="bold" color="gray.800" lineHeight="tight">
               Ready to Get Started?
             </Heading>
-            <Text fontSize="xl" color="whiteAlpha.900" maxW="2xl">
+            <Text fontSize="xl" color="gray.800" maxW="2xl">
               Join thousands of users who trust Pen My Work for authentic handwritten content. Start your free trial today.
             </Text>
 
@@ -465,13 +528,19 @@ export default function PlansPage() {
             >
               <Button
                 bg="white"
-                _hover={{ bg: "gray.100" }}
-                color={textColor}
                 h={14}
                 px={8}
+                color="gray.800"
                 borderRadius="full"
                 fontWeight="semibold"
                 fontSize="lg"
+                border="2px solid black"
+                boxShadow="4px 4px 0px #000000"
+                _hover={{ 
+                  bg: "gray.100",
+                  boxShadow: "8px 8px 0px #000000" 
+                }}
+                transition="all 0.2s"
                 onClick={() => router.push("/sign-in")}
               >
                 Start Free Trial
@@ -479,20 +548,20 @@ export default function PlansPage() {
               <Button
                 bg="transparent"
                 _hover={{ bg: "whiteAlpha.200" }}
-                color="white"
                 h={14}
                 px={8}
                 borderRadius="full"
                 fontWeight="semibold"
+                color="gray.800"
                 fontSize="lg"
-                border="2px solid white"
+                border="2px solid black"
                 onClick={() => router.push("/plans")}
               >
                 View All Plans
               </Button>
             </Flex>
 
-            <Text color="whiteAlpha.800" fontSize="sm">
+            <Text color="gray.800" fontSize="sm">
               No credit card required • 7-day free trial • Cancel anytime
             </Text>
           </VStack>
