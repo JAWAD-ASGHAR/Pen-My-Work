@@ -63,6 +63,7 @@ export default function PlansPage() {
 
   const plansRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const headerTimeline = useRef<gsap.core.Timeline | null>(null);
   const bannerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const featuresRef = useRef<HTMLDivElement>(null);
@@ -119,6 +120,38 @@ export default function PlansPage() {
           ease: "power2.out",
         }
       );
+
+      // Header shrink on scroll
+      if (headerRef.current) {
+        headerTimeline.current = gsap
+          .timeline({ paused: true })
+          .to(headerRef.current, {
+            scale: 0.95,
+            paddingTop: 8,
+            paddingBottom: 8,
+            boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
+            duration: 0.3,
+            ease: "power2.out",
+          });
+      }
+
+      const handleScroll = () => {
+        if (!headerTimeline.current || typeof window === "undefined") return;
+        if (window.scrollY > 30) {
+          headerTimeline.current.play();
+          setScrolled(true);
+        } else {
+          headerTimeline.current.reverse();
+          setScrolled(false);
+        }
+      };
+
+      if (typeof window !== "undefined") {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+      }
 
       // Hero content animation
       gsap.fromTo(
