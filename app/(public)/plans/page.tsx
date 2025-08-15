@@ -294,21 +294,14 @@ export default function PlansPage() {
               return (
                 <Card
                   key={index}
-                  bg="white"
-                  shadow="lg"
-                  borderRadius="2xl"
-                  border={
-                    planData.popular ? `2px solid ${accentColor}` : "1px solid"
-                  }
-                  borderColor={planData.popular ? accentColor : "gray.200"}
                   position="relative"
-                  _hover={{
-                    shadow: "xl",
-                    transform: "translateY(-4px)",
-                    borderColor: planData.popular ? accentColor : "gray.300",
-                  }}
-                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                   overflow="hidden"
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
                 >
                   {planData.popular && (
                     <Badge
@@ -460,20 +453,14 @@ export default function PlansPage() {
 
             {/* Manual Handwriting Comparison Card */}
             <Card
-              bg="white"
-              shadow="lg"
-              borderRadius="2xl"
-              border="1px solid"
-              borderColor="gray.300"
               position="relative"
-              _hover={{
-                shadow: "xl",
-                transform: "translateY(-4px)",
-                borderColor: "gray.400",
-              }}
-              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
               overflow="hidden"
-              opacity={0.7}
+              bg="#FDF7EE"
+              border="2px solid #000000"
+              boxShadow="4px 4px 0px #000000"
+              borderRadius="xl"
+              _hover={{ boxShadow: "8px 8px 0px #000000" }}
+              transition="box-shadow 0.2s"
             >
               <CardBody p={8}>
                 <VStack spacing={6} align="stretch">
