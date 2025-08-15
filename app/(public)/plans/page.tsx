@@ -230,7 +230,7 @@ export default function PlansPage() {
           {/* Plans Grid - Improved design */}
           <Grid 
             ref={plansRef}
-            templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} 
+            templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }} 
             gap={8} 
             mb={16}
           >
@@ -361,6 +361,126 @@ export default function PlansPage() {
                 </Card>
               )
             })}
+
+            {/* Manual Handwriting Comparison Card */}
+            <Card
+              bg="white"
+              shadow="lg"
+              borderRadius="2xl"
+              border="1px solid"
+              borderColor="gray.300"
+              position="relative"
+              _hover={{ 
+                shadow: "xl", 
+                transform: "translateY(-4px)",
+                borderColor: "gray.400"
+              }}
+              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+              overflow="hidden"
+              opacity={0.7}
+            >
+              <CardBody p={8}>
+                <VStack spacing={6} align="stretch">
+                  {/* Plan Header */}
+                  <VStack spacing={4} textAlign="center">
+                    <Box
+                      w={16}
+                      h={16}
+                      bg="gray.100"
+                      color="gray.500"
+                      borderRadius="xl"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      shadow="sm"
+                    >
+                      <Icon as={FiUsers} h={8} w={8} />
+                    </Box>
+                    <VStack spacing={2}>
+                      <Heading fontSize="2xl" fontWeight="bold" color="gray.500">
+                        Manual Handwriting
+                      </Heading>
+                      <Text color="gray.400" fontSize="md">
+                        Hire someone to write by hand
+                      </Text>
+                    </VStack>
+                  </VStack>
+
+                  {/* Pricing with strikethrough */}
+                  <VStack spacing={1} textAlign="center">
+                    <HStack spacing={1} justify="center">
+                      <Text fontSize="5xl" fontWeight="bold" color="gray.400" textDecoration="line-through">
+                        $50
+                      </Text>
+                      <Text fontSize="lg" color="gray.400">
+                        /page
+                      </Text>
+                    </HStack>
+                    <Text fontSize="sm" color="gray.500" fontWeight="medium">
+                      + 2-3 days wait time
+                    </Text>
+                  </VStack>
+
+                  <Divider borderColor="gray.200" />
+
+                  {/* Features */}
+                  <VStack spacing={4} align="stretch">
+                    <Text fontWeight="semibold" color="gray.500" fontSize="lg">
+                      What you get:
+                    </Text>
+                    <List spacing={3}>
+                      <ListItem display="flex" alignItems="center">
+                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Text color="gray.400" fontSize="sm">
+                          One-time handwriting service
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Text color="gray.400" fontSize="sm">
+                          No digital copies
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Text color="gray.400" fontSize="sm">
+                          Limited revisions
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box w={2} h={2} bg="gray.400" borderRadius="full" mr={3} />
+                        <Text color="gray.400" fontSize="sm">
+                          Shipping costs extra
+                        </Text>
+                      </ListItem>
+                    </List>
+                  </VStack>
+
+                  {/* Disabled CTA Button */}
+                  <Button
+                    bg="gray.100"
+                    color="gray.400"
+                    border="2px solid"
+                    borderColor="gray.200"
+                    h={14}
+                    borderRadius="full"
+                    fontWeight="semibold"
+                    fontSize="lg"
+                    w="full"
+                    cursor="not-allowed"
+                    _hover={{
+                      bg: "gray.100",
+                      transform: "none"
+                    }}
+                    _active={{
+                      transform: "none"
+                    }}
+                  >
+                    Not Available
+                  </Button>
+                </VStack>
+              </CardBody>
+            </Card>
           </Grid>
 
           {/* Features Section - Improved design */}
