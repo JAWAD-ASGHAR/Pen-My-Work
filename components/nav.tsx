@@ -38,6 +38,18 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
       
     };
 
+    // Function to handle navigation to landing page sections
+    const handleSectionNavigation = (sectionId: string) => {
+      // Check if we're already on the landing page
+      if (window.location.pathname === '/') {
+        // If on landing page, just scroll to section
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // If on another page, navigate to landing page with hash
+        router.push(`/#${sectionId}`);
+      }
+    };
+
     return (
       <Flex
         ref={ref}
@@ -65,7 +77,11 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
       >
         {/* Logo Left */}
         <Flex align="center" onClick={() => {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (window.location.pathname === '/') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            router.push('/');
+          }
         }} minW="120px" cursor="pointer">
           <Logo size="md" />
         </Flex>
@@ -86,7 +102,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             transition="colors"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+              handleSectionNavigation('how-it-works');
             }}
           >
             How It Works
@@ -99,7 +115,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             transition="colors"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth' });
+              handleSectionNavigation('examples');
             }}
           >
             Examples
@@ -112,7 +128,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             transition="colors"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' });
+              handleSectionNavigation('use-cases');
             }}
           >
             Use Cases
@@ -125,7 +141,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             transition="colors"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+              handleSectionNavigation('testimonials');
             }}
           >
             Reviews
@@ -138,7 +154,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
             transition="colors"
             onClick={(e) => {
               e.preventDefault();
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              handleSectionNavigation('contact');
             }}
           >
             Contact
@@ -219,7 +235,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
                 onClick={(e) => {
                   e.preventDefault();
                   setMenuOpen(false);
-                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  handleSectionNavigation('how-it-works');
                 }}
               >
                 How It Works
@@ -230,7 +246,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
                 onClick={(e) => {
                   e.preventDefault();
                   setMenuOpen(false);
-                  document.getElementById('examples')?.scrollIntoView({ behavior: 'smooth' });
+                  handleSectionNavigation('examples');
                 }}
               >
                 Examples
@@ -241,7 +257,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
                 onClick={(e) => {
                   e.preventDefault();
                   setMenuOpen(false);
-                  document.getElementById('use-cases')?.scrollIntoView({ behavior: 'smooth' });
+                  handleSectionNavigation('use-cases');
                 }}
               >
                 Use Cases
@@ -252,7 +268,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
                 onClick={(e) => {
                   e.preventDefault();
                   setMenuOpen(false);
-                  document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+                  handleSectionNavigation('testimonials');
                 }}
               >
                 Reviews
@@ -263,7 +279,7 @@ export const Navbar = React.forwardRef<HTMLDivElement, HeaderProps>(
                 onClick={(e) => {
                   e.preventDefault();
                   setMenuOpen(false);
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  handleSectionNavigation('contact');
                 }}
               >
                 Contact
