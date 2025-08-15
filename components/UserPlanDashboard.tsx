@@ -34,6 +34,7 @@ import {
   getSubscriptionManagementURLs,
   getCurrentUserPlanAndSubscription
 } from "@/server/actions/user-plans"
+import LoadingSpinner from "./LoadingSpinner"
 
 type Plan = {
   planId: string;
@@ -180,9 +181,7 @@ export default function UserPlanDashboard() {
 
   if (loading) {
     return (
-      <Box minH="100vh" bg="gray.50" display="flex" alignItems="center" justifyContent="center">
-        <Text>Loading your subscription...</Text>
-      </Box>
+      <LoadingSpinner />
     )
   }
 
