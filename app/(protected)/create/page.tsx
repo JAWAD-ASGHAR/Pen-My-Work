@@ -256,7 +256,7 @@ export default function CreatePage() {
                 </Text>
                 <Box bg="orange.50" p={4} borderRadius="md">
                   <Text fontWeight="semibold" color="orange.800">
-                    Free Plan: 10 pages per month
+                    Free Plan: 10 pages trial
                   </Text>
                   <Text color="orange.700" fontSize="sm">
                     Upgrade to Pro for unlimited pages!

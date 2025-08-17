@@ -18,7 +18,7 @@ Transform your digital text into authentic handwritten pages instantly. Perfect 
 - **Download Options**: Multiple formats including PNG, PDF, and ZIP
 
 ### 💳 Subscription Management
-- **Free Plan**: 10 pages per month with basic features
+- **Free Plan**: 10 pages trial with basic features
 - **Pro Plan**: Unlimited pages with premium features
 - **Credit System**: Track usage for free plan users
 - **Subscription Status**: Handle active, cancelled, and expired subscriptions
@@ -153,7 +153,7 @@ Pen-My-Work/
 ## 💳 Subscription Plans
 
 ### Free Plan
-- 10 handwritten pages per month
+- 10 handwritten pages trial
 - Basic handwriting styles
 - Standard paper types
 - Email support

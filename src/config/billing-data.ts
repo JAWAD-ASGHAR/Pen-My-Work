@@ -15,7 +15,7 @@ export const billingData = {
       trialIntervalCount: null,
       sort: 1,
       features: [
-        "10 handwritten pages per month",
+        "10 handwritten pages trial",
         "Basic handwriting styles",
         "Standard paper types",
         "Email support",

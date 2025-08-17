@@ -215,7 +215,7 @@ export default function PlansPage() {
         plan.price === "0"
           ? "$0"
           : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
-      period: plan.price === "0" ? "forever" : "per month",
+      period: plan.price === "0" ? "trial" : "per month",
       description: plan.description,
       color: plan.planId === "free" ? "gray.500" : accentColor,
       bgColor: plan.planId === "free" ? "gray.50" : "orange.50",

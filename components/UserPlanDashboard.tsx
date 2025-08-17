@@ -260,7 +260,7 @@ export default function UserPlanDashboard() {
                       {isFreePlan ? "Free" : `$${(parseInt(currentPlan?.price || "0") / 100).toFixed(2)}`}
                     </Text>
                     <Text color="gray.600">
-                      {isFreePlan ? "forever" : "per month"}
+                      {isFreePlan ? "trial" : "per month"}
                     </Text>
                   </VStack>
                 </HStack>
