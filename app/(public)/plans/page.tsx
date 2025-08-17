@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -13,21 +13,30 @@ import {
   Icon,
   Text,
   VStack,
-  Badge,
   List,
   ListItem,
   ListIcon,
+  Image,
   Divider,
-} from "@chakra-ui/react"
-import { useState, useEffect } from "react"
-import { FiCheck, FiStar, FiZap, FiUsers, FiDownload, FiRepeat, FiShield } from "react-icons/fi"
-import { gsap } from "gsap"
-import { useRef } from "react"
-import { Banner } from "@/components/banner"
-import { Navbar } from "@/components/nav"
-import { useRouter } from "next/navigation"
-import { getPlans } from "@/server/actions/user-plans"
-import { PlanButton } from '@/components/PlanButton'
+} from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import {
+  FiStar,
+  FiZap,
+  FiUsers,
+  FiDownload,
+  FiRepeat,
+  FiShield,
+} from "react-icons/fi";
+import { FaCircleCheck } from "react-icons/fa6";
+import { gsap } from "gsap";
+import { useRef } from "react";
+import { Banner } from "@/components/banner";
+import { Navbar } from "@/components/nav";
+import { useRouter } from "next/navigation";
+import { getPlans } from "@/server/actions/user-plans";
+import { PlanButton } from "@/components/PlanButton";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type Plan = {
   planId: string;
@@ -45,69 +54,150 @@ type Plan = {
   trialInterval?: string | null;
   trialIntervalCount?: number | null;
   sort?: number | null;
-}
+};
 
 export default function PlansPage() {
-  const bgColor = "#FDF7EE"
-  const textColor = "#1A1A1A"
-  const accentColor = "#FF6A00"
-  const router = useRouter()
-  
-  const plansRef = useRef<HTMLDivElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
-  const bannerRef = useRef<HTMLDivElement>(null)
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [plans, setPlans] = useState<Plan[]>([])
-  const [loading, setLoading] = useState(true)
+  const bgColor = "#F7F7D2";
+  const textColor = "#1A1A1A";
+  const accentColor = "#FF6A00";
+  const router = useRouter();
+
+  const plansRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const headerTimeline = useRef<gsap.core.Timeline | null>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [plans, setPlans] = useState<Plan[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
+      setScrolled(window.scrollY > 50);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const plansData = await getPlans()
-        setPlans(plansData)
+        const plansData = await getPlans();
+        setPlans(plansData);
       } catch (error) {
-        console.error("Error fetching plans:", error)
+        console.error("Error fetching plans:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchPlans()
-  }, [])
+    fetchPlans();
+  }, []);
 
   useEffect(() => {
-    if (loading) return
+    if (loading) return;
 
     const ctx = gsap.context(() => {
       // Banner animation
-      gsap.fromTo(bannerRef.current, { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" })
+      gsap.fromTo(
+        bannerRef.current,
+        { y: -50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }
+      );
 
       // Header animation
       gsap.fromTo(
         headerRef.current?.children || [],
         { y: -30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: "power2.out" },
-      )
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          delay: 0.2,
+          ease: "power2.out",
+        }
+      );
 
-      // Plans animation
+      // Header shrink on scroll
+      if (headerRef.current) {
+        headerTimeline.current = gsap
+          .timeline({ paused: true })
+          .to(headerRef.current, {
+            scale: 0.95,
+            paddingTop: 8,
+            paddingBottom: 8,
+            boxShadow: "0 2px 16px 0 rgba(0,0,0,0.10)",
+            duration: 0.3,
+            ease: "power2.out",
+          });
+      }
+
+      const handleScroll = () => {
+        if (!headerTimeline.current || typeof window === "undefined") return;
+        if (window.scrollY > 30) {
+          headerTimeline.current.play();
+          setScrolled(true);
+        } else {
+          headerTimeline.current.reverse();
+          setScrolled(false);
+        }
+      };
+
+      if (typeof window !== "undefined") {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+      }
+
+      // Hero content animation
+      gsap.fromTo(
+        heroRef.current?.children || [],
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          delay: 0.4,
+          ease: "power2.out",
+        }
+      );
+
+      // Plans animation - smoother and less aggressive
       gsap.fromTo(
         plansRef.current?.children || [],
-        { y: 100, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 1, stagger: 0.2, delay: 0.4, ease: "power2.out" },
-      )
-    })
-    return () => ctx.revert()
-  }, [loading])
+        { y: 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          delay: 0.6,
+          ease: "power2.out",
+        }
+      );
+
+      // Features animation
+      gsap.fromTo(
+        featuresRef.current?.children || [],
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          delay: 1.0,
+          ease: "power2.out",
+        }
+      );
+    });
+    return () => ctx.revert();
+  }, [loading]);
 
   // Function to get plan display data based on database plan
   const getPlanDisplayData = (plan: {
@@ -121,29 +211,35 @@ export default function PlansPage() {
   }) => {
     const baseData = {
       name: plan.name,
-      price: plan.price === "0" ? "$0" : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
+      price:
+        plan.price === "0"
+          ? "$0"
+          : `$${(parseInt(plan.price) / 100).toFixed(2)}`, // Convert cents to dollars
       period: plan.price === "0" ? "forever" : "per month",
       description: plan.description,
       color: plan.planId === "free" ? "gray.500" : accentColor,
       bgColor: plan.planId === "free" ? "gray.50" : "orange.50",
       popular: plan.planId === "pro",
-      buttonText: plan.planId === "free" ? "Get Started Free" : "Start Pro Trial",
-      buttonVariant: plan.planId === "free" ? "outline" as const : "solid" as const,
+      buttonText:
+        plan.planId === "free" ? "Get Started Free" : "Start Pro Trial",
+      buttonVariant:
+        plan.planId === "free" ? ("outline" as const) : ("solid" as const),
       icon: plan.planId === "free" ? FiStar : FiZap,
       features: Array.isArray(plan.features) ? plan.features : [],
       limitations: Array.isArray(plan.limitations) ? plan.limitations : [],
       planId: plan.planId,
       variantId: plan.variantId || undefined,
-    }
+    };
 
-    return baseData
-  }
+    return baseData;
+  };
 
   const features = [
     {
       icon: FiDownload,
       title: "High-Quality Downloads",
-      description: "Get your handwritten pages in multiple formats and resolutions",
+      description:
+        "Get your handwritten pages in multiple formats and resolutions",
     },
     {
       icon: FiRepeat,
@@ -160,26 +256,30 @@ export default function PlansPage() {
       title: "Team Collaboration",
       description: "Share and collaborate with team members seamlessly",
     },
-  ]
+  ];
 
   if (loading) {
     return (
-      <Box minH="100vh" bg="white" display="flex" alignItems="center" justifyContent="center">
-        <Text>Loading plans...</Text>
-      </Box>
-    )
+      <LoadingSpinner />
+    );
   }
 
   return (
     <Box minH="100vh" bg="white">
       <Banner ref={bannerRef} />
       <Box h="16px" />
-      <Navbar ref={headerRef} scrolled={scrolled} menuOpen={menuOpen} setMenuOpen={setMenuOpen} router={router} />
-      
-      {/* Hero Section */}
-      <Box as="section" px={6} py={20} bg={bgColor}>
+      <Navbar
+        ref={headerRef}
+        scrolled={scrolled}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        router={router}
+      />
+
+      {/* Hero Section - Matching landing page design */}
+      <Box as="section" px={6} py={20} bg={"white"}>
         <Container maxW="7xl">
-          <VStack spacing={6} textAlign="center" mb={16}>
+          <VStack ref={heroRef} spacing={6} textAlign="center" mb={16}>
             <Heading
               fontSize={{ base: "4xl", lg: "6xl" }}
               fontWeight="bold"
@@ -188,141 +288,87 @@ export default function PlansPage() {
             >
               Choose Your{" "}
               <Box position="relative" display="inline">
-                Plan
                 <Box
                   position="absolute"
-                  bottom="-8px"
-                  left={0}
-                  w="full"
-                  h={3}
-                  bg={accentColor}
-                  opacity={0.3}
-                  borderRadius="full"
-                />
+                  bottom="-16px"
+                  left="-8px"
+                  right="-8px"
+                >
+                  <Image
+                    src="/underline.svg"
+                    alt=""
+                    w="full"
+                    h="full"
+                    objectFit="cover"
+                    style={{ transform: "scale(0.9)" }}
+                  />
+                </Box>
+                <Box position="relative" zIndex={1} display="inline">
+                  Plan
+                </Box>
               </Box>
             </Heading>
             <Text fontSize="xl" color="#666" maxW="3xl">
-              Transform your digital text into authentic handwritten pages. Start free and upgrade as you grow.
+              Transform your digital text into authentic handwritten pages.
+              Start free and upgrade as you grow.
             </Text>
           </VStack>
 
-          {/* Plans Grid */}
-          <Grid 
+          {/* Plans Grid - Improved design */}
+          <Grid
             ref={plansRef}
-            templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} 
-            gap={8} 
+            templateColumns={{ base: "1fr", lg: "repeat(3, 1fr)" }}
+            gap={8}
             mb={16}
           >
             {plans.map((plan, index) => {
-              const planData = getPlanDisplayData(plan)
+              const planData = getPlanDisplayData(plan);
               return (
                 <Card
                   key={index}
-                  bg="white"
-                  shadow="xl"
-                  borderRadius="3xl"
-                  border={planData.popular ? `3px solid ${accentColor}` : "1px solid"}
-                  borderColor={planData.popular ? accentColor : "gray.200"}
                   position="relative"
-                  _hover={{ shadow: "2xl", transform: "translateY(-8px)" }}
-                  transition="all 0.3s ease"
+                  overflow="hidden"
+                  bg={planData.popular ? "gray.900" : "#FDF7EE"}
+                  border={planData.popular ? `2px solid ${accentColor}` : "2px solid #000000"}
+                  boxShadow={planData.popular ? `4px 4px 0px ${accentColor}` : "4px 4px 0px #000000"}
+                  borderRadius="xl"
+                  _hover={{ boxShadow: planData.popular ? `8px 8px 0px ${accentColor}` : "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
                 >
-                  {planData.popular && (
-                    <Badge
-                      position="absolute"
-                      top={-3}
-                      left="50%"
-                      transform="translateX(-50%)"
-                      bg={accentColor}
-                      color="white"
-                      px={4}
-                      py={2}
-                      borderRadius="full"
-                      fontSize="sm"
-                      fontWeight="bold"
-                      zIndex={10}
-                    >
-                      Most Popular
-                    </Badge>
-                  )}
-                  
                   <CardBody p={8}>
-                    <VStack spacing={6} align="stretch">
-                      {/* Plan Header */}
-                      <VStack spacing={4} textAlign="center">
-                        <Box
-                          w={16}
-                          h={16}
-                          bg={planData.bgColor}
-                          color={planData.color}
-                          borderRadius="2xl"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
+                    <VStack  align="start">
+                      {/* Plan Title */}
+                      <VStack spacing={2} align="start">
+                        <Heading
+                          fontSize="xl"
+                          fontWeight="semibold"
+                          color={planData.popular ? "white" : textColor}
                         >
-                          <Icon as={planData.icon} h={8} w={8} />
-                        </Box>
-                        <VStack spacing={2}>
-                          <Heading fontSize="2xl" fontWeight="bold" color={textColor}>
-                            {planData.name}
-                          </Heading>
-                          <Text color="#666" fontSize="lg">
-                            {planData.description}
-                          </Text>
-                        </VStack>
+                          {planData.name}
+                        </Heading>
                       </VStack>
 
                       {/* Pricing */}
-                      <VStack spacing={1} textAlign="center">
-                        <HStack spacing={1} justify="center">
-                          <Text fontSize="4xl" fontWeight="bold" color={textColor}>
+                      <VStack align="start">
+                        <HStack spacing={1}>
+                          <Text
+                            fontSize="5xl"
+                            fontWeight="bold"
+                            color={planData.popular ? "white" : textColor}
+                          >
                             {planData.price}
                           </Text>
                           <Text fontSize="lg" color="#666">
                             /{planData.period}
                           </Text>
                         </HStack>
-                      </VStack>
-
-                      <Divider />
-
-                      {/* Features */}
-                      <VStack spacing={4} align="stretch">
-                        <Text fontWeight="semibold" color={textColor} fontSize="lg">
-                          What&apos;s included:
+                        <Text color={planData.popular ? "white" : "#666"} fontSize="sm">
+                          {planData.description}
                         </Text>
-                        <List spacing={3}>
-                          {planData.features.map((feature: string, featureIndex: number) => (
-                            <ListItem key={featureIndex} display="flex" alignItems="center">
-                              <ListIcon as={FiCheck} color="green.500" />
-                              <Text color="#666" fontSize="sm">
-                                {feature}
-                              </Text>
-                            </ListItem>
-                          ))}
-                        </List>
-                        
-                        {planData.limitations && planData.limitations.length > 0 && (
-                          <>
-                            <Text fontWeight="semibold" color="red.500" fontSize="lg" mt={4}>
-                              Limitations:
-                            </Text>
-                            <List spacing={3}>
-                              {planData.limitations.map((limitation: string, limitationIndex: number) => (
-                                <ListItem key={limitationIndex} display="flex" alignItems="center">
-                                  <Box w={2} h={2} bg="red.500" borderRadius="full" mr={3} />
-                                  <Text color="#666" fontSize="sm">
-                                    {limitation}
-                                  </Text>
-                                </ListItem>
-                              ))}
-                            </List>
-                          </>
-                        )}
                       </VStack>
 
                       {/* CTA Button */}
-                      <PlanButton 
+                      <PlanButton
                         plan={{
                           planId: plan.planId,
                           name: plan.name,
@@ -330,35 +376,233 @@ export default function PlansPage() {
                           variantId: plan.variantId || undefined,
                         }}
                       />
+
+                      <Divider borderColor="gray.400" my={4} />
+
+                      {/* Features Section */}
+                      <VStack spacing={2} align="start">
+                        <Text
+                          fontWeight="bold"
+                          color={planData.popular ? "white" : textColor}
+                          fontSize="sm"
+                          textTransform="uppercase"
+                        >
+                          Features
+                        </Text>
+                        <Text color={planData.popular ? "white" : "#gray.700"} fontSize="sm" mb={4}>
+                          {planData.planId === "free"
+                            ? "Everything you need to get started"
+                            : planData.planId === "pro"
+                            ? "Everything in our free plan plus...."
+                            : "Everything in Pro plus...."}
+                        </Text>
+                        <List spacing={2}>
+                          {planData.features
+                            .slice(0, 4)
+                            .map((feature: string, featureIndex: number) => (
+                              <ListItem
+                                key={featureIndex}
+                                display="flex"
+                                alignItems="center"
+                              >
+                                <ListIcon
+                                  as={FaCircleCheck}
+                                  color="green.500"
+                                  boxSize={4}
+                                />
+                                <Text color={planData.popular ? "white" : "#gray.700"} fontSize="sm">
+                                  {feature}
+                                </Text>
+                              </ListItem>
+                            ))}
+                        </List>
+                      </VStack>
                     </VStack>
                   </CardBody>
                 </Card>
-              )
+              );
             })}
+
+            {/* Manual Handwriting Comparison Card */}
+            <Card
+              position="relative"
+              overflow="hidden"
+              bg="gray.100"
+              border="2px solid #000000"
+              boxShadow="4px 4px 0px #000000"
+              borderRadius="xl"
+              _hover={{ boxShadow: "8px 8px 0px #000000" }}
+              transition="box-shadow 0.2s"
+            >
+              <CardBody p={8}>
+                <VStack align="start">
+                  {/* Plan Title */}
+                  <VStack spacing={2} align="start">
+                    <Heading
+                      fontSize="xl"
+                      fontWeight="semibold"
+                      color="gray.600"
+                    >
+                      Manual Handwriting
+                    </Heading>
+                  </VStack>
+
+                  {/* Pricing with strikethrough */}
+                  <VStack align="start">
+                    <HStack spacing={1}>
+                      <Text
+                        fontSize="5xl"
+                        fontWeight="bold"
+                        color="gray.400"
+                        textDecoration="line-through"
+                      >
+                        $50
+                      </Text>
+                      <Text fontSize="lg" color="gray.400">
+                        /page
+                      </Text>
+                    </HStack>
+                    <Text color="gray.500" fontSize="sm" mb={2}>
+                      Hire someone to write by hand... Too social for introverts like us.
+                    </Text>
+                  </VStack>
+
+                  {/* Disabled CTA Button */}
+                  <Button
+                    bg="gray.200"
+                    color="gray.500"
+                    border="2px solid"
+                    borderColor="gray.300"
+                    h={12}
+                    borderRadius="xl"
+                    fontWeight="semibold"
+                    fontSize="lg"
+                    w="full"
+                    cursor="not-allowed"
+                    _hover={{
+                      bg: "gray.200",
+                      transform: "none",
+                    }}
+                    _active={{
+                      transform: "none",
+                    }}
+                  >
+                    Not Available
+                  </Button>
+
+                  <Divider borderColor="gray.400" my={4} />
+
+                  {/* Features Section */}
+                  <VStack spacing={2} align="start">
+                    <Text
+                      fontWeight="bold"
+                      color="gray.600"
+                      fontSize="sm"
+                      textTransform="uppercase"
+                    >
+                      Features
+                    </Text>
+                    <Text color="gray.500" fontSize="sm" mb={4}>
+                      What you get with manual service
+                    </Text>
+                    <List spacing={2}>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.500" fontSize="sm">
+                          One-time handwriting service
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.500" fontSize="sm">
+                          No digital copies
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.500" fontSize="sm">
+                          Limited revisions
+                        </Text>
+                      </ListItem>
+                      <ListItem display="flex" alignItems="center">
+                        <Box
+                          w={2}
+                          h={2}
+                          bg="gray.400"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Text color="gray.500" fontSize="sm">
+                          Shipping costs extra
+                        </Text>
+                      </ListItem>
+                    </List>
+                  </VStack>
+                </VStack>
+              </CardBody>
+            </Card>
           </Grid>
 
-          {/* Features Section */}
-          <VStack spacing={12}>
+          {/* Features Section - Improved design */}
+          <VStack ref={featuresRef} spacing={12}>
             <VStack spacing={4} textAlign="center">
-              <Heading fontSize={{ base: "3xl", lg: "4xl" }} fontWeight="bold" color={textColor}>
+              <Heading
+                fontSize={{ base: "3xl", lg: "4xl" }}
+                fontWeight="bold"
+                color={textColor}
+              >
                 All Plans Include
               </Heading>
               <Text fontSize="lg" color="#666" maxW="2xl">
-                Powerful features to help you create authentic handwritten content
+                Powerful features to help you create authentic handwritten
+                content
               </Text>
             </VStack>
 
-            <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }} gap={6}>
+            <Grid
+              templateColumns={{
+                base: "1fr",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(4, 1fr)",
+              }}
+              gap={6}
+            >
               {features.map((feature, index) => (
-                <Card key={index} bg="white" shadow="lg" borderRadius="2xl" border={0}>
+                <Card
+                  key={index}
+                  bg="#FDF7EE"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
+                >
                   <CardBody p={6} textAlign="center">
                     <VStack spacing={4}>
                       <Box
                         w={12}
                         h={12}
-                        bg={bgColor}
-                        color={accentColor}
-                        borderRadius="xl"
+                        bg={accentColor}
+                        color={"white"}
+                        borderRadius="lg"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
@@ -382,13 +626,59 @@ export default function PlansPage() {
         </Container>
       </Box>
 
-      {/* FAQ Section */}
-      <Box as="section" px={6} py={20} bg="white">
+      {/* Wave Top - Transition from bgColor to white */}
+      <Box position="relative" bg={"white"}>
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          zIndex={1}
+          transform="translateY(1px) rotate(180deg)"
+        >
+          <Image
+            src="/wavetop.svg"
+            alt=""
+            w="full"
+            h="auto"
+            objectFit="cover"
+            filter="brightness(0) saturate(100%) invert(97%) sepia(5%) saturate(1200%) hue-rotate(355deg) brightness(105%) contrast(94%)"
+          />
+        </Box>
+        <Box h="150px" bg={"white"} />
+      </Box>
+
+      {/* FAQ Section - Improved design */}
+      <Box as="section" px={6} py={20} bg={bgColor}>
         <Container maxW="4xl">
           <VStack spacing={12}>
             <VStack spacing={4} textAlign="center">
-              <Heading fontSize={{ base: "3xl", lg: "4xl" }} fontWeight="bold" color={textColor}>
-                Frequently Asked Questions
+              <Heading
+                fontSize={{ base: "3xl", lg: "4xl" }}
+                fontWeight="bold"
+                color={textColor}
+              >
+                Frequently Asked{" "}
+                <Box position="relative" display="inline">
+                  <Box
+                    position="absolute"
+                    bottom="-25px"
+                    left="-6px"
+                    right="-6px"
+                  >
+                    <Image
+                      src="/underline.svg"
+                      alt=""
+                      w="full"
+                      h="full"
+                      objectFit="cover"
+                      style={{ transform: "scale(0.9)" }}
+                    />
+                  </Box>
+                  <Box position="relative" zIndex={1} display="inline">
+                    Questions
+                  </Box>
+                </Box>
               </Heading>
             </VStack>
 
@@ -396,29 +686,47 @@ export default function PlansPage() {
               {[
                 {
                   question: "Can I cancel my subscription anytime?",
-                  answer: "Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.",
+                  answer:
+                    "Yes, you can cancel your subscription at any time. Your access will continue until the end of your current billing period.",
                 },
                 {
                   question: "What payment methods do you accept?",
-                  answer: "We accept all major credit cards, PayPal, and Apple Pay. All payments are processed securely through Stripe.",
+                  answer:
+                    "We accept all major credit cards, PayPal, and Apple Pay. All payments are processed securely through Stripe.",
                 },
                 {
                   question: "Is there a free trial?",
-                  answer: "Yes! All paid plans come with a 7-day free trial. No credit card required to start your trial.",
+                  answer:
+                    "Yes! All paid plans come with a 7-day free trial. No credit card required to start your trial.",
                 },
                 {
                   question: "Can I upgrade or downgrade my plan?",
-                  answer: "Absolutely! You can change your plan at any time. Upgrades take effect immediately, while downgrades take effect at the next billing cycle.",
+                  answer:
+                    "Absolutely! You can change your plan at any time. Upgrades take effect immediately, while downgrades take effect at the next billing cycle.",
                 },
                 {
                   question: "What happens if I exceed my monthly limit?",
-                  answer: "You'll receive a notification when you're close to your limit. You can either upgrade your plan or wait until the next billing cycle.",
+                  answer:
+                    "You'll receive a notification when you're close to your limit. You can either upgrade your plan or wait until the next billing cycle.",
                 },
               ].map((faq, index) => (
-                <Card key={index} bg="white" shadow="sm" borderRadius="2xl" border="1px solid" borderColor="gray.200" w="full">
+                <Card
+                  key={index}
+                  w="full"
+                  bg="white"
+                  border="2px solid #000000"
+                  boxShadow="4px 4px 0px #000000"
+                  borderRadius="xl"
+                  _hover={{ boxShadow: "8px 8px 0px #000000" }}
+                  transition="box-shadow 0.2s"
+                >
                   <CardBody p={6}>
                     <VStack spacing={3} align="stretch">
-                      <Text fontWeight="semibold" color={textColor} fontSize="lg">
+                      <Text
+                        fontWeight="semibold"
+                        color={textColor}
+                        fontSize="lg"
+                      >
                         {faq.question}
                       </Text>
                       <Text color="#666" lineHeight="relaxed">
@@ -433,28 +741,54 @@ export default function PlansPage() {
         </Container>
       </Box>
 
-      {/* Final CTA */}
+      {/* Wave Bottom - Transition from white to dark */}
+      <Box position="relative" bg="white">
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          zIndex={1}
+          transform="translateY(1px) rotate(180deg)"
+        >
+          <Image
+            src="/wavetop.svg"
+            alt=""
+            w="full"
+            h="auto"
+            objectFit="cover"
+          />
+        </Box>
+        <Box h="150px" bg={bgColor} />
+      </Box>
+
+      {/* Final CTA - Matching landing page design */}
       <Box
         as="section"
         px={6}
         py={20}
-        bgGradient="linear(to-br, #FF6A00, #FF8A33)"
+        bg="#FF9966"
         position="relative"
         overflow="hidden"
       >
-        <Box
-          position="absolute"
-          inset={0}
-          bgImage="url('https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&h=400&fit=crop&crop=center')"
-          opacity={0.1}
-        />
-        <Container maxW="4xl" textAlign="center" position="relative" zIndex={10}>
+        <Container
+          maxW="4xl"
+          textAlign="center"
+          position="relative"
+          zIndex={10}
+        >
           <VStack spacing={8}>
-            <Heading fontSize={{ base: "4xl", lg: "5xl" }} fontWeight="bold" color="white" lineHeight="tight">
+            <Heading
+              fontSize={{ base: "4xl", lg: "5xl" }}
+              fontWeight="bold"
+              color="gray.800"
+              lineHeight="tight"
+            >
               Ready to Get Started?
             </Heading>
-            <Text fontSize="xl" color="whiteAlpha.900" maxW="2xl">
-              Join thousands of users who trust Pen My Work for authentic handwritten content. Start your free trial today.
+            <Text fontSize="xl" color="gray.800" maxW="2xl">
+              Join thousands of users who trust Pen My Work for authentic
+              handwritten content. Start your free trial today.
             </Text>
 
             <Flex
@@ -465,13 +799,19 @@ export default function PlansPage() {
             >
               <Button
                 bg="white"
-                _hover={{ bg: "gray.100" }}
-                color={textColor}
                 h={14}
                 px={8}
+                color="gray.800"
                 borderRadius="full"
                 fontWeight="semibold"
                 fontSize="lg"
+                border="2px solid black"
+                boxShadow="4px 4px 0px #000000"
+                _hover={{
+                  bg: "gray.100",
+                  boxShadow: "8px 8px 0px #000000",
+                }}
+                transition="all 0.2s"
                 onClick={() => router.push("/sign-in")}
               >
                 Start Free Trial
@@ -479,25 +819,25 @@ export default function PlansPage() {
               <Button
                 bg="transparent"
                 _hover={{ bg: "whiteAlpha.200" }}
-                color="white"
                 h={14}
                 px={8}
                 borderRadius="full"
                 fontWeight="semibold"
+                color="gray.800"
                 fontSize="lg"
-                border="2px solid white"
-                onClick={() => router.push("/plans")}
+                border="2px solid black"
+                onClick={() => router.push("/sign-in")}
               >
-                View All Plans
+                Sign In
               </Button>
             </Flex>
 
-            <Text color="whiteAlpha.800" fontSize="sm">
+            <Text color="gray.800" fontSize="sm">
               No credit card required • 7-day free trial • Cancel anytime
             </Text>
           </VStack>
         </Container>
       </Box>
     </Box>
-  )
+  );
 }

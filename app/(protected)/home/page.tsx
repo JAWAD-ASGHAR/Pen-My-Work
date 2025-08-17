@@ -192,7 +192,6 @@ export default function Dashboard() {
             justifyContent="center"
           >
             <LoadingSpinner
-              message="Loading your assignments..."
               minHeight="auto"
             />
           </Box>
