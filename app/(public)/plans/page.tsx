@@ -443,7 +443,7 @@ export default function PlansPage() {
                       fontWeight="semibold"
                       color="gray.600"
                     >
-                      Manual Handwriting
+                      Handwriting Service
                     </Heading>
                   </VStack>
 
