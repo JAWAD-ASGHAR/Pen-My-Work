@@ -37,6 +37,7 @@ import { toPng } from "html-to-image";
 import { useRef } from "react";
 import JSZip from "jszip";
 import jsPDF from "jspdf";
+import { writingStyles } from "@/data/styles";
 
 export default function AssignmentDetails() {
   const params = useParams();
@@ -408,7 +409,7 @@ export default function AssignmentDetails() {
                             <Paper
                               text={pageContent}
                               textColor={assignment.ink}
-                              fontFamily="'Caveat', cursive"
+                              fontFamily={writingStyles.find(style => style.id === assignment.writingStyle)?.fontFamily || ''}
                               paperType={
                                 assignment.paper === "ruled" ? "lined" :
                                 assignment.paper === "blank" ? "blank" :
