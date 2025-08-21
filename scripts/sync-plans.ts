@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import { syncPlans } from "../server/actions/user-plans"
-import { db } from "../src/db"
 
 async function main() {
   try {

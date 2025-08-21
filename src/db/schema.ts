@@ -5,6 +5,7 @@ export const assignment = pgTable("assignment", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
   paper: text("paper").notNull(), 
+  writingStyle: text("writing_style").notNull(),
   ink: text("ink").notNull(), 
   text: text("text").notNull(), 
   specialQuery: text("special_query"), 

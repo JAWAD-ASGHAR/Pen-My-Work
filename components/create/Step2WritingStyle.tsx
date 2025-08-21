@@ -11,58 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { FiArrowRight } from "react-icons/fi";
-
-const writingStyles = [
-  {
-    id: "caveat",
-    name: "Caveat",
-    description: "Natural handwritten style",
-    fontFamily: "'Caveat', cursive",
-    fontSize: "30px",
-  },
-  {
-    id: "gloria",
-    name: "Gloria Hallelujah",
-    description: "Playful and expressive",
-    fontFamily: "'Gloria Hallelujah', cursive",
-    fontSize: "20px",
-  },
-  {
-    id: "patrick",
-    name: "Patrick Hand",
-    description: "Clear and readable",
-    fontFamily: "'Patrick Hand', cursive",
-    fontSize: "24px",
-  },
-  {
-    id: "permanent-marker",
-    name: "Permanent Marker",
-    description: "Bold and confident",
-    fontFamily: "'Permanent Marker', cursive",
-    fontSize: "20px",
-  },
-  {
-    id: "reenie-beanie",
-    name: "Reenie Beanie",
-    description: "Casual and friendly",
-    fontFamily: "'Reenie Beanie', cursive",
-    fontSize: "30px",
-  },
-  {
-    id: "shadows-into-light",
-    name: "Shadows Into Light",
-    description: "Elegant and flowing",
-    fontFamily: "'Shadows Into Light', cursive",
-    fontSize: "24px",
-  },
-  {
-    id: "edu-sa-hand",
-    name: "Edu SA Hand",
-    description: "Professional handwritten",
-    fontFamily: "'Edu SA Hand', cursive",
-    fontSize: "24px",
-  },
-];
+import { writingStyles } from "@/data/styles";
 
 interface Step2WritingStyleProps {
   selectedWritingStyle: string;

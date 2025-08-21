@@ -9,6 +9,7 @@ import { headers } from "next/headers"
 export type Assignment = {
   id: string
   paper: string
+  writingStyle: string
   ink: string
   text: string
   specialQuery?: string
@@ -37,6 +38,7 @@ export async function getAssignments(): Promise<Assignment[]> {
     return assignments.map(assignment => ({
       id: assignment.id,
       paper: assignment.paper,
+      writingStyle: assignment.writingStyle,
       ink: assignment.ink,
       text: assignment.text,
       specialQuery: assignment.specialQuery || undefined,
@@ -76,6 +78,7 @@ export async function getAssignmentById(id: string): Promise<Assignment | null> 
     return {
       id: assignmentData.id,
       paper: assignmentData.paper,
+      writingStyle: assignmentData.writingStyle,
       ink: assignmentData.ink,
       text: assignmentData.text,
       specialQuery: assignmentData.specialQuery || undefined,

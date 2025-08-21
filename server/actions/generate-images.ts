@@ -65,7 +65,7 @@ export const generateSystemMessage = async (
   ].join("\n");
 };
 
-export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string, ink: string, paper: string, additionalQueries: string, requiredPages: number) => {
+export const generateImages = protectedAction(async (user: AuthenticatedUser, pages: string, ink: string, paper: string, writingStyle: string, additionalQueries: string, requiredPages: number) => {
   try {
       const result = await db.transaction(async (tx) => {
           // First get current user credits
@@ -77,6 +77,7 @@ export const generateImages = protectedAction(async (user: AuthenticatedUser, pa
               userId: user.id,
               imageURLs: [],
               paper: paper,
+              writingStyle: writingStyle,
               ink: ink,
               text: pages,
               specialQuery: additionalQueries || null,

@@ -1,3 +1,4 @@
+import { paperTypes } from "@/data/paper";
 import {
   Box,
   Button,
@@ -13,33 +14,6 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FiArrowRight } from "react-icons/fi";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { FiFileText, FiGrid } from "react-icons/fi";
-
-const paperTypes = [
-  {
-    id: "ruled",
-    name: "Ruled",
-    description: "Traditional lined paper",
-    icon: RxHamburgerMenu,
-    preview: "/lines-page.png",
-  },
-  {
-    id: "blank",
-    name: "Blank",
-    description: "Clean white paper",
-    icon: FiFileText,
-    preview: "/blank-page.png",
-  },
-  {
-    id: "grid",
-    name: "Grid",
-    description: "Graph paper with grid lines",
-    icon: FiGrid,
-    preview: "/grid-page.png",
-  },
-];
-
 interface Step1PaperTypeProps {
   selectedPaper: string;
   setSelectedPaper: (paper: string) => void;

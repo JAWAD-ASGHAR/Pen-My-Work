@@ -79,6 +79,7 @@ export default function CreatePage() {
     pages: string,
     ink: string,
     paper: string,
+    writingStyle: string,
     additionalQueries: string
   ) => {
     try {
@@ -99,6 +100,7 @@ export default function CreatePage() {
         pages,
         ink,
         paper,
+        writingStyle,
         additionalQueries,
         requiredPages
       );
@@ -150,7 +152,7 @@ export default function CreatePage() {
   };
 
   const handleGenerateClick = () => {
-    handleGenerate(content, selectedInk, selectedPaper, "");
+    handleGenerate(content, selectedInk, selectedPaper, selectedWritingStyle, "");
   };
 
   const handleUpgradeToPro = () => {
