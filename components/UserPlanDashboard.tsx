@@ -116,29 +116,29 @@ export default function UserPlanDashboard() {
     }
   }
 
-  const handlePauseSubscription = async () => {
-    setActionLoading("pause")
-    try {
-      await pauseSubscription()
-      toast({
-        title: "Success",
-        description: "Your subscription has been paused",
-        status: "success",
-      })
-      // Refresh subscription data
-      const sub = await getCurrentUserSubscription()
-      setSubscription(sub)
-    } catch (error) {
-      console.error("Pause subscription error:", error)
-      toast({
-        title: "Error",
-        description: "Failed to pause subscription",
-        status: "error",
-      })
-    } finally {
-      setActionLoading(null)
-    }
-  }
+  // const handlePauseSubscription = async () => {
+  //   setActionLoading("pause")
+  //   try {
+  //     await pauseSubscription()
+  //     toast({
+  //       title: "Success",
+  //       description: "Your subscription has been paused",
+  //       status: "success",
+  //     })
+  //     // Refresh subscription data
+  //     const sub = await getCurrentUserSubscription()
+  //     setSubscription(sub)
+  //   } catch (error) {
+  //     console.error("Pause subscription error:", error)
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to pause subscription",
+  //       status: "error",
+  //     })
+  //   } finally {
+  //     setActionLoading(null)
+  //   }
+  // }
 
   const handleUnpauseSubscription = async () => {
     setActionLoading("unpause")
@@ -333,7 +333,7 @@ export default function UserPlanDashboard() {
                         Update Billing
                       </Button>
                       
-                      {isPaused ? (
+                      {/* {isPaused ? (
                         <Button
                           leftIcon={<Icon as={FiPlay} />}
                           onClick={handleUnpauseSubscription}
@@ -367,7 +367,7 @@ export default function UserPlanDashboard() {
                         >
                           Pause Subscription
                         </Button>
-                      )}
+                      )} */}
                       
                       <Button
                         leftIcon={<Icon as={FiX} />}
