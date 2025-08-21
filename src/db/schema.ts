@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, timestamp, integer, boolean, serial } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, timestamp, integer, boolean, serial, varchar } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
 export const assignment = pgTable("assignment", {
@@ -71,6 +71,16 @@ export const userCredits = pgTable('user_credits', {
     .references(() => user.id),
   totalCredits: integer('total_credits').notNull().default(0),
   usedCredits: integer('used_credits').notNull().default(0),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}).enableRLS();
+
+export const feedback = pgTable('feedback', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  name: varchar('name',{length:255}),
+  email: varchar('email',{length:64}),
+  message: text('message'),
+  subject: text('subject'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }).enableRLS();
