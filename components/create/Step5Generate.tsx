@@ -42,7 +42,21 @@ interface Step5GenerateProps {
   onPrevious: () => void;
   userCredits?: { totalCredits: number; usedCredits: number } | null;
   userPlan?: { planId: string; name: string } | null;
-  subscription?: { status: string; statusFormatted: string } | null;
+  subscription?: { status: string; statusFormatted: string; renewsAt?: string; endsAt?: string } | null;
+}
+
+function isSubscriptionActive(subscription: any): boolean {
+  if (!subscription) return false
+  
+  if (subscription.status === "active") {
+    return !subscription.endsAt || new Date(subscription.endsAt) > new Date()
+  }
+  
+  if (subscription.status === "cancelled" && subscription.renewsAt) {
+    return new Date(subscription.renewsAt) > new Date()
+  }
+  
+  return false
 }
 
 export default function Step5Generate({
@@ -59,7 +73,9 @@ export default function Step5Generate({
   const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
   const hasEnoughCredits = availableCredits >= pageCount;
   const isFreePlan = userPlan?.planId === "free";
-  const isCancelled = subscription?.status === "cancelled" || subscription?.status === "expired";
+  const isSubscriptionActiveNow = isSubscriptionActive(subscription);
+  const isCancelledButActive = subscription?.status === "cancelled" && isSubscriptionActiveNow;
+  const isCancelledAndExpired = subscription?.status === "cancelled" && !isSubscriptionActiveNow;
 
   return (
     <>
@@ -115,8 +131,25 @@ export default function Step5Generate({
                     </Badge>
                   </HStack>
                   
-                  {/* Cancelled Subscription Status */}
-                  {isCancelled && (
+                  {/* Cancelled but Still Active Subscription Status */}
+                  {isCancelledButActive && (
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="orange.50"
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor="orange.200"
+                    >
+                      <Text fontWeight="medium">Subscription Status:</Text>
+                      <Badge colorScheme="orange" variant="subtle">
+                        Cancelled (Active until {subscription.renewsAt ? new Date(subscription.renewsAt).toLocaleDateString() : "renewal"})
+                      </Badge>
+                    </HStack>
+                  )}
+                  
+                  {/* Cancelled and Expired Subscription Status */}
+                  {isCancelledAndExpired && (
                     <HStack
                       justify="space-between"
                       p={4}
@@ -127,13 +160,13 @@ export default function Step5Generate({
                     >
                       <Text fontWeight="medium">Subscription Status:</Text>
                       <Badge colorScheme="red" variant="subtle">
-                        Cancelled
+                        Cancelled (Expired)
                       </Badge>
                     </HStack>
                   )}
                   
-                  {/* Credit Information - Only show for free plan users */}
-                  {isFreePlan && !isCancelled && userCredits && (
+                  {/* Credit Information - Only show for free plan users or expired cancelled subscriptions */}
+                  {(isFreePlan || isCancelledAndExpired) && !isCancelledButActive && userCredits && (
                     <HStack
                       justify="space-between"
                       p={4}
@@ -147,13 +180,13 @@ export default function Step5Generate({
                         colorScheme={hasEnoughCredits ? "green" : "red"}
                         variant="subtle"
                       >
-                        {availableCredits} / {pageCount} needed
+                        {availableCredits} / {pageCount} required
                       </Badge>
                     </HStack>
                   )}
                   
                   {/* Pro Plan Message */}
-                  {!isFreePlan && !isCancelled && (
+                  {!isFreePlan && !isCancelledAndExpired && (
                     <HStack
                       justify="space-between"
                       p={4}
@@ -189,19 +222,19 @@ export default function Step5Generate({
                 size="lg"
                 w="full"
                 leftIcon={<Icon as={FiPlay} />}
-                isDisabled={!content.trim() || (isFreePlan && !isCancelled && userCredits ? !hasEnoughCredits : false)}
+                isDisabled={!content.trim() || (isFreePlan && !isCancelledAndExpired && userCredits ? !hasEnoughCredits : false)}
               >
-                {isFreePlan && !isCancelled && userCredits && !hasEnoughCredits 
+                {isFreePlan && !isCancelledAndExpired && userCredits && !hasEnoughCredits 
                   ? "Insufficient Credits - Upgrade Required" 
                   : "Generate Assignment"
                 }
               </Button>
               
               {/* Cancelled Subscription Message */}
-              {isCancelled && (
+              {isCancelledAndExpired && (
                 <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
                   <Text color="red.700" fontSize="sm" textAlign="center" mb={3}>
-                    Your subscription has been cancelled. You now have access to the free plan features.
+                    Your subscription has expired. You now have access to the free plan features.
                   </Text>
                   <Button
                     leftIcon={<Icon as={FiZap} />}
@@ -215,7 +248,7 @@ export default function Step5Generate({
                 </Box>
               )}
               
-              {isFreePlan && !isCancelled && userCredits && !hasEnoughCredits && (
+              {isFreePlan && !isCancelledAndExpired && userCredits && !hasEnoughCredits && (
                 <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
                   <Text color="red.700" fontSize="sm" textAlign="center">
                     You need {pageCount} credits but only have {availableCredits} available. 

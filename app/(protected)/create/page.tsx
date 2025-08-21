@@ -160,17 +160,25 @@ export default function CreatePage() {
     router.push("/plans");
   };
 
-  // Check if user needs credit validation
   const needsCreditCheck = userPlan?.planId === "free";
 
-  // Get subscription info for components
-  const [subscription, setSubscription] = useState<{ status: string; statusFormatted: string } | null>(null);
+  const [subscription, setSubscription] = useState<{ status: string; statusFormatted: string; renewsAt?: string; endsAt?: string } | null>(null);
 
   useEffect(() => {
     const fetchSubscription = async () => {
       try {
         const { subscription: sub } = await getCurrentUserPlanAndSubscription();
-        setSubscription(sub);
+
+        if (sub) {
+          setSubscription({
+            status: sub.status,
+            statusFormatted: sub.statusFormatted,
+            renewsAt: sub.renewsAt || undefined,
+            endsAt: sub.endsAt || undefined,
+          });
+        } else {
+          setSubscription(null);
+        }
       } catch (error) {
         console.error("Error fetching subscription:", error);
       }

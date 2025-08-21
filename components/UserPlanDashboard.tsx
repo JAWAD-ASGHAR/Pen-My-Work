@@ -56,6 +56,20 @@ type Subscription = {
   price: string;
 }
 
+function isSubscriptionActive(subscription: any): boolean {
+  if (!subscription) return false
+  
+  if (subscription.status === "active") {
+    return !subscription.endsAt || new Date(subscription.endsAt) > new Date()
+  }
+  
+  if (subscription.status === "cancelled" && subscription.renewsAt) {
+    return new Date(subscription.renewsAt) > new Date()
+  }
+  
+  return false
+}
+
 export default function UserPlanDashboard() {
   const bgColor = "#FDF7EE";
   const textColor = "#1A1A1A";
@@ -116,29 +130,29 @@ export default function UserPlanDashboard() {
     }
   }
 
-  const handlePauseSubscription = async () => {
-    setActionLoading("pause")
-    try {
-      await pauseSubscription()
-      toast({
-        title: "Success",
-        description: "Your subscription has been paused",
-        status: "success",
-      })
-      // Refresh subscription data
-      const sub = await getCurrentUserSubscription()
-      setSubscription(sub)
-    } catch (error) {
-      console.error("Pause subscription error:", error)
-      toast({
-        title: "Error",
-        description: "Failed to pause subscription",
-        status: "error",
-      })
-    } finally {
-      setActionLoading(null)
-    }
-  }
+  // const handlePauseSubscription = async () => {
+  //   setActionLoading("pause")
+  //   try {
+  //     await pauseSubscription()
+  //     toast({
+  //       title: "Success",
+  //       description: "Your subscription has been paused",
+  //       status: "success",
+  //     })
+  //     // Refresh subscription data
+  //     const sub = await getCurrentUserSubscription()
+  //     setSubscription(sub)
+  //   } catch (error) {
+  //     console.error("Pause subscription error:", error)
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to pause subscription",
+  //       status: "error",
+  //     })
+  //   } finally {
+  //     setActionLoading(null)
+  //   }
+  // }
 
   const handleUnpauseSubscription = async () => {
     setActionLoading("unpause")
@@ -190,9 +204,10 @@ export default function UserPlanDashboard() {
   }
 
   const isFreePlan = currentPlan?.planId === "free"
-  const isActive = subscription?.status === "active"
+  const isSubscriptionActiveNow = isSubscriptionActive(subscription)
+  const isCancelledButActive = subscription?.status === "cancelled" && isSubscriptionActiveNow
+  const isCancelledAndExpired = subscription?.status === "cancelled" && !isSubscriptionActiveNow
   const isPaused = subscription?.isPaused ?? false
-  const isCancelled = subscription?.status === "cancelled" || subscription?.status === "expired"
 
   return (
     <Box minH="100vh" bg={bgColor} py={8}>
@@ -240,13 +255,22 @@ export default function UserPlanDashboard() {
                       </Heading>
                       {!isFreePlan && (
                         <Badge 
-                          colorScheme={isActive ? "green" : isPaused ? "yellow" : "red"}
+                          colorScheme={
+                            isSubscriptionActiveNow 
+                              ? (isCancelledButActive ? "orange" : "green") 
+                              : isPaused 
+                                ? "yellow" 
+                                : "red"
+                          }
                           variant="subtle"
                           borderRadius="full"
                           px={3}
                           py={1}
                         >
-                          {subscription?.statusFormatted}
+                          {isCancelledButActive 
+                            ? "Cancelled (Active)" 
+                            : subscription?.statusFormatted
+                          }
                         </Badge>
                       )}
                     </HStack>
@@ -286,6 +310,13 @@ export default function UserPlanDashboard() {
                           </Text>
                         </HStack>
                       )}
+                      {isCancelledButActive && (
+                        <Box bg="orange.50" p={3} borderRadius="md" border="1px solid" borderColor="orange.200">
+                          <Text color="orange.700" fontSize="sm" textAlign="center">
+                            Your subscription is cancelled but remains active until the renewal date. You continue to have access to Pro features.
+                          </Text>
+                        </Box>
+                      )}
                     </VStack>
                   </Box>
                 )}
@@ -310,7 +341,7 @@ export default function UserPlanDashboard() {
                 )}
 
                 {/* Action Buttons */}
-                {!isFreePlan && subscription && isActive && (
+                {!isFreePlan && subscription && isSubscriptionActiveNow && (
                   <VStack spacing={4} align="stretch">
                     <Text fontWeight="semibold" color={textColor} fontSize="lg">
                       Manage Subscription
@@ -333,7 +364,7 @@ export default function UserPlanDashboard() {
                         Update Billing
                       </Button>
                       
-                      {isPaused ? (
+                      {/* {isPaused ? (
                         <Button
                           leftIcon={<Icon as={FiPlay} />}
                           onClick={handleUnpauseSubscription}
@@ -367,7 +398,7 @@ export default function UserPlanDashboard() {
                         >
                           Pause Subscription
                         </Button>
-                      )}
+                      )} */}
                       
                       <Button
                         leftIcon={<Icon as={FiX} />}
@@ -390,7 +421,7 @@ export default function UserPlanDashboard() {
                 )}
 
                 {/* Buy Plan Button for Cancelled/Expired Subscriptions */}
-                {!isFreePlan && subscription && isCancelled && (
+                {!isFreePlan && subscription && isCancelledAndExpired && (
                   <VStack spacing={4}>
                     <Box bg="red.50" p={6} borderRadius="xl" border="2px solid" borderColor="red.200" w="full">
                       <Text color="red.700" fontSize="md" textAlign="center" fontWeight="medium">

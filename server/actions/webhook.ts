@@ -31,9 +31,7 @@ export async function processWebhookEvent(webhookEvent: {
       // Save subscription invoices; eventBody is a SubscriptionInvoice
       // Not implemented.
     } else if (
-      webhookEvent.eventName === 'subscription_created' ||
-      webhookEvent.eventName === 'subscription_updated' ||
-      webhookEvent.eventName === 'subscription_cancelled'
+      webhookEvent.eventName === 'subscription_created' 
     ) {
       // Save subscription events; obj is a Subscription
       const attributes = eventBody.data.attributes
@@ -93,13 +91,37 @@ export async function processWebhookEvent(webhookEvent: {
       } catch (error) {
         console.error(`❌ Failed to upsert Subscription #${updateData.lemonSqueezyId} to the database.`, error)
       }
-    } else if (webhookEvent.eventName.startsWith('order_')) {
-      // Save orders; eventBody is a "Order"
-      /* Not implemented */
-    } else if (webhookEvent.eventName.startsWith('license_')) {
-      // Save license keys; eventBody is a "License key"
-      /* Not implemented */
+    } else if (
+      webhookEvent.eventName === 'subscription_updated' ||
+      webhookEvent.eventName === 'subscription_cancelled'
+    ) {
+      // Update the subscription in the database.
+      const attributes = eventBody.data.attributes
+      const updateData: any = {
+        lemonSqueezyId: eventBody.data.id,
+        orderId: attributes.order_id as number,
+        name: attributes.user_name as string,
+        email: attributes.user_email as string,
+        status: attributes.status as string,
+        statusFormatted: attributes.status_formatted as string,
+        renewsAt: attributes.renews_at as string,
+        endsAt: attributes.ends_at as string,
+        trialEndsAt: attributes.trial_ends_at as string,
+        isPaused: false,
+        subscriptionItemId: attributes.first_subscription_item.subscription_item_id,
+        isUsageBased: attributes.first_subscription_item.is_usage_based,
+        userId: eventBody.meta.custom_data.user_id,
+      }
+      await db.update(subscriptions).set(updateData).where(eq(subscriptions.userId, eventBody.meta.custom_data.user_id))
+      console.log(`✅ Subscription #${eventBody.data.id} updated in the database.`)
     }
+    // } else if (webhookEvent.eventName.startsWith('order_')) {
+    //   // Save orders; eventBody is a "Order"
+    //   /* Not implemented */
+    // } else if (webhookEvent.eventName.startsWith('license_')) {
+    //   // Save license keys; eventBody is a "License key"
+    //   /* Not implemented */
+    // }
   } else {
     console.error('❌ No meta data found in webhook event')
   }
