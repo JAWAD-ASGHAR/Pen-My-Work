@@ -30,7 +30,6 @@ export default function Header({
   const handleLogout = async () => {
     try {
       await authClient.signOut();
-      router.push("/sign-in");
     } catch (error) {
       console.error("Logout error:", error);
     }
