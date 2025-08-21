@@ -24,10 +24,11 @@ interface Step4ContentProps {
   userCredits?: { totalCredits: number; usedCredits: number } | null;
   userPlan?: { planId: string; name: string } | null;
   subscription?: { status: string; statusFormatted: string; renewsAt?: string; endsAt?: string } | null;
+  selectedWritingStyle: string;
 }
 
 // Utility function to check if a subscription is still active
-function isSubscriptionActive(subscription: any): boolean {
+function isSubscriptionActive(subscription: { status: string; statusFormatted: string; renewsAt?: string; endsAt?: string } | null): boolean {
   if (!subscription) return false
   
   // If status is active, check if it hasn't ended
@@ -52,12 +53,13 @@ export default function Step4Content({
   userCredits,
   userPlan,
   subscription,
+  selectedWritingStyle,
 }: Step4ContentProps) {
-  const { pageCount } = charCount(content);
+  const { pageCount } = charCount(content,selectedWritingStyle);
   const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
   const hasEnoughCredits = availableCredits >= pageCount;
   const isFreePlan = userPlan?.planId === "free";
-  const isSubscriptionActiveNow = isSubscriptionActive(subscription);
+  const isSubscriptionActiveNow = isSubscriptionActive(subscription || null);
   const isCancelledButActive = subscription?.status === "cancelled" && isSubscriptionActiveNow;
   const isCancelledAndExpired = subscription?.status === "cancelled" && !isSubscriptionActiveNow;
 

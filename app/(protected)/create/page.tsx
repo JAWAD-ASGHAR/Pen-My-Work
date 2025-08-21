@@ -68,12 +68,12 @@ export default function CreatePage() {
   // Calculate required pages when content changes
   useEffect(() => {
     if (content.trim()) {
-      const { pageCount } = charCount(content);
+      const { pageCount } = charCount(content,selectedWritingStyle);
       setRequiredPages(pageCount);
     } else {
       setRequiredPages(0);
     }
-  }, [content]);
+  }, [content,selectedWritingStyle]);
 
   const handleGenerate = async (
     pages: string,
@@ -108,7 +108,7 @@ export default function CreatePage() {
       if ("error" in result) {
         console.error("Error creating assignment:", result.error);
         toast({
-          title: "Error",
+          title: "Error", 
           description: result.error,
           status: "error",
         });
@@ -231,6 +231,7 @@ export default function CreatePage() {
           userCredits={needsCreditCheck ? userCredits : null}
           userPlan={userPlan}
           subscription={subscription}
+          selectedWritingStyle={selectedWritingStyle}
         />
       )}
 
@@ -238,6 +239,7 @@ export default function CreatePage() {
         <Step5Generate
           content={content}
           selectedPaper={selectedPaper}
+          selectedWritingStyle={selectedWritingStyle}
           isGenerating={isGenerating}
           onGenerate={handleGenerateClick}
           onPrevious={prevStep}

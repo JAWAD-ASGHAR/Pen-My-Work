@@ -235,7 +235,7 @@ export default function AssignmentDetails() {
   }
 
   // Split text into pages for rendering
-  const { pages: textPages } = charCount(assignment.text);
+  const { pages: textPages } = charCount(assignment.text,assignment.writingStyle);
   console.log(textPages);
   return (
     <>

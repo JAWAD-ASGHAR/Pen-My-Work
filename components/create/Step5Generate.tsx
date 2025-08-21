@@ -37,6 +37,7 @@ const paperTypes = [
 interface Step5GenerateProps {
   content: string;
   selectedPaper: string;
+  selectedWritingStyle: string;
   isGenerating: boolean;
   onGenerate: () => void;
   onPrevious: () => void;
@@ -45,13 +46,17 @@ interface Step5GenerateProps {
   subscription?: { status: string; statusFormatted: string; renewsAt?: string; endsAt?: string } | null;
 }
 
-function isSubscriptionActive(subscription: any): boolean {
+// Utility function to check if a subscription is still active
+function isSubscriptionActive(subscription: { status: string; statusFormatted: string; renewsAt?: string; endsAt?: string } | null): boolean {
   if (!subscription) return false
   
+  // If status is active, check if it hasn't ended
   if (subscription.status === "active") {
     return !subscription.endsAt || new Date(subscription.endsAt) > new Date()
   }
   
+  // If status is cancelled, check if the renewal date is still in the future
+  // This means they've paid for the current period and should still have access
   if (subscription.status === "cancelled" && subscription.renewsAt) {
     return new Date(subscription.renewsAt) > new Date()
   }
@@ -62,6 +67,7 @@ function isSubscriptionActive(subscription: any): boolean {
 export default function Step5Generate({
   content,
   selectedPaper,
+  selectedWritingStyle,
   isGenerating,
   onGenerate,
   onPrevious,
@@ -69,11 +75,11 @@ export default function Step5Generate({
   userPlan,
   subscription,
 }: Step5GenerateProps) {
-  const { pageCount } = charCount(content);
+  const { pageCount } = charCount(content,selectedWritingStyle);
   const availableCredits = userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0;
   const hasEnoughCredits = availableCredits >= pageCount;
   const isFreePlan = userPlan?.planId === "free";
-  const isSubscriptionActiveNow = isSubscriptionActive(subscription);
+  const isSubscriptionActiveNow = isSubscriptionActive(subscription || null);
   const isCancelledButActive = subscription?.status === "cancelled" && isSubscriptionActiveNow;
   const isCancelledAndExpired = subscription?.status === "cancelled" && !isSubscriptionActiveNow;
 

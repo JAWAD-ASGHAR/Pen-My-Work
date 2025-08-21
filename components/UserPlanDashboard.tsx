@@ -25,12 +25,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 import { useState, useEffect, useRef } from "react"
-import { FiCheck, FiStar, FiZap, FiCreditCard, FiPause, FiPlay, FiX } from "react-icons/fi"
+import { FiCheck, FiStar, FiZap, FiCreditCard, FiX } from "react-icons/fi"
 import { 
-  getCurrentUserSubscription,
   cancelUserSubscription,
-  pauseSubscription,
-  unpauseSubscription,
   getSubscriptionManagementURLs,
   getCurrentUserPlanAndSubscription
 } from "@/server/actions/user-plans"
@@ -56,7 +53,7 @@ type Subscription = {
   price: string;
 }
 
-function isSubscriptionActive(subscription: any): boolean {
+function isSubscriptionActive(subscription: Subscription | null): boolean {
   if (!subscription) return false
   
   if (subscription.status === "active") {
@@ -127,54 +124,6 @@ export default function UserPlanDashboard() {
     } finally {
       setActionLoading(null)
       onClose()
-    }
-  }
-
-  // const handlePauseSubscription = async () => {
-  //   setActionLoading("pause")
-  //   try {
-  //     await pauseSubscription()
-  //     toast({
-  //       title: "Success",
-  //       description: "Your subscription has been paused",
-  //       status: "success",
-  //     })
-  //     // Refresh subscription data
-  //     const sub = await getCurrentUserSubscription()
-  //     setSubscription(sub)
-  //   } catch (error) {
-  //     console.error("Pause subscription error:", error)
-  //     toast({
-  //       title: "Error",
-  //       description: "Failed to pause subscription",
-  //       status: "error",
-  //     })
-  //   } finally {
-  //     setActionLoading(null)
-  //   }
-  // }
-
-  const handleUnpauseSubscription = async () => {
-    setActionLoading("unpause")
-    try {
-      await unpauseSubscription()
-      toast({
-        title: "Success",
-        description: "Your subscription has been resumed",
-        status: "success",
-      })
-      // Refresh subscription data
-      const sub = await getCurrentUserSubscription()
-      setSubscription(sub)
-    } catch (error) {
-      console.error("Unpause subscription error:", error)
-      toast({
-        title: "Error",
-        description: "Failed to resume subscription",
-        status: "error",
-      })
-    } finally {
-      setActionLoading(null)
     }
   }
 
