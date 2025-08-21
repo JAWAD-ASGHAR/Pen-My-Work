@@ -29,7 +29,13 @@ export default function Header({
 
   const handleLogout = async () => {
     try {
-      await authClient.signOut();
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: () => {
+            router.push("/sign-in");
+          },
+        },
+      });
     } catch (error) {
       console.error("Logout error:", error);
     }
