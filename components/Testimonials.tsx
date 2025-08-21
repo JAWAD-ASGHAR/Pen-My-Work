@@ -11,25 +11,25 @@ const Testimonials = ({accentColor, textColor}: {accentColor: string, textColor:
     <VStack spacing={8}>
     {[
       {
-        text: "ScriptAI saved me hours on my assignments. The handwriting looks so natural, my professors never knew the difference!",
+        text: "Pen My Work saved me hours on my assignments. The handwriting looks so natural, my professors never knew the difference!",
         author: "Alex Chen",
         role: "Computer Science Student",
         avatar:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face",
+          "https://i.pinimg.com/1200x/bb/00/fb/bb00fbabd0a58d0bc918cb8bd5664837.jpg",
       },
       {
         text: "As a teacher, I use this to create personalized worksheets. My students love the authentic handwritten feel.",
         author: "Maria Rodriguez",
         role: "Elementary School Teacher",
         avatar:
-          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face",
+          "https://i.pinimg.com/1200x/da/63/2f/da632f84e5324a7bb62971d39c5a0c03.jpg",
       },
       {
         text: "Perfect for my design projects. The handwritten elements add that human touch clients love.",
         author: "James Wilson",
         role: "Graphic Designer",
         avatar:
-          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face",
+          "https://i.pinimg.com/736x/66/2b/be/662bbef42e07620cbea41e3ac63a74eb.jpg",
       },
     ].map((testimonial, index) => (
       <Card

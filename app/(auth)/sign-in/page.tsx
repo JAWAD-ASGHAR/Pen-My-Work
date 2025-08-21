@@ -141,7 +141,7 @@ export default function SignInPage() {
             <Box mx="auto" w={20} h={20} position="relative" mb={4}>
               <Image
                 src="/Logo.png"
-                alt="ScriptAI Logo"
+                alt="Pen My Work Logo"
                 fill
                 style={{ objectFit: "contain" }}
               />
