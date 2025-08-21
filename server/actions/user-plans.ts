@@ -15,16 +15,33 @@ export const getPlans = async () => {
 export async function getCurrentUserSubscription() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user?.id) {
-    throw new Error('User not authenticated')
+    return null
   }
 
   const userSubscription = await db
     .select()
     .from(subscriptions)
     .where(eq(subscriptions.userId, session.user.id))
-    .limit(1)
 
   return userSubscription[0] || null
+}
+
+// Utility function to check if a subscription is still active
+function isSubscriptionActive(subscription: any): boolean {
+  if (!subscription) return false
+  
+  // If status is active, check if it hasn't ended
+  if (subscription.status === "active") {
+    return !subscription.endsAt || new Date(subscription.endsAt) > new Date()
+  }
+  
+  // If status is cancelled, check if the renewal date is still in the future
+  // This means they've paid for the current period and should still have access
+  if (subscription.status === "cancelled" && subscription.renewsAt) {
+    return new Date(subscription.renewsAt) > new Date()
+  }
+  
+  return false
 }
 
 // Get current user's plan details
@@ -36,12 +53,11 @@ export async function getCurrentUserPlanAndSubscription() {
     return { plan: billingData.plans.find(plan => plan.planId === "free"), subscription: null }
   }
 
-  // Check if subscription is active
-  const isActive = subscription.status === "active" && 
-                   (!subscription.endsAt || new Date(subscription.endsAt) > new Date())
+  // Check if subscription is active using the new utility function
+  const isActive = isSubscriptionActive(subscription)
 
   if (!isActive) {
-    // Treat cancelled/expired subscriptions as free plan
+    // Treat inactive subscriptions as free plan
     return { plan: billingData.plans.find(plan => plan.planId === "free"), subscription: subscription }
   }
 
