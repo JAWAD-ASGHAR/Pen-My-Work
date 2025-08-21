@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { sendFeedback } from "@/server/actions/feedback";
 
 const ContactForm = ({
   accentColor,
@@ -39,8 +40,8 @@ const ContactForm = ({
     setIsSubmitting(true);
 
     try {
-      // Simulate form submission
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      await sendFeedback(formData);
 
       toast({
         title: "Message sent!",
