@@ -40,10 +40,10 @@ const StatsSection = ({bgColor, textColor}: {bgColor: string, textColor: string}
         gap={6}
       >
         {[
-          { number: "1M+", label: "Handwritten pages generated" },
+          { number: "1K+", label: "Handwritten pages generated" },
           { number: "98%", label: "User satisfaction rate" },
-          { number: "150K+", label: "Active users worldwide" },
-          { number: "100+", label: "Countries served" },
+          { number: "100+", label: "Active users worldwide" },
+          { number: "10+", label: "Countries served" },
         ].map((stat, index) => (
           <Card
             key={index}
