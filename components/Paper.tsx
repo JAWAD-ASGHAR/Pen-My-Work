@@ -8,7 +8,6 @@ interface PaperProps {
   fontSize?: string;
   paperType: 'lined' | 'blank' | 'grid';
   paperRef?: React.RefObject<HTMLDivElement> | ((el: HTMLDivElement | null) => void);
-  captureMode?: boolean; // New prop for capture mode
 }
 
 const Paper: React.FC<PaperProps> = ({ 
@@ -17,8 +16,7 @@ const Paper: React.FC<PaperProps> = ({
   fontFamily, 
   fontSize = '24px', 
   paperType,
-  paperRef,
-  captureMode = false
+  paperRef
 }) => {
   // A4 dimensions in pixels (595 x 842)
   const A4_WIDTH = 595;
@@ -35,20 +33,14 @@ const Paper: React.FC<PaperProps> = ({
   // Calculate responsive paper dimensions after component mounts
   useEffect(() => {
     const calculateDimensions = () => {
-      if (captureMode) {
-        // For capture, always use full A4 size
-        setPaperDimensions({
-          width: A4_WIDTH,
-          height: A4_HEIGHT,
-          scaleFactor: 1
-        });
-        return;
-      }
-
-      // Get available width with better responsive calculation - use more space
-      const containerPadding = window.innerWidth < 768 ? 8 : 16; // Reduced padding
+      // Get available width with better responsive calculation for mobile
+      const isMobile = window.innerWidth < 768;
+      const containerPadding = isMobile ? 38 : 16; // More padding on mobile to prevent cutoff
       const availableWidth = Math.min(A4_WIDTH, window.innerWidth - containerPadding);
-      const paperWidth = availableWidth;
+      
+      // Safety check: ensure paper never exceeds viewport width
+      const maxWidth = window.innerWidth - 16; // 16px minimum margin
+      const paperWidth = Math.min(availableWidth, maxWidth);
       const paperHeight = paperWidth * A4_ASPECT_RATIO;
       
       // Calculate scale factor relative to original A4 size
@@ -63,12 +55,10 @@ const Paper: React.FC<PaperProps> = ({
 
     calculateDimensions();
     
-    // Recalculate on window resize (only for display mode)
-    if (!captureMode) {
-      window.addEventListener('resize', calculateDimensions);
-      return () => window.removeEventListener('resize', calculateDimensions);
-    }
-  }, [captureMode]);
+    // Recalculate on window resize
+    window.addEventListener('resize', calculateDimensions);
+    return () => window.removeEventListener('resize', calculateDimensions);
+  }, []);
 
   // Constants that scale proportionally
   const totalLines = 25;

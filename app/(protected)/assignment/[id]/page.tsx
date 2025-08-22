@@ -593,7 +593,7 @@ export default function AssignmentDetails() {
       </Drawer>
 
       {/* Main Content - Full Width Layout */}
-      <Container maxW="7xl" px={{ base: 1, sm: 2, lg: 4 }} py={{ base: 4, md: 6 }}>
+      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={{ base: 4, md: 6 }}>
         <Grid
           templateColumns={{ base: "1fr", lg: "400px 1fr" }}
           gap={{ base: 4, lg: 8 }}
