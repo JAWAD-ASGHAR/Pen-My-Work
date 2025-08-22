@@ -234,28 +234,78 @@ export default function Dashboard() {
                     Choose from your handwritten assignments or create a new one
                   </Text>
                 </VStack>
-                <Link href="/plans">
-                  <Button
-                    variant="outline"
-                    borderColor="gray.300"
-                    color="#666"
-                    _hover={{
-                      borderColor: "#FF6A00",
-                      color: "#FF6A00",
-                      bg: "orange.50",
-                    }}
-                    size="sm"
-                    px={4}
-                    py={2}
-                    fontSize="sm"
-                    fontWeight="medium"
-                    borderRadius="lg"
-                    transition="all 0.2s"
-                    w={{ base: "full", md: "auto" }}
-                  >
-                    View Plans
-                  </Button>
-                </Link>
+                {/* Mobile Filter Menu in Header */}
+                <Box display={{ base: "block", lg: "none" }}>
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      variant="outline"
+                      borderColor="gray.300"
+                      color="#666"
+                      _hover={{
+                        borderColor: "#FF6A00",
+                        color: "#FF6A00",
+                        bg: "orange.50",
+                      }}
+                      size="sm"
+                      px={4}
+                      py={2}
+                      fontSize="sm"
+                      fontWeight="medium"
+                      borderRadius="lg"
+                      transition="all 0.2s"
+                      rightIcon={<Icon as={FiFilter} />}
+                      w={{ base: "full", md: "auto" }}
+                    >
+                      {selectedFilter === "all" && `All Assignments (${getFilterCount("all")})`}
+                      {selectedFilter === "blank" && `Blank (${getFilterCount("blank")})`}
+                      {selectedFilter === "ruled" && `Ruled (${getFilterCount("ruled")})`}
+                      {selectedFilter === "grid" && `Grid (${getFilterCount("grid")})`}
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => setSelectedFilter("all")}
+                        bg={selectedFilter === "all" ? "orange.50" : "transparent"}
+                        color={selectedFilter === "all" ? "#FF6A00" : "#666"}
+                        _hover={{
+                          bg: selectedFilter === "all" ? "orange.100" : "gray.50",
+                        }}
+                      >
+                        All Assignments ({getFilterCount("all")})
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => setSelectedFilter("blank")}
+                        bg={selectedFilter === "blank" ? "orange.50" : "transparent"}
+                        color={selectedFilter === "blank" ? "#FF6A00" : "#666"}
+                        _hover={{
+                          bg: selectedFilter === "blank" ? "orange.100" : "gray.50",
+                        }}
+                      >
+                        Blank ({getFilterCount("blank")})
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => setSelectedFilter("ruled")}
+                        bg={selectedFilter === "ruled" ? "orange.50" : "transparent"}
+                        color={selectedFilter === "ruled" ? "#FF6A00" : "#666"}
+                        _hover={{
+                          bg: selectedFilter === "ruled" ? "orange.100" : "gray.50",
+                        }}
+                      >
+                        Ruled ({getFilterCount("ruled")})
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => setSelectedFilter("grid")}
+                        bg={selectedFilter === "grid" ? "orange.50" : "transparent"}
+                        color={selectedFilter === "grid" ? "#FF6A00" : "#666"}
+                        _hover={{
+                          bg: selectedFilter === "grid" ? "orange.100" : "gray.50",
+                        }}
+                      >
+                        Grid ({getFilterCount("grid")})
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Box>
               </Flex>
             </VStack>
 
@@ -287,121 +337,45 @@ export default function Dashboard() {
 
               <Spacer display={{ base: "none", md: "block" }} />
 
-                             {/* Filter Section */}
-               <Box>
-                 {/* Mobile Filter Menu */}
-                 <Box display={{ base: "block", lg: "none" }}>
-                   <Menu>
-                     <MenuButton
-                       as={Button}
-                       variant="outline"
-                       borderColor="gray.300"
-                       color="#666"
-                       _hover={{
-                         borderColor: "#FF6A00",
-                         color: "#FF6A00",
-                         bg: "orange.50",
-                       }}
-                       size="md"
-                       px={4}
-                       py={2}
-                       fontSize="sm"
-                       fontWeight="medium"
-                       borderRadius="lg"
-                       transition="all 0.2s"
-                       rightIcon={<Icon as={FiFilter} />}
-                       w="full"
-                     >
-                       {selectedFilter === "all" && `All Assignments (${getFilterCount("all")})`}
-                       {selectedFilter === "blank" && `Blank (${getFilterCount("blank")})`}
-                       {selectedFilter === "ruled" && `Ruled (${getFilterCount("ruled")})`}
-                       {selectedFilter === "grid" && `Grid (${getFilterCount("grid")})`}
-                     </MenuButton>
-                     <MenuList>
-                       <MenuItem
-                         onClick={() => setSelectedFilter("all")}
-                         bg={selectedFilter === "all" ? "orange.50" : "transparent"}
-                         color={selectedFilter === "all" ? "#FF6A00" : "#666"}
-                         _hover={{
-                           bg: selectedFilter === "all" ? "orange.100" : "gray.50",
-                         }}
-                       >
-                         All Assignments ({getFilterCount("all")})
-                       </MenuItem>
-                       <MenuItem
-                         onClick={() => setSelectedFilter("blank")}
-                         bg={selectedFilter === "blank" ? "orange.50" : "transparent"}
-                         color={selectedFilter === "blank" ? "#FF6A00" : "#666"}
-                         _hover={{
-                           bg: selectedFilter === "blank" ? "orange.100" : "gray.50",
-                         }}
-                       >
-                         Blank ({getFilterCount("blank")})
-                       </MenuItem>
-                       <MenuItem
-                         onClick={() => setSelectedFilter("ruled")}
-                         bg={selectedFilter === "ruled" ? "orange.50" : "transparent"}
-                         color={selectedFilter === "ruled" ? "#FF6A00" : "#666"}
-                         _hover={{
-                           bg: selectedFilter === "ruled" ? "orange.100" : "gray.50",
-                         }}
-                       >
-                         Ruled ({getFilterCount("ruled")})
-                       </MenuItem>
-                       <MenuItem
-                         onClick={() => setSelectedFilter("grid")}
-                         bg={selectedFilter === "grid" ? "orange.50" : "transparent"}
-                         color={selectedFilter === "grid" ? "#FF6A00" : "#666"}
-                         _hover={{
-                           bg: selectedFilter === "grid" ? "orange.100" : "gray.50",
-                         }}
-                       >
-                         Grid ({getFilterCount("grid")})
-                       </MenuItem>
-                     </MenuList>
-                   </Menu>
-                 </Box>
-
-                {/* Desktop Filter Buttons */}
-                <HStack spacing={3} display={{ base: "none", lg: "flex" }} flexWrap="wrap">
-                  <Button
-                    variant={selectedFilter === "all" ? "solid" : "outline"}
-                    colorScheme="orange"
-                    size="md"
-                    onClick={() => setSelectedFilter("all")}
-                    borderRadius="md"
-                  >
-                    All Assignments ({getFilterCount("all")})
-                  </Button>
-                  <Button
-                    variant={selectedFilter === "blank" ? "solid" : "outline"}
-                    colorScheme="orange"
-                    size="md"
-                    onClick={() => setSelectedFilter("blank")}
-                    borderRadius="md"
-                  >
-                    Blank ({getFilterCount("blank")})
-                  </Button>
-                  <Button
-                    variant={selectedFilter === "ruled" ? "solid" : "outline"}
-                    colorScheme="orange"
-                    size="md"
-                    onClick={() => setSelectedFilter("ruled")}
-                    borderRadius="md"
-                  >
-                    Ruled ({getFilterCount("ruled")})
-                  </Button>
-                  <Button
-                    variant={selectedFilter === "grid" ? "solid" : "outline"}
-                    colorScheme="orange"
-                    size="md"
-                    onClick={() => setSelectedFilter("grid")}
-                    borderRadius="md"
-                  >
-                    Grid ({getFilterCount("grid")})
-                  </Button>
-                </HStack>
-              </Box>
+              {/* Desktop Filter Buttons */}
+              <HStack spacing={3} display={{ base: "none", lg: "flex" }} flexWrap="wrap">
+                <Button
+                  variant={selectedFilter === "all" ? "solid" : "outline"}
+                  colorScheme="orange"
+                  size="md"
+                  onClick={() => setSelectedFilter("all")}
+                  borderRadius="md"
+                >
+                  All Assignments ({getFilterCount("all")})
+                </Button>
+                <Button
+                  variant={selectedFilter === "blank" ? "solid" : "outline"}
+                  colorScheme="orange"
+                  size="md"
+                  onClick={() => setSelectedFilter("blank")}
+                  borderRadius="md"
+                >
+                  Blank ({getFilterCount("blank")})
+                </Button>
+                <Button
+                  variant={selectedFilter === "ruled" ? "solid" : "outline"}
+                  colorScheme="orange"
+                  size="md"
+                  onClick={() => setSelectedFilter("ruled")}
+                  borderRadius="md"
+                >
+                  Ruled ({getFilterCount("ruled")})
+                </Button>
+                <Button
+                  variant={selectedFilter === "grid" ? "solid" : "outline"}
+                  colorScheme="orange"
+                  size="md"
+                  onClick={() => setSelectedFilter("grid")}
+                  borderRadius="md"
+                >
+                  Grid ({getFilterCount("grid")})
+                </Button>
+              </HStack>
             </Stack>
 
             {/* Assignments Grid */}
