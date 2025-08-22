@@ -277,8 +277,8 @@ export default function AssignmentDetails() {
         </CardBody>
       </Card>
 
-      {/* Download Options Card */}
-      <Card bg="white" border="1px" borderColor="gray.200">
+      {/* Download Options Card - Desktop Only */}
+      <Card bg="white" border="1px" borderColor="gray.200" display={{ base: "none", lg: "block" }}>
         <CardBody p={{ base: 4, md: 6 }}>
           <VStack spacing={4} align="stretch">
             <Heading size="md" color="#1A1A1A">
@@ -286,27 +286,27 @@ export default function AssignmentDetails() {
             </Heading>
 
             <Button
-              onClick={downloadAllImages}
-              isLoading={downloading === "all"}
-              leftIcon={<Icon as={FiDownload} />}
+              onClick={downloadAsPDF}
+              isLoading={downloading === "pdf"}
+              leftIcon={<Icon as={FiFileText} />}
               bg="#FF6A00"
               _hover={{ bg: "#FF8A33" }}
               color="white"
               size="md"
             >
-              Download All as ZIP
+              Download as PDF
             </Button>
 
             <Button
-              onClick={downloadAsPDF}
-              isLoading={downloading === "pdf"}
-              leftIcon={<Icon as={FiFileText} />}
+              onClick={downloadAllImages}
+              isLoading={downloading === "all"}
+              leftIcon={<Icon as={FiDownload} />}
               variant="outline"
               borderColor="gray.300"
               color="#1A1A1A"
               size="md"
             >
-              Download as PDF
+              Download All as ZIP
             </Button>
           </VStack>
         </CardBody>
@@ -351,7 +351,7 @@ export default function AssignmentDetails() {
 
   return (
     <Box minH="100vh" bg="#FDF7EE" overflow="hidden">
-      {/* Mobile Header with Menu Button */}
+      {/* Mobile Header with Menu Button and Download Options */}
       <Box 
         display={{ base: "flex", lg: "none" }} 
         bg="white" 
@@ -362,30 +362,63 @@ export default function AssignmentDetails() {
         top={0}
         zIndex={4}
       >
-        <HStack justify="space-between" w="full">
-          <Link href="/home">
+        <VStack spacing={3} w="full">
+          {/* Top Row - Navigation */}
+          <HStack justify="space-between" w="full">
+            <Link href="/home">
+              <Button
+                variant="ghost"
+                color="#666"
+                size="sm"
+                leftIcon={<Icon as={FiArrowLeft} />}
+              >
+                Back
+              </Button>
+            </Link>
+            <Heading size="md" color="#1A1A1A">
+              Assignment Details
+            </Heading>
             <Button
               variant="ghost"
               color="#666"
               size="sm"
-              leftIcon={<Icon as={FiArrowLeft} />}
+              onClick={onOpen}
+              leftIcon={<Icon as={FiMenu} />}
             >
-              Back
+              Info
             </Button>
-          </Link>
-          <Heading size="md" color="#1A1A1A">
-            Assignment Details
-          </Heading>
-          <Button
-            variant="ghost"
-            color="#666"
-            size="sm"
-            onClick={onOpen}
-            leftIcon={<Icon as={FiMenu} />}
-          >
-            Info
-          </Button>
-        </HStack>
+          </HStack>
+          
+          {/* Bottom Row - Download Buttons */}
+          <HStack justify="center" w="full" spacing={3}>
+            <Button
+              onClick={downloadAsPDF}
+              isLoading={downloading === "pdf"}
+              leftIcon={<Icon as={FiFileText} />}
+              bg="#FF6A00"
+              _hover={{ bg: "#FF8A33" }}
+              color="white"
+              size="sm"
+              flex={1}
+              maxW="140px"
+            >
+              Download PDF
+            </Button>
+            <Button
+              onClick={downloadAllImages}
+              isLoading={downloading === "all"}
+              leftIcon={<Icon as={FiDownload} />}
+              variant="outline"
+              borderColor="gray.300"
+              color="#1A1A1A"
+              size="sm"
+              flex={1}
+              maxW="140px"
+            >
+              Download ZIP
+            </Button>
+          </HStack>
+        </VStack>
       </Box>
 
       {/* Mobile Drawer for Assignment Info */}
