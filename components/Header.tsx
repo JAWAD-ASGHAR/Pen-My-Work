@@ -43,7 +43,7 @@ export default function Header({
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
-            router.push("/sign-in");
+            router.push("/");
           },
         },
       });
