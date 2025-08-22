@@ -332,10 +332,8 @@ export default function Step5Generate({
 
       {!isGenerating && (
         <Flex 
-          justify="space-between" 
+          justify="center" 
           px={{ base: 4, md: 0 }}
-          direction={{ base: "column", sm: "row" }}
-          gap={{ base: 3, sm: 0 }}
         >
           <Button
             variant="outline"

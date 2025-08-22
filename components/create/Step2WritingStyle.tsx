@@ -90,20 +90,6 @@ export default function Step2WritingStyle({
         gap={{ base: 3, sm: 0 }}
       >
         <Button
-          variant="outline"
-          borderColor="gray.200"
-          color="#666"
-          bg="transparent"
-          onClick={onPrevious}
-          w={{ base: "full", sm: "auto" }}
-          py={{ base: 3, md: 4 }}
-          fontSize={{ base: "sm", md: "md" }}
-          className="mobile-button"
-        >
-          <ArrowBackIcon w={4} h={4} mr={2} />
-          Previous
-        </Button>
-        <Button
           bg="#FF6A00"
           _hover={{ bg: "#FF8A33" }}
           color="white"
@@ -117,6 +103,20 @@ export default function Step2WritingStyle({
           className="mobile-button"
         >
           Next Step
+        </Button>
+        <Button
+          variant="outline"
+          borderColor="gray.200"
+          color="#666"
+          bg="transparent"
+          onClick={onPrevious}
+          w={{ base: "full", sm: "auto" }}
+          py={{ base: 3, md: 4 }}
+          fontSize={{ base: "sm", md: "md" }}
+          className="mobile-button"
+        >
+          <ArrowBackIcon w={4} h={4} mr={2} />
+          Previous
         </Button>
       </Flex>
     </>
