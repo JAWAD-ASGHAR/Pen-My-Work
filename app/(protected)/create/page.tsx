@@ -188,7 +188,13 @@ export default function CreatePage() {
   }, []);
 
   return (
-    <Container maxW="4xl" px={{ base: 4, sm: 6, lg: 8 }} py={8}>
+    <Container 
+      maxW={{ base: "100%", sm: "2xl", lg: "4xl" }} 
+      px={{ base: 2, sm: 4, md: 6, lg: 8 }} 
+      py={{ base: 4, md: 6, lg: 8 }}
+      minH="100vh"
+      className="mobile-scroll"
+    >
       <ProgressIndicator currentStep={currentStep} totalSteps={5} />
 
       {currentStep === 1 && (
@@ -256,21 +262,21 @@ export default function CreatePage() {
         onClose={() => setShowCreditError(false)}
       >
         <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <AlertDialogContent mx={{ base: 4, md: 0 }}>
+            <AlertDialogHeader fontSize={{ base: "md", md: "lg" }} fontWeight="bold">
               Insufficient Credits
             </AlertDialogHeader>
 
             <AlertDialogBody>
               <VStack spacing={4} align="stretch">
-                <Text>
+                <Text fontSize={{ base: "sm", md: "md" }}>
                   You need {requiredPages} pages but only have {userCredits ? userCredits.totalCredits - userCredits.usedCredits : 0} credits remaining.
                 </Text>
-                <Box bg="orange.50" p={4} borderRadius="md">
-                  <Text fontWeight="semibold" color="orange.800">
+                <Box bg="orange.50" p={{ base: 3, md: 4 }} borderRadius="md">
+                  <Text fontWeight="semibold" color="orange.800" fontSize={{ base: "sm", md: "md" }}>
                     Free Plan: 10 pages trial
                   </Text>
-                  <Text color="orange.700" fontSize="sm">
+                  <Text color="orange.700" fontSize={{ base: "xs", md: "sm" }}>
                     Upgrade to Pro for unlimited pages!
                   </Text>
                 </Box>
@@ -278,13 +284,14 @@ export default function CreatePage() {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={() => setShowCreditError(false)}>
+              <Button ref={cancelRef} onClick={() => setShowCreditError(false)} size={{ base: "sm", md: "md" }}>
                 Cancel
               </Button>
               <Button
                 colorScheme="orange"
                 onClick={handleUpgradeToPro}
                 ml={3}
+                size={{ base: "sm", md: "md" }}
               >
                 Upgrade to Pro
               </Button>

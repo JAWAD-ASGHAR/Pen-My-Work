@@ -85,54 +85,64 @@ export default function Step5Generate({
 
   return (
     <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
+      <VStack spacing={{ base: 6, md: 8 }} align="center" mb={{ base: 6, md: 8 }}>
+        <Heading 
+          size={{ base: "xl", md: "2xl" }} 
+          color="#1A1A1A" 
+          textAlign="center"
+          px={{ base: 2, md: 0 }}
+        >
           Generate Assignment
         </Heading>
-        <Text color="#666" textAlign="center">
+        <Text 
+          color="#666" 
+          textAlign="center"
+          fontSize={{ base: "sm", md: "md" }}
+          px={{ base: 4, md: 0 }}
+        >
           Create your handwritten assignment image
         </Text>
       </VStack>
 
       {!isGenerating && (
-        <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-          <CardBody p={8}>
-            <VStack spacing={8} align="stretch">
+        <Card bg="white" border="1px" borderColor="gray.200" mb={{ base: 6, md: 8 }} mx={{ base: 2, md: 0 }}>
+          <CardBody p={{ base: 6, md: 8 }}>
+            <VStack spacing={{ base: 6, md: 8 }} align="stretch">
               <Box>
-                <Heading size="md" color="#1A1A1A" mb={4}>
+                <Heading size={{ base: "sm", md: "md" }} color="#1A1A1A" mb={4}>
                   Generation Summary
                 </Heading>
-                <VStack spacing={4} align="stretch">
+                <VStack spacing={{ base: 3, md: 4 }} align="stretch">
                   <HStack
                     justify="space-between"
-                    p={4}
+                    p={{ base: 3, md: 4 }}
                     bg="gray.50"
                     borderRadius="md"
                   >
-                    <Text fontWeight="medium">Page Style:</Text>
-                    <Badge colorScheme="orange" variant="subtle">
+                    <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Page Style:</Text>
+                    <Badge colorScheme="orange" variant="subtle" fontSize={{ base: "xs", md: "sm" }}>
                       {paperTypes.find((p) => p.id === selectedPaper)?.name}
                     </Badge>
                   </HStack>
                   <HStack
                     justify="space-between"
-                    p={4}
+                    p={{ base: 3, md: 4 }}
                     bg="gray.50"
                     borderRadius="md"
                   >
-                    <Text fontWeight="medium">Pages to Generate:</Text>
-                    <Badge colorScheme="blue" variant="subtle">
+                    <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Pages to Generate:</Text>
+                    <Badge colorScheme="blue" variant="subtle" fontSize={{ base: "xs", md: "sm" }}>
                       {pageCount} pages
                     </Badge>
                   </HStack>
                   <HStack
                     justify="space-between"
-                    p={4}
+                    p={{ base: 3, md: 4 }}
                     bg="gray.50"
                     borderRadius="md"
                   >
-                    <Text fontWeight="medium">Content Length:</Text>
-                    <Badge colorScheme="green" variant="subtle">
+                    <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Content Length:</Text>
+                    <Badge colorScheme="green" variant="subtle" fontSize={{ base: "xs", md: "sm" }}>
                       ~{content.length} characters
                     </Badge>
                   </HStack>
@@ -141,14 +151,14 @@ export default function Step5Generate({
                   {isCancelledButActive && (
                     <HStack
                       justify="space-between"
-                      p={4}
+                      p={{ base: 3, md: 4 }}
                       bg="orange.50"
                       borderRadius="md"
                       border="1px solid"
                       borderColor="orange.200"
                     >
-                      <Text fontWeight="medium">Subscription Status:</Text>
-                      <Badge colorScheme="orange" variant="subtle">
+                      <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Subscription Status:</Text>
+                      <Badge colorScheme="orange" variant="subtle" fontSize={{ base: "xs", md: "sm" }}>
                         Cancelled (Active until {subscription.renewsAt ? new Date(subscription.renewsAt).toLocaleDateString() : "renewal"})
                       </Badge>
                     </HStack>
@@ -158,14 +168,14 @@ export default function Step5Generate({
                   {isCancelledAndExpired && (
                     <HStack
                       justify="space-between"
-                      p={4}
+                      p={{ base: 3, md: 4 }}
                       bg="red.50"
                       borderRadius="md"
                       border="1px solid"
                       borderColor="red.200"
                     >
-                      <Text fontWeight="medium">Subscription Status:</Text>
-                      <Badge colorScheme="red" variant="subtle">
+                      <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Subscription Status:</Text>
+                      <Badge colorScheme="red" variant="subtle" fontSize={{ base: "xs", md: "sm" }}>
                         Cancelled (Expired)
                       </Badge>
                     </HStack>
@@ -175,16 +185,17 @@ export default function Step5Generate({
                   {(isFreePlan || isCancelledAndExpired) && !isCancelledButActive && userCredits && (
                     <HStack
                       justify="space-between"
-                      p={4}
+                      p={{ base: 3, md: 4 }}
                       bg={hasEnoughCredits ? "green.50" : "red.50"}
                       borderRadius="md"
                       border="1px solid"
                       borderColor={hasEnoughCredits ? "green.200" : "red.200"}
                     >
-                      <Text fontWeight="medium">Credits Available:</Text>
+                      <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Credits Available:</Text>
                       <Badge 
                         colorScheme={hasEnoughCredits ? "green" : "red"}
                         variant="subtle"
+                        fontSize={{ base: "xs", md: "sm" }}
                       >
                         {availableCredits} / {pageCount} required
                       </Badge>
@@ -195,14 +206,14 @@ export default function Step5Generate({
                   {!isFreePlan && !isCancelledAndExpired && (
                     <HStack
                       justify="space-between"
-                      p={4}
+                      p={{ base: 3, md: 4 }}
                       bg="green.50"
                       borderRadius="md"
                       border="1px solid"
                       borderColor="green.200"
                     >
-                      <Text fontWeight="medium">Plan Status:</Text>
-                      <Badge colorScheme="green" variant="subtle">
+                      <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Plan Status:</Text>
+                      <Badge colorScheme="green" variant="subtle" fontSize={{ base: "xs", md: "sm" }}>
                         Unlimited with {userPlan?.name}
                       </Badge>
                     </HStack>
@@ -210,12 +221,12 @@ export default function Step5Generate({
                   
                   <HStack
                     justify="space-between"
-                    p={4}
+                    p={{ base: 3, md: 4 }}
                     bg="orange.50"
                     borderRadius="md"
                   >
-                    <Text fontWeight="medium">Estimated Time:</Text>
-                    <Badge colorScheme="orange">2-3 minutes</Badge>
+                    <Text fontWeight="medium" fontSize={{ base: "sm", md: "md" }}>Estimated Time:</Text>
+                    <Badge colorScheme="orange" fontSize={{ base: "xs", md: "sm" }}>2-3 minutes</Badge>
                   </HStack>
                 </VStack>
               </Box>
@@ -225,10 +236,13 @@ export default function Step5Generate({
                 bg="#FF6A00"
                 _hover={{ bg: "#FF8A33" }}
                 color="white"
-                size="lg"
+                size={{ base: "md", md: "lg" }}
                 w="full"
                 leftIcon={<Icon as={FiPlay} />}
                 isDisabled={!content.trim() || (isFreePlan && !isCancelledAndExpired && userCredits ? !hasEnoughCredits : false)}
+                py={{ base: 3, md: 4 }}
+                fontSize={{ base: "sm", md: "md" }}
+                className="mobile-button"
               >
                 {isFreePlan && !isCancelledAndExpired && userCredits && !hasEnoughCredits 
                   ? "Insufficient Credits - Upgrade Required" 
@@ -238,25 +252,28 @@ export default function Step5Generate({
               
               {/* Cancelled Subscription Message */}
               {isCancelledAndExpired && (
-                <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
-                  <Text color="red.700" fontSize="sm" textAlign="center" mb={3}>
+                <Box bg="red.50" p={{ base: 3, md: 4 }} borderRadius="md" border="1px solid" borderColor="red.200">
+                  <Text color="red.700" fontSize={{ base: "xs", md: "sm" }} textAlign="center" mb={3}>
                     Your subscription has expired. You now have access to the free plan features.
                   </Text>
-                  <Button
-                    leftIcon={<Icon as={FiZap} />}
-                    colorScheme="orange"
-                    size="sm"
-                    w="full"
-                    onClick={() => window.location.href = "/plans"}
-                  >
+                                      <Button
+                      leftIcon={<Icon as={FiZap} />}
+                      colorScheme="orange"
+                      size={{ base: "sm", md: "md" }}
+                      w="full"
+                      onClick={() => window.location.href = "/plans"}
+                      py={{ base: 2, md: 3 }}
+                      fontSize={{ base: "xs", md: "sm" }}
+                      className="mobile-button"
+                    >
                     Upgrade to Pro for Unlimited Pages
                   </Button>
                 </Box>
               )}
               
               {isFreePlan && !isCancelledAndExpired && userCredits && !hasEnoughCredits && (
-                <Box bg="red.50" p={4} borderRadius="md" border="1px solid" borderColor="red.200">
-                  <Text color="red.700" fontSize="sm" textAlign="center">
+                <Box bg="red.50" p={{ base: 3, md: 4 }} borderRadius="md" border="1px solid" borderColor="red.200">
+                  <Text color="red.700" fontSize={{ base: "xs", md: "sm" }} textAlign="center">
                     You need {pageCount} credits but only have {availableCredits} available. 
                     Please upgrade to Pro for unlimited pages.
                   </Text>
@@ -269,13 +286,13 @@ export default function Step5Generate({
 
       {/* Rest of the component remains the same */}
       {isGenerating && (
-        <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-          <CardBody p={8} textAlign="center">
+        <Card bg="white" border="1px" borderColor="gray.200" mb={{ base: 6, md: 8 }} mx={{ base: 2, md: 0 }}>
+          <CardBody p={{ base: 6, md: 8 }} textAlign="center">
             <Box
-              w="24"
-              h="24"
+              w={{ base: "20", md: "24" }}
+              h={{ base: "20", md: "24" }}
               mx="auto"
-              mb={6}
+              mb={{ base: 4, md: 6 }}
               bg="orange.50"
               borderRadius="full"
               display="flex"
@@ -284,16 +301,16 @@ export default function Step5Generate({
             >
               <Icon
                 as={FiFileText}
-                w="12"
-                h="12"
+                w={{ base: "10", md: "12" }}
+                h={{ base: "10", md: "12" }}
                 color="#FF6A00"
                 animation="bounce 1s ease-in-out infinite"
               />
             </Box>
-            <Heading size="lg" color="#1A1A1A" mb={2}>
+            <Heading size={{ base: "md", md: "lg" }} color="#1A1A1A" mb={2}>
               Writing with virtual ink...
             </Heading>
-            <Text color="#666" mb={4}>
+            <Text color="#666" mb={4} fontSize={{ base: "sm", md: "md" }}>
               Please wait while we generate your handwritten assignment
             </Text>
             <Box w="full" bg="gray.200" borderRadius="full" h={3} overflow="hidden">
@@ -306,7 +323,7 @@ export default function Step5Generate({
                 transform="translateX(-100%)"
               ></Box>
             </Box>
-            <Text fontSize="sm" color="#666" mt={3}>
+            <Text fontSize={{ base: "xs", md: "sm" }} color="#666" mt={3}>
               This may take a few moments...
             </Text>
           </CardBody>
@@ -314,13 +331,22 @@ export default function Step5Generate({
       )}
 
       {!isGenerating && (
-        <Flex justify="space-between">
+        <Flex 
+          justify="space-between" 
+          px={{ base: 4, md: 0 }}
+          direction={{ base: "column", sm: "row" }}
+          gap={{ base: 3, sm: 0 }}
+        >
           <Button
             variant="outline"
             borderColor="gray.200"
             color="#666"
             bg="transparent"
             onClick={onPrevious}
+            w={{ base: "full", sm: "auto" }}
+            py={{ base: 3, md: 4 }}
+            fontSize={{ base: "sm", md: "md" }}
+            className="mobile-button"
           >
             <ArrowBackIcon w={4} h={4} mr={2} />
             Previous

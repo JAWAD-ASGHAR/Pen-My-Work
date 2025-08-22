@@ -108,19 +108,30 @@ export default function Step3InkColor({
 
   return (
     <>
-      <VStack spacing={8} align="center" mb={8}>
-        <Heading size="2xl" color="#1A1A1A" textAlign="center">
+      <VStack spacing={{ base: 6, md: 8 }} align="center" mb={{ base: 6, md: 8 }}>
+        <Heading 
+          size={{ base: "xl", md: "2xl" }} 
+          color="#1A1A1A" 
+          textAlign="center"
+          px={{ base: 2, md: 0 }}
+        >
           Choose Ink Color
         </Heading>
-        <Text color="#666" textAlign="center">
+        <Text 
+          color="#666" 
+          textAlign="center"
+          fontSize={{ base: "sm", md: "md" }}
+          px={{ base: 4, md: 0 }}
+        >
           Select the ink color for your handwriting
         </Text>
       </VStack>
 
       <Grid
-        templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-        gap={6}
-        mb={8}
+        templateColumns={{ base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+        gap={{ base: 4, md: 6 }}
+        mb={{ base: 6, md: 8 }}
+        px={{ base: 2, md: 0 }}
       >
         {inkColors.map((ink) => (
           ink.id === "custom" ? (
@@ -139,14 +150,16 @@ export default function Step3InkColor({
                   border="1px"
                   borderColor={selectedInk === customColor ? "#FF6A00" : "gray.200"}
                   _hover={{ shadow: "md" }}
+                  _active={{ transform: "scale(0.98)" }}
+                  className="mobile-card"
                 >
-                  <CardBody p={6} textAlign="center">
+                  <CardBody p={{ base: 4, md: 6 }} textAlign="center">
                     <Box
-                      w="16"
-                      h="16"
+                      w={{ base: "12", md: "16" }}
+                      h={{ base: "12", md: "16" }}
                       borderRadius="full"
                       mx="auto"
-                      mb={4}
+                      mb={{ base: 3, md: 4 }}
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
@@ -159,13 +172,13 @@ export default function Step3InkColor({
                       _hover={{ transform: "scale(1.05)" }}
                       transition="transform 0.2s"
                     >
-                      <Box w="8" h="8" bg="white" borderRadius="full"></Box>
+                      <Box w={{ base: "6", md: "8" }} h={{ base: "6", md: "8" }} bg="white" borderRadius="full"></Box>
                     </Box>
-                    <Heading size="md" color="#1A1A1A" mb={1}>
+                    <Heading size={{ base: "sm", md: "md" }} color="#1A1A1A" mb={1}>
                       {ink.name}
                     </Heading>
                     <Text 
-                      fontSize="sm" 
+                      fontSize={{ base: "xs", md: "sm" }} 
                       color="#666"
                       cursor="pointer"
                       onClick={(e) => {
@@ -181,7 +194,7 @@ export default function Step3InkColor({
                 </Card>
               </PopoverTrigger>
               <Portal>
-                <PopoverContent p={4} w="300px">
+                <PopoverContent p={4} w={{ base: "280px", md: "300px" }}>
                   <PopoverBody>
                     <VStack spacing={4}>
                       <Heading size="md" color="#1A1A1A" textAlign="center">
@@ -260,25 +273,27 @@ export default function Step3InkColor({
               border="1px"
               borderColor={selectedInk === ink.hex ? "#FF6A00" : "gray.200"}
               _hover={{ shadow: "md" }}
+              _active={{ transform: "scale(0.98)" }}
+              className="mobile-card"
             >
-              <CardBody p={6} textAlign="center">
+              <CardBody p={{ base: 4, md: 6 }} textAlign="center">
                 <Box
-                  w="16"
-                  h="16"
+                  w={{ base: "12", md: "16" }}
+                  h={{ base: "12", md: "16" }}
                   borderRadius="full"
                   mx="auto"
-                  mb={4}
+                  mb={{ base: 3, md: 4 }}
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
                   bg={ink.color}
                 >
-                  <Box w="8" h="8" bg="white" borderRadius="full"></Box>
+                  <Box w={{ base: "6", md: "8" }} h={{ base: "6", md: "8" }} bg="white" borderRadius="full"></Box>
                 </Box>
-                <Heading size="md" color="#1A1A1A" mb={1}>
+                <Heading size={{ base: "sm", md: "md" }} color="#1A1A1A" mb={1}>
                   {ink.name}
                 </Heading>
-                <Text fontSize="sm" color="#666">
+                <Text fontSize={{ base: "xs", md: "sm" }} color="#666">
                   {ink.hex}
                 </Text>
               </CardBody>
@@ -288,21 +303,22 @@ export default function Step3InkColor({
       </Grid>
 
       {/* Handwriting Preview */}
-      <Card bg="white" border="1px" borderColor="gray.200" mb={8}>
-        <CardBody p={8}>
-          <Heading size="md" color="#1A1A1A" mb={4} textAlign="center">
+      <Card bg="white" border="1px" borderColor="gray.200" mb={{ base: 6, md: 8 }} mx={{ base: 2, md: 0 }}>
+        <CardBody p={{ base: 6, md: 8 }}>
+          <Heading size={{ base: "sm", md: "md" }} color="#1A1A1A" mb={4} textAlign="center">
             Preview
           </Heading>
-          <Box bg="gray.50" p={6} borderRadius="lg">
+          <Box bg="gray.50" p={{ base: 4, md: 6 }} borderRadius="lg">
             <Text
-              fontSize={writingStyles.find((s) => s.id === selectedWritingStyle)
-                  ?.fontSize || "24px"}
+              fontSize={{ base: "16px", sm: writingStyles.find((s) => s.id === selectedWritingStyle)
+                  ?.fontSize || "24px" }}
               textAlign="center"
               color={selectedColor?.color}
               fontFamily={
                 writingStyles.find((s) => s.id === selectedWritingStyle)
                   ?.fontFamily || "'Patrick Hand', cursive"
               }
+              lineHeight="1.4"
             >
               The quick brown fox jumps over the lazy dog
             </Text>
@@ -310,13 +326,22 @@ export default function Step3InkColor({
         </CardBody>
       </Card>
 
-      <Flex justify="space-between">
+      <Flex 
+        justify="space-between" 
+        px={{ base: 4, md: 0 }}
+        direction={{ base: "column", sm: "row" }}
+        gap={{ base: 3, sm: 0 }}
+      >
         <Button
           variant="outline"
           borderColor="gray.200"
           color="#666"
           bg="transparent"
           onClick={onPrevious}
+          w={{ base: "full", sm: "auto" }}
+          py={{ base: 3, md: 4 }}
+          fontSize={{ base: "sm", md: "md" }}
+          className="mobile-button"
         >
           <ArrowBackIcon w={4} h={4} mr={2} />
           Previous
@@ -325,9 +350,13 @@ export default function Step3InkColor({
           bg="#FF6A00"
           _hover={{ bg: "#FF8A33" }}
           color="white"
-          px={8}
+          px={{ base: 6, md: 8 }}
+          py={{ base: 3, md: 4 }}
+          fontSize={{ base: "sm", md: "md" }}
           rightIcon={<Icon as={FiArrowRight} />}
           onClick={onNext}
+          w={{ base: "full", sm: "auto" }}
+          className="mobile-button"
         >
           Next Step
         </Button>
