@@ -30,7 +30,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Select,
   Stack,
 } from "@chakra-ui/react";
 import {
@@ -288,28 +287,80 @@ export default function Dashboard() {
 
               <Spacer display={{ base: "none", md: "block" }} />
 
-              {/* Filter Section */}
-              <Box>
-                {/* Mobile Filter Dropdown */}
-                <Box display={{ base: "block", lg: "none" }}>
-                  <Select
-                    value={selectedFilter}
-                    onChange={(e) => setSelectedFilter(e.target.value)}
-                    bg="white"
-                    border="1px solid"
-                    borderColor="gray.200"
-                    _focus={{
-                      borderColor: "#FF6A00",
-                      boxShadow: "0 0 0 1px #FF6A00",
-                    }}
-                    icon={<Icon as={FiFilter} />}
-                  >
-                    <option value="all">All Assignments ({getFilterCount("all")})</option>
-                    <option value="blank">Blank ({getFilterCount("blank")})</option>
-                    <option value="ruled">Ruled ({getFilterCount("ruled")})</option>
-                    <option value="grid">Grid ({getFilterCount("grid")})</option>
-                  </Select>
-                </Box>
+                             {/* Filter Section */}
+               <Box>
+                 {/* Mobile Filter Menu */}
+                 <Box display={{ base: "block", lg: "none" }}>
+                   <Menu>
+                     <MenuButton
+                       as={Button}
+                       variant="outline"
+                       borderColor="gray.300"
+                       color="#666"
+                       _hover={{
+                         borderColor: "#FF6A00",
+                         color: "#FF6A00",
+                         bg: "orange.50",
+                       }}
+                       size="md"
+                       px={4}
+                       py={2}
+                       fontSize="sm"
+                       fontWeight="medium"
+                       borderRadius="lg"
+                       transition="all 0.2s"
+                       rightIcon={<Icon as={FiFilter} />}
+                       w="full"
+                     >
+                       {selectedFilter === "all" && `All Assignments (${getFilterCount("all")})`}
+                       {selectedFilter === "blank" && `Blank (${getFilterCount("blank")})`}
+                       {selectedFilter === "ruled" && `Ruled (${getFilterCount("ruled")})`}
+                       {selectedFilter === "grid" && `Grid (${getFilterCount("grid")})`}
+                     </MenuButton>
+                     <MenuList>
+                       <MenuItem
+                         onClick={() => setSelectedFilter("all")}
+                         bg={selectedFilter === "all" ? "orange.50" : "transparent"}
+                         color={selectedFilter === "all" ? "#FF6A00" : "#666"}
+                         _hover={{
+                           bg: selectedFilter === "all" ? "orange.100" : "gray.50",
+                         }}
+                       >
+                         All Assignments ({getFilterCount("all")})
+                       </MenuItem>
+                       <MenuItem
+                         onClick={() => setSelectedFilter("blank")}
+                         bg={selectedFilter === "blank" ? "orange.50" : "transparent"}
+                         color={selectedFilter === "blank" ? "#FF6A00" : "#666"}
+                         _hover={{
+                           bg: selectedFilter === "blank" ? "orange.100" : "gray.50",
+                         }}
+                       >
+                         Blank ({getFilterCount("blank")})
+                       </MenuItem>
+                       <MenuItem
+                         onClick={() => setSelectedFilter("ruled")}
+                         bg={selectedFilter === "ruled" ? "orange.50" : "transparent"}
+                         color={selectedFilter === "ruled" ? "#FF6A00" : "#666"}
+                         _hover={{
+                           bg: selectedFilter === "ruled" ? "orange.100" : "gray.50",
+                         }}
+                       >
+                         Ruled ({getFilterCount("ruled")})
+                       </MenuItem>
+                       <MenuItem
+                         onClick={() => setSelectedFilter("grid")}
+                         bg={selectedFilter === "grid" ? "orange.50" : "transparent"}
+                         color={selectedFilter === "grid" ? "#FF6A00" : "#666"}
+                         _hover={{
+                           bg: selectedFilter === "grid" ? "orange.100" : "gray.50",
+                         }}
+                       >
+                         Grid ({getFilterCount("grid")})
+                       </MenuItem>
+                     </MenuList>
+                   </Menu>
+                 </Box>
 
                 {/* Desktop Filter Buttons */}
                 <HStack spacing={3} display={{ base: "none", lg: "flex" }} flexWrap="wrap">
