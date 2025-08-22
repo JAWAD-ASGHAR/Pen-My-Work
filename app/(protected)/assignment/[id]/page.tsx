@@ -593,7 +593,7 @@ export default function AssignmentDetails() {
       </Drawer>
 
       {/* Main Content - Full Width Layout */}
-      <Box w="full" px={{ base: 1, sm: 2, lg: 4 }} py={{ base: 4, md: 6 }}>
+      <Container maxW="7xl" px={{ base: 1, sm: 2, lg: 4 }} py={{ base: 4, md: 6 }}>
         <Grid
           templateColumns={{ base: "1fr", lg: "400px 1fr" }}
           gap={{ base: 4, lg: 8 }}
@@ -685,7 +685,7 @@ export default function AssignmentDetails() {
             </VStack>
           </GridItem>
         </Grid>
-      </Box>
+      </Container>
     </Box>
   );
 }
