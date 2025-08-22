@@ -141,12 +141,16 @@ export default function CreatePage() {
 
   const nextStep = () => {
     if (currentStep < 5) {
+      // Scroll to top before changing step
+      window.scrollTo({ top: 0, behavior: 'instant' });
       setCurrentStep(currentStep + 1);
     }
   };
 
   const prevStep = () => {
     if (currentStep > 1) {
+      // Scroll to top before changing step
+      window.scrollTo({ top: 0, behavior: 'instant' });
       setCurrentStep(currentStep - 1);
     }
   };
