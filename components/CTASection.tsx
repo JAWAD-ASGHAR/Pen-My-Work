@@ -43,17 +43,16 @@ const CTASection = ({
                 just seconds.
               </Text>
 
-              <VStack spacing={4}>
+              <VStack spacing={4} w="full">
                 <Flex
                   direction={{ base: "column", sm: "row" }}
                   gap={4}
+                  w="full"
                   maxW="md"
                   mx="auto"
-                  align="center"
                 >
                   <Input
                     placeholder="Enter your email"
-                    flex={1}
                     h={14}
                     borderRadius="lg"
                     border="2px solid black"
@@ -61,6 +60,8 @@ const CTASection = ({
                     _placeholder={{ color: "gray.900", fontWeight: "semibold" }}
                     color={textColor}
                     _focus={{ borderColor: accentColor, boxShadow: "none" }}
+                    flex={{ base: "none", sm: 1 }}
+                    w={{ base: "100%", sm: "auto" }}
                   />
                   <Button
                     bg={accentColor}
@@ -72,6 +73,7 @@ const CTASection = ({
                     fontWeight="semibold"
                     border="2px solid black"
                     boxShadow="4px 4px 0px #000000"
+                    w={{ base: "100%", sm: "auto" }}
                   >
                     Get Started
                   </Button>
