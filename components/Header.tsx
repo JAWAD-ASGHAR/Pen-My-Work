@@ -43,12 +43,14 @@ export default function Header({
       await authClient.signOut({
         fetchOptions: {
           onSuccess: () => {
-            router.push("/");
+            window.location.href = "/sign-in";
           },
         },
       });
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if there's an error, redirect to home and refresh
+      window.location.href = "/sign-in";
     }
   };
 
