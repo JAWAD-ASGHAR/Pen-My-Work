@@ -1,7 +1,18 @@
 "use client";
 
-import { Box, Button, Container, Flex, HStack, Icon } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { 
+  Box, 
+  Button, 
+  Container, 
+  Flex, 
+  HStack, 
+  Icon, 
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem
+} from "@chakra-ui/react";
+import { ArrowBackIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { FiHome, FiLogOut, FiCreditCard } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -54,16 +65,22 @@ export default function Header({
     >
       <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }}>
         <Flex justify="space-between" align="center" h="16">
-          <HStack spacing={2}>
+          {/* Left side - Logo and back button */}
+          <HStack spacing={2} flexShrink={0}>
             {showBackButton && (
               <>
                 <Link href={backUrl}>
-                  <Button variant="ghost" color="#666" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    color="#666" 
+                    size="sm"
+                    display={{ base: "none", sm: "flex" }}
+                  >
                     <ArrowBackIcon w={4} h={4} mr={2} />
                     {backText}
                   </Button>
                 </Link>
-                <Box w="1px" h="6" bg="gray.300" />
+                <Box w="1px" h="6" bg="gray.300" display={{ base: "none", sm: "block" }} />
               </>
             )}
             <Link href={isHomePage ? "/" : "/home"}>
@@ -71,13 +88,15 @@ export default function Header({
                 cursor="pointer"
                 _hover={{ opacity: 0.8 }}
                 transition="opacity 0.2s"
+                minW="fit-content"
               >
                 <Logo size="md" />
               </Box>
             </Link>
           </HStack>
 
-          <HStack spacing={3}>
+          {/* Right side - Navigation buttons */}
+          <HStack spacing={3} display={{ base: "none", md: "flex" }}>
             {children ||
               (isHomePage ? (
                 <>
@@ -132,6 +151,51 @@ export default function Header({
                 </>
               ))}
           </HStack>
+
+          {/* Mobile menu button */}
+          <Box display={{ base: "block", md: "none" }}>
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="ghost"
+                size="sm"
+                color="#666"
+                _hover={{ bg: "gray.100" }}
+              >
+                <HamburgerIcon w={5} h={5} />
+              </MenuButton>
+              <MenuList>
+                {isHomePage ? (
+                  <>
+                    <Link href="/subscription">
+                      <MenuItem icon={<Icon as={FiCreditCard} />}>
+                        Subscription
+                      </MenuItem>
+                    </Link>
+                    <MenuItem 
+                      icon={<Icon as={FiLogOut} />}
+                      onClick={handleLogout}
+                    >
+                      Sign Out
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/subscription">
+                      <MenuItem icon={<Icon as={FiCreditCard} />}>
+                        Subscription
+                      </MenuItem>
+                    </Link>
+                    <Link href="/home">
+                      <MenuItem icon={<Icon as={FiHome} />}>
+                        Go to Home
+                      </MenuItem>
+                    </Link>
+                  </>
+                )}
+              </MenuList>
+            </Menu>
+          </Box>
         </Flex>
       </Container>
     </Box>

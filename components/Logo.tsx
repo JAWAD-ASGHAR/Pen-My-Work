@@ -27,18 +27,23 @@ export const Logo: React.FC<LogoProps> = ({
   const { imageSize, textSize } = getSize();
 
   return (
-    <Flex align="center" gap={2}>
+    <Flex align="center" gap={2} minW="fit-content">
       <Image 
         src="/Logo.png" 
         alt="Pen My Work" 
         width={imageSize} 
         height={imageSize} 
+        style={{ flexShrink: 0 }}
       />
       {showText && (
         <Text 
-          fontSize={textSize} 
+          fontSize={{ base: "sm", sm: textSize }}
           fontWeight="bold" 
           color={textColor}
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          maxW={{ base: "120px", sm: "none" }}
         >
           Pen My Work
         </Text>
