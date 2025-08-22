@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 
 interface PaperProps {
   text: string;
@@ -18,14 +18,51 @@ const Paper: React.FC<PaperProps> = ({
   paperType,
   paperRef 
 }) => {
-  // Constants for A4 paper
-  const totalLines = 25;
-  const availableHeight = 762; // A4 height (842px) - top/bottom padding (80px)
-  const lineHeightPx = availableHeight / totalLines; // Distribute lines evenly
-  const textLineSpacing = lineHeightPx * 0.00001; // Reduce spacing for more natural handwritten look
-  const leftPadding = 5; // px, just past the red margin line
+  // A4 dimensions in pixels (595 x 842)
+  const A4_WIDTH = 595;
+  const A4_HEIGHT = 842;
+  const A4_ASPECT_RATIO = A4_HEIGHT / A4_WIDTH; // ≈ 1.414
 
-  // Split text into lines (no wrapping needed since charCount handles it)
+  // State for paper dimensions
+  const [paperDimensions, setPaperDimensions] = useState({
+    width: A4_WIDTH,
+    height: A4_HEIGHT,
+    scaleFactor: 1
+  });
+
+  // Calculate responsive paper dimensions after component mounts
+  useEffect(() => {
+    const calculateDimensions = () => {
+      // Get available width (accounting for container padding)
+      const availableWidth = Math.min(A4_WIDTH, window.innerWidth - 64); // 64px for container padding
+      const paperWidth = availableWidth;
+      const paperHeight = paperWidth * A4_ASPECT_RATIO;
+      
+      // Calculate scale factor relative to original A4 size
+      const scaleFactor = paperWidth / A4_WIDTH;
+      
+      setPaperDimensions({
+        width: paperWidth,
+        height: paperHeight,
+        scaleFactor
+      });
+    };
+
+    calculateDimensions();
+    
+    // Recalculate on window resize
+    window.addEventListener('resize', calculateDimensions);
+    return () => window.removeEventListener('resize', calculateDimensions);
+  }, []);
+
+  // Constants that scale proportionally
+  const totalLines = 25;
+  const availableHeight = paperDimensions.height - 80; // Account for top/bottom padding
+  const lineHeightPx = availableHeight / totalLines;
+  const textLineSpacing = lineHeightPx * 0.00001;
+  const leftPadding = 5 * paperDimensions.scaleFactor;
+
+  // Split text into lines
   const lines = text.split('\n');
 
   // Generate background pattern based on paper type
@@ -43,10 +80,10 @@ const Paper: React.FC<PaperProps> = ({
           linear-gradient(
             90deg,
             transparent 0px,
-            transparent 49px,
-            #ff0000 49px,
-            #ff0000 50px,
-            transparent 50px
+            transparent ${49 * paperDimensions.scaleFactor}px,
+            #ff0000 ${49 * paperDimensions.scaleFactor}px,
+            #ff0000 ${50 * paperDimensions.scaleFactor}px,
+            transparent ${50 * paperDimensions.scaleFactor}px
           ),
           #ffffff
         `;
@@ -86,30 +123,23 @@ const Paper: React.FC<PaperProps> = ({
     }
   };
 
-  const getTextContainerHeight = () => {
-    switch (paperType) {
-      case 'lined':
-        return '842px'; // A4 height (842px) - no top/bottom padding
-      case 'blank':
-      case 'grid':
-        return '842px'; // A4 height (842px) - no top/bottom padding
-      default:
-        return '842px';
-    }
+  const getPadding = () => {
+    const basePadding = {
+      lined: { top: 35, right: 0, bottom: 0, left: 50 },
+      blank: { top: 20, right: 20, bottom: 20, left: 20 },
+      grid: { top: 35, right: 30, bottom: 30, left: 30 }
+    };
+
+    const padding = basePadding[paperType] || basePadding.lined;
+    
+    return `${padding.top * paperDimensions.scaleFactor}px ${padding.right * paperDimensions.scaleFactor}px ${padding.bottom * paperDimensions.scaleFactor}px ${padding.left * paperDimensions.scaleFactor}px`;
   };
 
-  const getPadding = () => {
-    switch (paperType) {
-      case 'lined':
-        return '35px 0px 0px 50px';
-      case 'blank':
-        return '20px 20px 20px 20px';
-      case 'grid':
-        return '35px 30px 30px 30px';
-      default:
-        return '35px 0px 0px 50px';
-    }
-  };
+  // Calculate proportional font size
+  const proportionalFontSize = useMemo(() => {
+    const baseFontSize = parseInt(fontSize);
+    return `${baseFontSize * paperDimensions.scaleFactor}px`;
+  }, [fontSize, paperDimensions.scaleFactor]);
 
   return (
     <div
@@ -124,23 +154,22 @@ const Paper: React.FC<PaperProps> = ({
           padding: getPadding(),
           boxSizing: 'border-box',
           overflow: 'hidden',
-          // Responsive sizing - maintain A4 aspect ratio with better constraints
-          width: 'min(595px, calc(100vw - 32px))', // Account for container padding
-          height: 'min(842px, calc((100vw - 32px) * 1.414))', // A4 aspect ratio
-          minHeight: '300px',
-          maxHeight: '842px',
+          width: `${paperDimensions.width}px`,
+          height: `${paperDimensions.height}px`,
           minWidth: '250px',
-          maxWidth: '595px',
+          maxWidth: `${A4_WIDTH}px`,
+          minHeight: '300px',
+          maxHeight: `${A4_HEIGHT}px`,
         }}
       >
         <div
           className="relative z-10"
           style={{
-            fontSize: `clamp(12px, 2vw, ${fontSize})`, // Smaller responsive font size
+            fontSize: proportionalFontSize,
             lineHeight: `${lineHeightPx}px`,
             color: textColor,
             width: '100%',
-            height: getTextContainerHeight(),
+            height: `${paperDimensions.height}px`,
             position: 'relative',
             top: '0px',
             fontFamily: fontFamily,
@@ -166,7 +195,7 @@ const Paper: React.FC<PaperProps> = ({
                 paddingLeft: `${leftPadding}px`,
                 fontFamily: fontFamily,
                 color: textColor,
-                fontSize: `clamp(12px, 2vw, ${fontSize})`, // Smaller responsive font size
+                fontSize: proportionalFontSize,
                 lineHeight: `${lineHeightPx}px`,
                 boxSizing: 'border-box',
                 pointerEvents: 'none',
