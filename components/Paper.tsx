@@ -8,6 +8,7 @@ interface PaperProps {
   fontSize?: string;
   paperType: 'lined' | 'blank' | 'grid';
   paperRef?: React.RefObject<HTMLDivElement> | ((el: HTMLDivElement | null) => void);
+  captureMode?: boolean; // New prop for capture mode
 }
 
 const Paper: React.FC<PaperProps> = ({ 
@@ -16,7 +17,8 @@ const Paper: React.FC<PaperProps> = ({
   fontFamily, 
   fontSize = '24px', 
   paperType,
-  paperRef 
+  paperRef,
+  captureMode = false
 }) => {
   // A4 dimensions in pixels (595 x 842)
   const A4_WIDTH = 595;
@@ -33,8 +35,19 @@ const Paper: React.FC<PaperProps> = ({
   // Calculate responsive paper dimensions after component mounts
   useEffect(() => {
     const calculateDimensions = () => {
-      // Get available width (accounting for container padding)
-      const availableWidth = Math.min(A4_WIDTH, window.innerWidth - 64); // 64px for container padding
+      if (captureMode) {
+        // For capture, always use full A4 size
+        setPaperDimensions({
+          width: A4_WIDTH,
+          height: A4_HEIGHT,
+          scaleFactor: 1
+        });
+        return;
+      }
+
+      // Get available width with better responsive calculation - use more space
+      const containerPadding = window.innerWidth < 768 ? 8 : 16; // Reduced padding
+      const availableWidth = Math.min(A4_WIDTH, window.innerWidth - containerPadding);
       const paperWidth = availableWidth;
       const paperHeight = paperWidth * A4_ASPECT_RATIO;
       
@@ -50,10 +63,12 @@ const Paper: React.FC<PaperProps> = ({
 
     calculateDimensions();
     
-    // Recalculate on window resize
-    window.addEventListener('resize', calculateDimensions);
-    return () => window.removeEventListener('resize', calculateDimensions);
-  }, []);
+    // Recalculate on window resize (only for display mode)
+    if (!captureMode) {
+      window.addEventListener('resize', calculateDimensions);
+      return () => window.removeEventListener('resize', calculateDimensions);
+    }
+  }, [captureMode]);
 
   // Constants that scale proportionally
   const totalLines = 25;
@@ -144,7 +159,14 @@ const Paper: React.FC<PaperProps> = ({
   return (
     <div
       ref={paperRef}
-      className="flex justify-center mb-6 w-full overflow-hidden"
+      className="flex justify-center items-center w-full h-full"
+      style={{
+        width: '100%',
+        minHeight: '400px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
     >
       <div
         className="bg-white border border-gray-300 shadow-lg relative"
@@ -153,12 +175,9 @@ const Paper: React.FC<PaperProps> = ({
           backgroundSize: getBackgroundSize(),
           padding: getPadding(),
           boxSizing: 'border-box',
-          overflow: 'hidden',
           width: `${paperDimensions.width}px`,
           height: `${paperDimensions.height}px`,
-          minWidth: '250px',
-          maxWidth: `${A4_WIDTH}px`,
-          minHeight: '300px',
+          minHeight: '350px',
           maxHeight: `${A4_HEIGHT}px`,
         }}
       >
@@ -177,7 +196,6 @@ const Paper: React.FC<PaperProps> = ({
             boxSizing: 'border-box',
             pointerEvents: 'none',
             userSelect: 'none',
-            overflow: 'hidden',
           }}
         >
           {/* Render each line from charCount */}
@@ -200,7 +218,6 @@ const Paper: React.FC<PaperProps> = ({
                 boxSizing: 'border-box',
                 pointerEvents: 'none',
                 userSelect: 'none',
-                overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'pre',
               }}

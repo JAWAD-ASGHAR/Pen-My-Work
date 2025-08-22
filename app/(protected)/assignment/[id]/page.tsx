@@ -90,14 +90,67 @@ export default function AssignmentDetails() {
   const downloadImage = async (index: number) => {
     try {
       setDownloading(`image-${index}`);
-      const paperNode = paperRefs.current[index];
-      if (!paperNode) throw new Error("Paper not found");
-      const dataUrl = await toPng(paperNode, { 
+      
+      // Create a hidden capture container
+      const captureContainer = document.createElement('div');
+      captureContainer.style.position = 'absolute';
+      captureContainer.style.left = '-9999px';
+      captureContainer.style.top = '-9999px';
+      captureContainer.style.width = '595px';
+      captureContainer.style.height = '842px';
+      captureContainer.style.backgroundColor = '#ffffff';
+      document.body.appendChild(captureContainer);
+
+      // Create capture version of Paper component
+      const capturePaper = document.createElement('div');
+      capturePaper.style.width = '595px';
+      capturePaper.style.height = '842px';
+      capturePaper.style.backgroundColor = '#ffffff';
+      capturePaper.style.position = 'relative';
+      capturePaper.style.overflow = 'hidden';
+      captureContainer.appendChild(capturePaper);
+
+      // Render the paper content at full A4 size
+      const { pages: textPages } = charCount(assignment!.text, assignment!.writingStyle);
+      const pageContent = textPages[index];
+      
+      // Create the paper background and content
+      const paperContent = document.createElement('div');
+      paperContent.style.width = '100%';
+      paperContent.style.height = '100%';
+      paperContent.style.padding = '35px 0px 0px 50px';
+      paperContent.style.boxSizing = 'border-box';
+      paperContent.style.fontSize = '24px';
+      paperContent.style.lineHeight = '30px';
+      paperContent.style.color = assignment!.ink;
+      paperContent.style.fontFamily = writingStyles.find(style => style.id === assignment!.writingStyle)?.fontFamily || '';
+      paperContent.style.whiteSpace = 'pre-line';
+      paperContent.style.position = 'relative';
+      paperContent.style.zIndex = '10';
+      paperContent.textContent = pageContent;
+      capturePaper.appendChild(paperContent);
+
+      // Add background pattern based on paper type
+      const backgroundPattern = assignment!.paper === "ruled" ? 
+        `repeating-linear-gradient(0deg, transparent, transparent 29px, #000000 29px, #000000 30px), linear-gradient(90deg, transparent 0px, transparent 49px, #ff0000 49px, #ff0000 50px, transparent 50px), #ffffff` :
+        assignment!.paper === "grid" ?
+        `repeating-linear-gradient(0deg, transparent, transparent 29px, #e0e0e0 29px, #e0e0e0 30px), repeating-linear-gradient(90deg, transparent, transparent 29px, #e0e0e0 29px, #e0e0e0 30px), #ffffff` :
+        '#ffffff';
+      
+      capturePaper.style.background = backgroundPattern;
+      capturePaper.style.backgroundSize = assignment!.paper === "ruled" || assignment!.paper === "grid" ? '100% 30px, 100% 30px, 100% 100%' : '100% 100%';
+
+      // Capture the image
+      const dataUrl = await toPng(capturePaper, { 
         backgroundColor: '#ffffff',
         quality: 1.0,
         width: 595,
         height: 842
       });
+
+      // Clean up
+      document.body.removeChild(captureContainer);
+
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = `assignment-page-${index + 1}.png`;
@@ -130,16 +183,69 @@ export default function AssignmentDetails() {
     try {
       setDownloading("all");
       const zip = new JSZip();
+      const { pages: textPages } = charCount(assignment.text, assignment.writingStyle);
+      
       // Render each Paper to PNG and add to zip
-      for (let i = 0; i < paperRefs.current.length; i++) {
-        const paperNode = paperRefs.current[i];
-        if (!paperNode) continue;
-        const dataUrl = await toPng(paperNode, { 
+      for (let i = 0; i < textPages.length; i++) {
+        // Create a hidden capture container
+        const captureContainer = document.createElement('div');
+        captureContainer.style.position = 'absolute';
+        captureContainer.style.left = '-9999px';
+        captureContainer.style.top = '-9999px';
+        captureContainer.style.width = '595px';
+        captureContainer.style.height = '842px';
+        captureContainer.style.backgroundColor = '#ffffff';
+        document.body.appendChild(captureContainer);
+
+        // Create capture version of Paper component
+        const capturePaper = document.createElement('div');
+        capturePaper.style.width = '595px';
+        capturePaper.style.height = '842px';
+        capturePaper.style.backgroundColor = '#ffffff';
+        capturePaper.style.position = 'relative';
+        capturePaper.style.overflow = 'hidden';
+        captureContainer.appendChild(capturePaper);
+
+        // Render the paper content at full A4 size
+        const pageContent = textPages[i];
+        
+        // Create the paper background and content
+        const paperContent = document.createElement('div');
+        paperContent.style.width = '100%';
+        paperContent.style.height = '100%';
+        paperContent.style.padding = '35px 0px 0px 50px';
+        paperContent.style.boxSizing = 'border-box';
+        paperContent.style.fontSize = '24px';
+        paperContent.style.lineHeight = '30px';
+        paperContent.style.color = assignment.ink;
+        paperContent.style.fontFamily = writingStyles.find(style => style.id === assignment.writingStyle)?.fontFamily || '';
+        paperContent.style.whiteSpace = 'pre-line';
+        paperContent.style.position = 'relative';
+        paperContent.style.zIndex = '10';
+        paperContent.textContent = pageContent;
+        capturePaper.appendChild(paperContent);
+
+        // Add background pattern based on paper type
+        const backgroundPattern = assignment.paper === "ruled" ? 
+          `repeating-linear-gradient(0deg, transparent, transparent 29px, #000000 29px, #000000 30px), linear-gradient(90deg, transparent 0px, transparent 49px, #ff0000 49px, #ff0000 50px, transparent 50px), #ffffff` :
+          assignment.paper === "grid" ?
+          `repeating-linear-gradient(0deg, transparent, transparent 29px, #e0e0e0 29px, #e0e0e0 30px), repeating-linear-gradient(90deg, transparent, transparent 29px, #e0e0e0 29px, #e0e0e0 30px), #ffffff` :
+          '#ffffff';
+        
+        capturePaper.style.background = backgroundPattern;
+        capturePaper.style.backgroundSize = assignment.paper === "ruled" || assignment.paper === "grid" ? '100% 30px, 100% 30px, 100% 100%' : '100% 100%';
+
+        // Capture the image
+        const dataUrl = await toPng(capturePaper, { 
           backgroundColor: '#ffffff',
           quality: 1.0,
           width: 595,
           height: 842
         });
+
+        // Clean up
+        document.body.removeChild(captureContainer);
+
         // Remove prefix for zip
         const imgData = dataUrl.split(",")[1];
         zip.file(`assignment-page-${i + 1}.png`, imgData, { base64: true });
@@ -177,15 +283,68 @@ export default function AssignmentDetails() {
     try {
       setDownloading("pdf");
       const pdf = new jsPDF({ unit: "px", format: [595, 842] }); // A4 size in px
-      for (let i = 0; i < paperRefs.current.length; i++) {
-        const paperNode = paperRefs.current[i];
-        if (!paperNode) continue;
-        const imgData = await toPng(paperNode, { 
+      const { pages: textPages } = charCount(assignment.text, assignment.writingStyle);
+      
+      for (let i = 0; i < textPages.length; i++) {
+        // Create a hidden capture container
+        const captureContainer = document.createElement('div');
+        captureContainer.style.position = 'absolute';
+        captureContainer.style.left = '-9999px';
+        captureContainer.style.top = '-9999px';
+        captureContainer.style.width = '595px';
+        captureContainer.style.height = '842px';
+        captureContainer.style.backgroundColor = '#ffffff';
+        document.body.appendChild(captureContainer);
+
+        // Create capture version of Paper component
+        const capturePaper = document.createElement('div');
+        capturePaper.style.width = '595px';
+        capturePaper.style.height = '842px';
+        capturePaper.style.backgroundColor = '#ffffff';
+        capturePaper.style.position = 'relative';
+        capturePaper.style.overflow = 'hidden';
+        captureContainer.appendChild(capturePaper);
+
+        // Render the paper content at full A4 size
+        const pageContent = textPages[i];
+        
+        // Create the paper background and content
+        const paperContent = document.createElement('div');
+        paperContent.style.width = '100%';
+        paperContent.style.height = '100%';
+        paperContent.style.padding = '35px 0px 0px 50px';
+        paperContent.style.boxSizing = 'border-box';
+        paperContent.style.fontSize = '24px';
+        paperContent.style.lineHeight = '30px';
+        paperContent.style.color = assignment.ink;
+        paperContent.style.fontFamily = writingStyles.find(style => style.id === assignment.writingStyle)?.fontFamily || '';
+        paperContent.style.whiteSpace = 'pre-line';
+        paperContent.style.position = 'relative';
+        paperContent.style.zIndex = '10';
+        paperContent.textContent = pageContent;
+        capturePaper.appendChild(paperContent);
+
+        // Add background pattern based on paper type
+        const backgroundPattern = assignment.paper === "ruled" ? 
+          `repeating-linear-gradient(0deg, transparent, transparent 29px, #000000 29px, #000000 30px), linear-gradient(90deg, transparent 0px, transparent 49px, #ff0000 49px, #ff0000 50px, transparent 50px), #ffffff` :
+          assignment.paper === "grid" ?
+          `repeating-linear-gradient(0deg, transparent, transparent 29px, #e0e0e0 29px, #e0e0e0 30px), repeating-linear-gradient(90deg, transparent, transparent 29px, #e0e0e0 29px, #e0e0e0 30px), #ffffff` :
+          '#ffffff';
+        
+        capturePaper.style.background = backgroundPattern;
+        capturePaper.style.backgroundSize = assignment.paper === "ruled" || assignment.paper === "grid" ? '100% 30px, 100% 30px, 100% 100%' : '100% 100%';
+
+        // Capture the image
+        const imgData = await toPng(capturePaper, { 
           backgroundColor: '#ffffff',
           quality: 1.0,
           width: 595,
           height: 842
         });
+
+        // Clean up
+        document.body.removeChild(captureContainer);
+
         if (i > 0) pdf.addPage([595, 842], "p");
         pdf.addImage(imgData, "PNG", 0, 0, 595, 842);
       }
@@ -350,7 +509,7 @@ export default function AssignmentDetails() {
   const { pages: textPages } = charCount(assignment.text, assignment.writingStyle);
 
   return (
-    <Box minH="100vh" bg="#FDF7EE" overflow="hidden">
+    <Box minH="100vh" bg="#FDF7EE" w="full">
       {/* Mobile Header with Menu Button and Download Options */}
       <Box 
         display={{ base: "flex", lg: "none" }} 
@@ -433,30 +592,30 @@ export default function AssignmentDetails() {
         </DrawerContent>
       </Drawer>
 
-      {/* Main Content */}
-      <Container maxW="7xl" px={{ base: 2, sm: 4, lg: 8 }} py={{ base: 4, md: 6 }} overflow="hidden">
+      {/* Main Content - Full Width Layout */}
+      <Box w="full" px={{ base: 1, sm: 2, lg: 4 }} py={{ base: 4, md: 6 }}>
         <Grid
           templateColumns={{ base: "1fr", lg: "400px 1fr" }}
           gap={{ base: 4, lg: 8 }}
           minH="calc(100vh - 80px)"
-          overflow="hidden"
+          w="full"
         >
           {/* Left Sidebar - Desktop Only */}
-          <GridItem display={{ base: "none", lg: "block" }} overflow="hidden">
-            <Box position="sticky" top={6} overflow="hidden">
+          <GridItem display={{ base: "none", lg: "block" }}>
+            <Box position="sticky" top={6}>
               <AssignmentInfo />
             </Box>
           </GridItem>
 
-          {/* Right Side - Content */}
-          <GridItem overflow="hidden">
-            <VStack spacing={6} align="stretch" overflow="hidden">
+          {/* Right Side - Content - Full Width */}
+          <GridItem w="full">
+            <VStack spacing={6} align="stretch" w="full">
               <Heading size="lg" color="#1A1A1A" display={{ base: "none", lg: "block" }}>
                 Generated Pages ({textPages.length})
               </Heading>
               
               {textPages.length > 0 ? (
-                <VStack spacing={6} align="stretch" overflow="hidden">
+                <VStack spacing={6} align="stretch" w="full">
                   {textPages.map((pageContent, index) => (
                     <Card
                       key={index}
@@ -466,10 +625,10 @@ export default function AssignmentDetails() {
                       shadow="md"
                       _hover={{ shadow: "lg" }}
                       transition="shadow"
-                      overflow="hidden"
+                      w="full"
                     >
-                      <CardBody p={{ base: 3, md: 6 }} overflow="hidden">
-                        <VStack spacing={4} align="stretch" overflow="hidden">
+                      <CardBody p={{ base: 2, sm: 3, md: 6 }} w="full">
+                        <VStack spacing={4} align="stretch" w="full">
                           <HStack justify="space-between">
                             <Text fontSize="lg" fontWeight="semibold" color="#1A1A1A">
                               Page {index + 1}
@@ -488,14 +647,11 @@ export default function AssignmentDetails() {
                           </HStack>
                           
                           <Box 
-                            bg="gray.50" 
-                            borderRadius="lg" 
-                            p={{ base: 1, md: 4 }}
+                            w="full"
                             display="flex"
                             alignItems="center"
                             justifyContent="center"
-                            overflow="hidden"
-                            w="full"
+                            minH="400px"
                           >
                             <Paper
                               text={pageContent}
@@ -529,7 +685,7 @@ export default function AssignmentDetails() {
             </VStack>
           </GridItem>
         </Grid>
-      </Container>
+      </Box>
     </Box>
   );
 }
