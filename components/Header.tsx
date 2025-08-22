@@ -15,7 +15,7 @@ import {
 import { ArrowBackIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { FiHome, FiLogOut, FiCreditCard } from "react-icons/fi";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { authClient } from "@/lib/auth-client";
 
@@ -34,7 +34,6 @@ export default function Header({
   backText = "Back",
   children,
 }: HeaderProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const isHomePage = pathname === "/home";
 
