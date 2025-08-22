@@ -360,7 +360,7 @@ export default function AssignmentDetails() {
         p={4}
         position="sticky"
         top={0}
-        zIndex={10}
+        zIndex={4}
       >
         <HStack justify="space-between" w="full">
           <Link href="/home">

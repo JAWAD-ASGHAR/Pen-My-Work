@@ -101,8 +101,7 @@ html, body {
 
 /* Better focus states for accessibility */
 button:focus, input:focus, textarea:focus, select:focus {
-  outline: 2px solid #FF6A00;
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* Custom scrollbar for webkit browsers */
