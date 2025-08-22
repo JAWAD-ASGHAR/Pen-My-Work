@@ -13,25 +13,19 @@ import {
   Badge,
   HStack,
   useToast,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
   Grid,
   GridItem,
+  Flex,
+  Divider,
 } from "@chakra-ui/react";
 import {
   FiFileText,
   FiDownload,
-  FiArrowLeft,
   FiCalendar,
   FiDroplet,
   FiImage,
   FiFile,
-  FiMenu,
+  FiHome,
 } from "react-icons/fi";
 import Link from "next/link";
 import { charCount } from "@/utils/char-count";
@@ -56,7 +50,6 @@ export default function AssignmentDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState<string | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   // Add refs for each page
   const paperRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -494,7 +487,7 @@ export default function AssignmentDetails() {
                 bg="#FF6A00"
                 _hover={{ bg: "#FF8A33" }}
                 color="white"
-                leftIcon={<Icon as={FiArrowLeft} />}
+                leftIcon={<Icon as={FiHome} />}
               >
                 Back to Assignments
               </Button>
@@ -510,94 +503,89 @@ export default function AssignmentDetails() {
 
   return (
     <Box minH="100vh" bg="#FDF7EE" w="full">
-      {/* Mobile Header with Menu Button and Download Options */}
+      {/* Responsive Header */}
       <Box 
-        display={{ base: "flex", lg: "none" }} 
         bg="white" 
         borderBottom="1px" 
         borderColor="gray.200"
-        p={4}
         position="sticky"
         top={0}
-        zIndex={4}
+        zIndex={10}
+        backdropFilter="blur(8px)"
       >
-        <VStack spacing={3} w="full">
-          {/* Top Row - Navigation */}
-          <HStack justify="space-between" w="full">
-            <Link href="/home">
-              <Button
-                variant="ghost"
-                color="#666"
-                size="sm"
-                leftIcon={<Icon as={FiArrowLeft} />}
+        <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }}>
+          <VStack spacing={{ base: 3, md: 4 }} py={{ base: 4, md: 6 }}>
+            {/* Top Row - Title and Navigation */}
+            <Flex 
+              w="full" 
+              justify="space-between" 
+              align="center"
+              direction={{ base: "column", sm: "row" }}
+              gap={{ base: 3, sm: 0 }}
+            >
+              <VStack align={{ base: "center", sm: "start" }} spacing={1}>
+                <Heading 
+                  size={{ base: "lg", md: "xl" }} 
+                  color="#1A1A1A"
+                  textAlign={{ base: "center", sm: "left" }}
+                >
+                  Assignment Details
+                </Heading>
+                <Text 
+                  color="#666" 
+                  fontSize={{ base: "sm", md: "md" }}
+                  textAlign={{ base: "center", sm: "left" }}
+                >
+                  {textPages.length} page{textPages.length !== 1 ? 's' : ''} • Created {formatDate(assignment.createdAt)}
+                </Text>
+              </VStack>
+            </Flex>
+
+            {/* Bottom Row - Download Actions */}
+            <Box w="full">
+              <Divider mb={4} />
+              <Flex 
+                justify={{ base: "center", md: "start" }}
+                gap={3}
+                flexWrap="wrap"
               >
-                Back
-              </Button>
-            </Link>
-            <Heading size="md" color="#1A1A1A">
-              Assignment Details
-            </Heading>
-            <Button
-              variant="ghost"
-              color="#666"
-              size="sm"
-              onClick={onOpen}
-              leftIcon={<Icon as={FiMenu} />}
-            >
-              Info
-            </Button>
-          </HStack>
-          
-          {/* Bottom Row - Download Buttons */}
-          <HStack justify="center" w="full" spacing={3}>
-            <Button
-              onClick={downloadAsPDF}
-              isLoading={downloading === "pdf"}
-              leftIcon={<Icon as={FiFileText} />}
-              bg="#FF6A00"
-              _hover={{ bg: "#FF8A33" }}
-              color="white"
-              size="sm"
-              flex={1}
-              maxW="140px"
-            >
-              Download PDF
-            </Button>
-            <Button
-              onClick={downloadAllImages}
-              isLoading={downloading === "all"}
-              leftIcon={<Icon as={FiDownload} />}
-              variant="outline"
-              borderColor="gray.300"
-              color="#1A1A1A"
-              size="sm"
-              flex={1}
-              maxW="140px"
-            >
-              Download ZIP
-            </Button>
-          </HStack>
-        </VStack>
+                <Button
+                  onClick={downloadAsPDF}
+                  isLoading={downloading === "pdf"}
+                  leftIcon={<Icon as={FiFileText} />}
+                  bg="#FF6A00"
+                  _hover={{ bg: "#FF8A33" }}
+                  color="white"
+                  size={{ base: "sm", md: "md" }}
+                  px={{ base: 4, md: 6 }}
+                >
+                  Download PDF
+                </Button>
+                <Button
+                  onClick={downloadAllImages}
+                  isLoading={downloading === "all"}
+                  leftIcon={<Icon as={FiDownload} />}
+                  variant="outline"
+                  borderColor="gray.300"
+                  color="#1A1A1A"
+                  size={{ base: "sm", md: "md" }}
+                  px={{ base: 4, md: 6 }}
+                  _hover={{ borderColor: "#FF6A00", color: "#FF6A00", bg: "orange.50" }}
+                >
+                  Download ZIP
+                </Button>
+              </Flex>
+            </Box>
+          </VStack>
+        </Container>
       </Box>
 
-      {/* Mobile Drawer for Assignment Info */}
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="sm">
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">Assignment Information</DrawerHeader>
-          <DrawerBody p={4}>
-            <AssignmentInfo />
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-
       {/* Main Content - Full Width Layout */}
-      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={{ base: 4, md: 6 }}>
+      <Container maxW="7xl" px={{ base: 4, sm: 6, lg: 8 }} py={{ base: 6, md: 8 }}>
         <Grid
           templateColumns={{ base: "1fr", lg: "400px 1fr" }}
-          gap={{ base: 4, lg: 8 }}
-          minH="calc(100vh - 80px)"
+          gap={{ base: 6, lg: 8 }}
+          minH="calc(100vh - 200px)"
           w="full"
         >
           {/* Left Sidebar - Desktop Only */}
@@ -627,7 +615,7 @@ export default function AssignmentDetails() {
                       transition="shadow"
                       w="full"
                     >
-                      <CardBody p={{ base: 2, sm: 3, md: 6 }} w="full">
+                      <CardBody p={{ base: 3, sm: 4, md: 6 }} w="full">
                         <VStack spacing={4} align="stretch" w="full">
                           <HStack justify="space-between">
                             <Text fontSize="lg" fontWeight="semibold" color="#1A1A1A">
