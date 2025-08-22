@@ -12,7 +12,9 @@ export default function ProtectedLayout({
   return (
     <Box minH="100vh" bg="#FDF7EE">
       <Header />
-      {children}
+      <Box as="main">
+        {children}
+      </Box>
     </Box>
   )
 } 

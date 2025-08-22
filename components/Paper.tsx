@@ -114,26 +114,29 @@ const Paper: React.FC<PaperProps> = ({
   return (
     <div
       ref={paperRef}
-      className="flex justify-center mb-6"
+      className="flex justify-center mb-6 w-full overflow-hidden"
     >
       <div
-        className="w-[595px] h-[842px] bg-white border border-gray-300 shadow-lg relative"
+        className="bg-white border border-gray-300 shadow-lg relative"
         style={{
           background: getBackgroundPattern(),
           backgroundSize: getBackgroundSize(),
           padding: getPadding(),
           boxSizing: 'border-box',
           overflow: 'hidden',
-          minHeight: '842px',
+          // Responsive sizing - maintain A4 aspect ratio with better constraints
+          width: 'min(595px, calc(100vw - 32px))', // Account for container padding
+          height: 'min(842px, calc((100vw - 32px) * 1.414))', // A4 aspect ratio
+          minHeight: '300px',
           maxHeight: '842px',
-          minWidth: '595px',
+          minWidth: '250px',
           maxWidth: '595px',
         }}
       >
         <div
           className="relative z-10"
           style={{
-            fontSize: fontSize,
+            fontSize: `clamp(12px, 2vw, ${fontSize})`, // Smaller responsive font size
             lineHeight: `${lineHeightPx}px`,
             color: textColor,
             width: '100%',
@@ -163,7 +166,7 @@ const Paper: React.FC<PaperProps> = ({
                 paddingLeft: `${leftPadding}px`,
                 fontFamily: fontFamily,
                 color: textColor,
-                fontSize: fontSize,
+                fontSize: `clamp(12px, 2vw, ${fontSize})`, // Smaller responsive font size
                 lineHeight: `${lineHeightPx}px`,
                 boxSizing: 'border-box',
                 pointerEvents: 'none',

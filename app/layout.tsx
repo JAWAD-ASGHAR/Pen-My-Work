@@ -72,6 +72,7 @@ export default function RootLayout({
       <body 
         className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${gloriaHallelujah.variable} ${patrickHand.variable} ${permanentMarker.variable} ${reenieBeanie.variable} ${shadowsIntoLight.variable}`}
         suppressHydrationWarning={true}
+        style={{ overflowX: 'hidden' }}
       >
         <Providers>
           {children}
