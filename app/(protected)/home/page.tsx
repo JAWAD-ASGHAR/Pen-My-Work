@@ -30,6 +30,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Select,
+  Stack,
 } from "@chakra-ui/react";
 import {
   FiFileText,
@@ -38,6 +40,7 @@ import {
   FiGrid,
   FiMoreVertical,
   FiTrash2,
+  FiFilter,
 } from "react-icons/fi";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -217,7 +220,13 @@ export default function Dashboard() {
           <Box>
             {/* Header Section */}
             <VStack spacing={2} align="start" mb={8}>
-              <Flex justify="space-between" align="center" w="full">
+              <Flex 
+                justify="space-between" 
+                align={{ base: "start", md: "center" }} 
+                w="full"
+                direction={{ base: "column", md: "row" }}
+                gap={{ base: 4, md: 0 }}
+              >
                 <VStack spacing={2} align="start">
                   <Heading size="xl" color="#1A1A1A">
                     Assignments Catalog
@@ -243,6 +252,7 @@ export default function Dashboard() {
                     fontWeight="medium"
                     borderRadius="lg"
                     transition="all 0.2s"
+                    w={{ base: "full", md: "auto" }}
                   >
                     View Plans
                   </Button>
@@ -250,13 +260,14 @@ export default function Dashboard() {
               </Flex>
             </VStack>
 
-            {/* Search and Upload Section */}
-            <Flex
+            {/* Search and Filter Section */}
+            <Stack 
+              spacing={4} 
               mb={6}
-              gap={4}
               direction={{ base: "column", md: "row" }}
-              align="center"
+              align={{ base: "stretch", md: "center" }}
             >
+              {/* Search Input */}
               <InputGroup maxW={{ base: "full", md: "400px" }}>
                 <InputLeftElement pointerEvents="none">
                   <Icon as={FiSearch} color="gray.400" />
@@ -275,58 +286,83 @@ export default function Dashboard() {
                 />
               </InputGroup>
 
-              <Spacer />
+              <Spacer display={{ base: "none", md: "block" }} />
 
-              {/* Filter Buttons */}
-              <HStack spacing={3} mb={8} flexWrap="wrap">
-                <Button
-                  variant={selectedFilter === "all" ? "solid" : "outline"}
-                  colorScheme="orange"
-                  size="md"
-                  onClick={() => setSelectedFilter("all")}
-                  borderRadius="md"
-                >
-                  All Assignments ({getFilterCount("all")})
-                </Button>
-                <Button
-                  variant={selectedFilter === "blank" ? "solid" : "outline"}
-                  colorScheme="orange"
-                  size="md"
-                  onClick={() => setSelectedFilter("blank")}
-                  borderRadius="md"
-                >
-                  Blank ({getFilterCount("blank")})
-                </Button>
-                <Button
-                  variant={selectedFilter === "ruled" ? "solid" : "outline"}
-                  colorScheme="orange"
-                  size="md"
-                  onClick={() => setSelectedFilter("ruled")}
-                  borderRadius="md"
-                >
-                  Ruled ({getFilterCount("ruled")})
-                </Button>
-                <Button
-                  variant={selectedFilter === "grid" ? "solid" : "outline"}
-                  colorScheme="orange"
-                  size="md"
-                  onClick={() => setSelectedFilter("grid")}
-                  borderRadius="md"
-                >
-                  Grid ({getFilterCount("grid")})
-                </Button>
-              </HStack>
-            </Flex>
+              {/* Filter Section */}
+              <Box>
+                {/* Mobile Filter Dropdown */}
+                <Box display={{ base: "block", lg: "none" }}>
+                  <Select
+                    value={selectedFilter}
+                    onChange={(e) => setSelectedFilter(e.target.value)}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    _focus={{
+                      borderColor: "#FF6A00",
+                      boxShadow: "0 0 0 1px #FF6A00",
+                    }}
+                    icon={<Icon as={FiFilter} />}
+                  >
+                    <option value="all">All Assignments ({getFilterCount("all")})</option>
+                    <option value="blank">Blank ({getFilterCount("blank")})</option>
+                    <option value="ruled">Ruled ({getFilterCount("ruled")})</option>
+                    <option value="grid">Grid ({getFilterCount("grid")})</option>
+                  </Select>
+                </Box>
+
+                {/* Desktop Filter Buttons */}
+                <HStack spacing={3} display={{ base: "none", lg: "flex" }} flexWrap="wrap">
+                  <Button
+                    variant={selectedFilter === "all" ? "solid" : "outline"}
+                    colorScheme="orange"
+                    size="md"
+                    onClick={() => setSelectedFilter("all")}
+                    borderRadius="md"
+                  >
+                    All Assignments ({getFilterCount("all")})
+                  </Button>
+                  <Button
+                    variant={selectedFilter === "blank" ? "solid" : "outline"}
+                    colorScheme="orange"
+                    size="md"
+                    onClick={() => setSelectedFilter("blank")}
+                    borderRadius="md"
+                  >
+                    Blank ({getFilterCount("blank")})
+                  </Button>
+                  <Button
+                    variant={selectedFilter === "ruled" ? "solid" : "outline"}
+                    colorScheme="orange"
+                    size="md"
+                    onClick={() => setSelectedFilter("ruled")}
+                    borderRadius="md"
+                  >
+                    Ruled ({getFilterCount("ruled")})
+                  </Button>
+                  <Button
+                    variant={selectedFilter === "grid" ? "solid" : "outline"}
+                    colorScheme="orange"
+                    size="md"
+                    onClick={() => setSelectedFilter("grid")}
+                    borderRadius="md"
+                  >
+                    Grid ({getFilterCount("grid")})
+                  </Button>
+                </HStack>
+              </Box>
+            </Stack>
 
             {/* Assignments Grid */}
             {filteredAssignments.length > 0 ? (
               <Grid
                 templateColumns={{
                   base: "1fr",
+                  sm: "repeat(2, 1fr)",
                   md: "repeat(2, 1fr)",
                   lg: "repeat(3, 1fr)",
                 }}
-                gap={6}
+                gap={{ base: 4, md: 6 }}
               >
                 {/* Create New Assignment Card */}
                 <Link href="/create">
@@ -340,18 +376,19 @@ export default function Dashboard() {
                     }}
                     transition="all 0.3s ease"
                     cursor="pointer"
-                    height="300px"
+                    height={{ base: "250px", md: "300px" }}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                   >
                     <VStack spacing={4}>
-                      <Icon as={FiPlusCircle} w={12} h={12} color="gray.400" />
+                      <Icon as={FiPlusCircle} w={{ base: 10, md: 12 }} h={{ base: 10, md: 12 }} color="gray.400" />
                       <Text
                         color="gray.600"
-                        fontSize="sm"
+                        fontSize={{ base: "xs", md: "sm" }}
                         textAlign="center"
                         fontWeight="medium"
+                        px={2}
                       >
                         Create a new assignment
                       </Text>
@@ -372,7 +409,7 @@ export default function Dashboard() {
                     transition="all 0.3s ease"
                     position="relative"
                     overflow="hidden"
-                    height="300px"
+                    height={{ base: "250px", md: "300px" }}
                   >
                     {/* Assignment Menu */}
                     <Menu>
@@ -428,7 +465,7 @@ export default function Dashboard() {
                             position="relative"
                             overflow="hidden"
                             bg="white"
-                            p={4}
+                            p={{ base: 3, md: 4 }}
                           >
                             {/* Document Header */}
                             <Box mb={3}>
@@ -454,7 +491,7 @@ export default function Dashboard() {
                                     size={4}
                                   />
                                   <Text
-                                    fontSize="lg"
+                                    fontSize={{ base: "md", md: "lg" }}
                                     fontWeight="bold"
                                     color="#1A1A1A"
                                     mb={1}
@@ -486,12 +523,12 @@ export default function Dashboard() {
                               borderRadius="md"
                               border="1px solid"
                               borderColor="gray.200"
-                              minH="150px"
+                              minH={{ base: "120px", md: "150px" }}
                               position="relative"
                             >
                               <Text
                                 color="#1A1A1A"
-                                fontSize="sm"
+                                fontSize={{ base: "xs", md: "sm" }}
                                 lineHeight="1.6"
                                 fontFamily="monospace"
                                 style={{
@@ -530,11 +567,13 @@ export default function Dashboard() {
                                   fontSize="xs"
                                   color="gray.500"
                                 >
-                                  <Text>{getStylesText(assignment)}</Text>
+                                  <Text fontSize={{ base: "2xs", md: "xs" }}>
+                                    {getStylesText(assignment)}
+                                  </Text>
                                 </HStack>
 
                                 {assignment.imageURLs?.length && (
-                                  <Badge colorScheme="orange" variant="subtle">
+                                  <Badge colorScheme="orange" variant="subtle" fontSize={{ base: "2xs", md: "xs" }}>
                                     {assignment.imageURLs?.length} page
                                     {assignment.imageURLs?.length !== 1
                                       ? "s"
@@ -557,7 +596,7 @@ export default function Dashboard() {
                   <Heading size="md" color="#1A1A1A">
                     No assignments found
                   </Heading>
-                  <Text color="#666">
+                  <Text color="#666" textAlign="center" px={4}>
                     {searchQuery
                       ? "Try adjusting your search or filters"
                       : "Create your first assignment to get started"}
@@ -587,8 +626,8 @@ export default function Dashboard() {
                   <Box position="relative">
                     {/* Main illustration */}
                     <Box
-                      w="48"
-                      h="48"
+                      w={{ base: "40", md: "48" }}
+                      h={{ base: "40", md: "48" }}
                       mx="auto"
                       mb={8}
                       bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
@@ -611,7 +650,7 @@ export default function Dashboard() {
                         zIndex: -1,
                       }}
                     >
-                      <Icon as={FiFileText} w="24" h="24" color="white" />
+                      <Icon as={FiFileText} w={{ base: "20", md: "24" }} h={{ base: "20", md: "24" }} color="white" />
                     </Box>
 
                     {/* Floating elements */}
@@ -641,19 +680,21 @@ export default function Dashboard() {
 
                   <VStack spacing={4}>
                     <Heading
-                      size="2xl"
+                      size={{ base: "xl", md: "2xl" }}
                       color="#1A1A1A"
                       fontWeight="bold"
                       bgGradient="linear(to-r, #1A1A1A, #FF6A00)"
                       bgClip="text"
+                      px={4}
                     >
                       Ready to Create Magic?
                     </Heading>
                     <Text
-                      fontSize="xl"
+                      fontSize={{ base: "lg", md: "xl" }}
                       color="#666"
                       maxW="2xl"
                       lineHeight="tall"
+                      px={4}
                     >
                       Transform your ideas into beautiful handwritten content.
                       Whether it&apos;s assignments, notes, or creative
@@ -663,14 +704,14 @@ export default function Dashboard() {
                 </VStack>
 
                 {/* CTA Section */}
-                <Box textAlign="center">
-                  <Text color="#666" fontSize="lg" mb={4}>
+                <Box textAlign="center" px={4}>
+                  <Text color="#666" fontSize={{ base: "md", md: "lg" }} mb={4}>
                     Start your journey with your first assignment
                   </Text>
                   <VStack spacing={4}>
                     <Link href="/create">
                       <Button
-                        size="lg"
+                        size={{ base: "md", md: "lg" }}
                         bg="linear-gradient(135deg, #FF6A00 0%, #FF8A33 100%)"
                         _hover={{
                           bg: "linear-gradient(135deg, #FF8A33 0%, #FF6A00 100%)",
@@ -682,13 +723,14 @@ export default function Dashboard() {
                         }}
                         color="white"
                         leftIcon={<Icon as={FiPlusCircle} />}
-                        px={8}
-                        py={6}
-                        fontSize="lg"
+                        px={{ base: 6, md: 8 }}
+                        py={{ base: 4, md: 6 }}
+                        fontSize={{ base: "md", md: "lg" }}
                         fontWeight="semibold"
                         borderRadius="xl"
                         boxShadow="0 8px 20px rgba(255, 106, 0, 0.3)"
                         transition="all 0.2s"
+                        w={{ base: "full", sm: "auto" }}
                       >
                         Create Your First Assignment
                       </Button>
@@ -703,13 +745,14 @@ export default function Dashboard() {
                           color: "#FF6A00",
                           bg: "orange.50",
                         }}
-                        size="md"
-                        px={6}
-                        py={4}
-                        fontSize="md"
+                        size={{ base: "sm", md: "md" }}
+                        px={{ base: 4, md: 6 }}
+                        py={{ base: 3, md: 4 }}
+                        fontSize={{ base: "sm", md: "md" }}
                         fontWeight="medium"
                         borderRadius="lg"
                         transition="all 0.2s"
+                        w={{ base: "full", sm: "auto" }}
                       >
                         View Plans & Pricing
                       </Button>
@@ -725,7 +768,7 @@ export default function Dashboard() {
       {/* Delete Confirmation Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent mx={4}>
           <ModalHeader>Delete Assignment</ModalHeader>
           <ModalBody>
             <Text>
